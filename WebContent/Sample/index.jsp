@@ -14,7 +14,7 @@
 	String strProtocol 		= request.getScheme().toUpperCase();
 	/* String strURL			= g_profile.getString("DEV", "IP", "");
 	String localWAS_Port	= g_profile.getString("LOCAL_WAS",request.getScheme().toUpperCase(), "");	
-		hgfsdv
+		htsrjgaefwl;gsehktjrweafgsjdl;kj
 	String strURL 			= g_profile.getString("URL", strProtocol, "");
 	pageContext.setAttribute("URL", strURL); */
 %>
