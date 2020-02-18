@@ -715,11 +715,6 @@ $.Actor = {
 						//Add thumb options
 						$.each(arElThumb, function(){
 
-							$(this).css("opacity","1");
-							$(this).find('.area_effect').ripple({
-								maxDiameter: "200%"
-							});
-
 							var idx = $(this).attr("idx");
 
 							var elTitleArea = $(this).find(".area_title_btn");
@@ -727,9 +722,10 @@ $.Actor = {
 							//Draw fold icon
 							$.Actor.addFoldIcon($.Actor, elTitleArea, idx);
 
-							if("1" === $.Actor.objSlipItem[idx].SDOCNO_INDEX)
+							if("1" !== $.Actor.objSlipItem[idx].SDOCNO_INDEX)
 							{
-								$.Actor.fold($.Actor, idx);
+								//$.Actor.fold($.Actor, idx);
+								$(this).hide();
 							}
 
 							//Draw option icon
@@ -753,6 +749,10 @@ $.Actor = {
 
 							$.Bookmark.Draw_BookmarkItem(bookmark, bookmarkItem, curObj["SLIP_ROTATE"]);
 
+							$(this).css("opacity","1");
+							$(this).find('.area_effect').ripple({
+								maxDiameter: "200%"
+							});
 						});
 					}
 
@@ -1037,14 +1037,14 @@ $.Actor = {
 				elThumbBtnArea.addClass("area_title_btn");
 				elThumbBtnArea.attr("type","SLIP");
 				elThumbBtnArea.appendTo(elThumbTitleArea);
-				
+				objData.IS_FOLD="1";
 			//	elThumb.attr("first","1");
 			//	elThumb.attr("fold","1");
 			}
-			else
-			{
-				elThumb.css("display","none");
-			}
+			// else
+			// {
+			// 	elThumb.css("display","none");
+			// }
 			
 			
 			

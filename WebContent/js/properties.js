@@ -3,7 +3,7 @@ $.Lang = {
 		ko : {
 			Mobile : {
 				"E-EVIDENCE" : "전자증빙",
-				"EVIDENCE_KEY" : "승인번호",
+				"EVIDENCE_KEY" : "전표번호",
 				"SLIP" : "증빙",
 				"ATTACH" : "첨부파일",
 			},
@@ -84,7 +84,7 @@ $.Lang = {
 				"REG_DATE" : "등록일자",
 				"ATTACH_TITLE" : "첨부파일",
 				"E-EVIDENCE" : "전자증빙",
-				"EVIDENCE_KEY" : "승인번호",
+				"EVIDENCE_KEY" : "전표번호",
 				"ATTACH" : "첨부파일",
 				"SDOC_NAME" : "증빙서 명",
 				"CHECKING_XPI" : "전자증빙 설치여부를 확인중입니다.",

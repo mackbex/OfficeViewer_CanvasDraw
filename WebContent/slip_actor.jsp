@@ -33,31 +33,6 @@
 
 	pageContext.setAttribute("MULTI_KEY", isMultiKey);
 
-	StringBuffer keyValue = new StringBuffer();
-	StringBuffer keyTitle = new StringBuffer();
-
-	String[] arKeyList = key.split(",");
-
-	for(int i = 0; i < arKeyList.length; i++) {
-		String[] arKeyVal = arKeyList[i].split(";");
-
-		keyValue.append(arKeyVal[0]);
-		try {
-			keyTitle.append(URLDecoder.decode(arKeyVal[1], "utf-8"));
-		}
-		catch (Exception e) {
-			keyTitle.append("");
-		}
-
-		if(i < arKeyList.length - 1) {
-			keyValue.append(",");
-			keyTitle.append(",");
-		}
-	}
-
-	pageContext.setAttribute("KEY", keyValue.toString());
-	pageContext.setAttribute("KEY_TITLE", keyTitle.toString());
-
 %>
 <script>
 
@@ -70,7 +45,7 @@ $(function(){
 			PART_NO 				: "<c:out value="${sessionScope.PART_NO}" />", 
 			SERVER_KEY 			: "<c:out value="${SERVER_KEY}" />",	
 			LANG 						: "<c:out value="${mParams['LANG'][0]}" />",
-			KEY		 				: "<c:out value="${KEY}" />",
+		KEY 						: "<c:out value="${mParams['KEY'][0]}" />",
 			KEY_TITLE		 		: "<c:out value="${KEY_TITLE}" />",
 			KEY_TYPE		 		: "<c:out value="${mParams['KEY_TYPE'][0]}" />",
 			VIEW_MODE			: "<c:url value ="${mParams['VIEW_MODE'][0]}" />",
@@ -92,8 +67,7 @@ $(function(){
 
 <c:set var="ViewMode" value="${mParams['VIEW_MODE'][0]}" />
 <c:set var="KeyType" value="${mParams['KEY_TYPE'][0]}" />
-<c:set var="Key" value="${KEY}" />
-<c:set var="KeyTitle" value="${KEY_TITLE}" />
+<c:set var="Key" value="${mParams['KEY'][0]}" />
 <c:set var="isMultiKey" value="${MULTI_KEY}" />
 
 
@@ -141,51 +115,26 @@ $(function(){
 								</span>
 						</div>
 						<div class="area_key">
-
-								<c:choose>
-									<c:when test="${isMultiKey eq true }">
-										<div class="key_title">
-											-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :
-										</div>
-										<div class="area_key_select">
-											<select class="key_select" onchange="javascript:$.Actor.change_GroupKey(this);">
-												<option value="">ALL</option>
-												<c:set var="keyVal" value="${fn:split(Key, ',')}" />
-												<c:set var="keyTitle" value="${fn:split(KeyTitle, ',')}" />
-												<c:set var="keySize" value="${fn:length(keyVal)}" />
-
-												<c:forEach var="i" begin="0" end="${keySize - 1}">
-													<option value="<c:out value="${keyVal[i]}"></c:out>">${keyTitle[i]}</option>
-												</c:forEach>
-											</select>
-										</div>
-									</c:when>
-									<c:otherwise>
-<%--										<div class="key_title">--%>
-<%--											-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :--%>
-<%--										</div>--%>
-<%--										<div class="key" id="key" title="${KeyTitle}" >--%>
-<%--											<c:out value="${KeyTitle}"></c:out>--%>
-<%--										</div>--%>
-									</c:otherwise>
-								</c:choose>
-<%--							<c:choose>--%>
-<%--								<c:when test="${isMultiKey eq true }">--%>
-<%--								<div class="area_key_select">--%>
-<%--									<select class="key_select" onchange="javascript:$.Actor.change_GroupKey(this);">--%>
-<%--										<option value="">ALL</option>--%>
-<%--										<c:forEach items="${fn:split(Key, ',') }" var="curKey">--%>
-<%--										<option value="<c:out value="${curKey}"></c:out>">${curKey}</option>--%>
-<%--										</c:forEach>--%>
-<%--									</select>--%>
-<%--									</div>--%>
-<%--								</c:when>--%>
-<%--								<c:otherwise>--%>
-<%--									<div class="key" id="key" title="${Key}" >--%>
-<%--										<c:out value="${Key}"></c:out>--%>
-<%--									</div>--%>
-<%--								</c:otherwise>--%>
-<%--							</c:choose>--%>
+							<div class="key_title">
+								-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :
+							</div>
+							<c:choose>
+								<c:when test="${isMultiKey eq true }">
+								<div class="area_key_select">
+									<select class="key_select" onchange="javascript:$.Actor.change_GroupKey(this);">
+										<option value="">ALL</option>
+										<c:forEach items="${fn:split(Key, ',') }" var="curKey">
+										<option value="<c:out value="${curKey}"></c:out>">${curKey}</option>
+										</c:forEach>
+									</select>
+									</div>
+								</c:when>
+								<c:otherwise>
+									<div class="key" id="key" title="${Key}" >
+										<c:out value="${Key}"></c:out>
+									</div>
+								</c:otherwise>
+							</c:choose>
 
 						</div>
 					</div>

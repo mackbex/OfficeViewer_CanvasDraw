@@ -73,7 +73,6 @@ $(function(){
 <c:set var="ViewMode" value="${mParams['VIEW_MODE'][0]}" />
 <c:set var="KeyType" value="${mParams['KEY_TYPE'][0]}" />
 <c:set var="Key" value="${mParams['KEY'][0]}" />
-<c:set var="KeyTitle" value="${KEY_TITLE}" />
 <c:set var="isMultiKey" value="${MULTI_KEY}" />
 
 
