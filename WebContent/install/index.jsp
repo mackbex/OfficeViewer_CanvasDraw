@@ -11,13 +11,19 @@
 
 <title>Download</title>
 <%
-	
+	String strDownloadURL = g_profile.getString("WAS_INFO","DOWNLOAD_URL","");
+	pageContext.setAttribute("DOWN_URL",strDownloadURL);
 %>
 <script>
 
 function DownloadFile()
 {
-	self.location.href= g_RootURL + "UpdateFiles/SetupSLIP.exe";
+	if($.Common.isBlank("<c:out value="${DOWN_URL}" />")) {
+		alert("Failed to download install file.");
+	}
+	else {
+		self.location.href= g_RootURL + "<%=strDownloadURL%>";
+	}
 }
 function DownloadAndroid()
 {
