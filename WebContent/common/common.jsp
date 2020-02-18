@@ -98,13 +98,11 @@
 <script>
 "use strict";
 
-<%--var g_ViewerCommand 		= "<c:url value='/ViewerCommand.do' />";--%>
-var g_ActorCommand 		= "<c:url value='/ActorCommand.do' />";
-var g_CommentCommand	= "<c:url value='/CommentCommand.do' />";
-var g_CoCardCommand		= "<c:url value='/CoCardCommand.do' />";
-var g_HistoryCommand		= "<c:url value='/HistoryCommand.do' />";
-var g_RootURL					= "<c:url value='/' />";
-var g_XPI_URL					= "<c:url value='/js/localWAS/OfficeXPI.js' />";
+var g_ActorCommand 		= "${pageContext.request.contextPath}/ActorCommand.do";
+var g_CommentCommand	= "${pageContext.request.contextPath}/CommentCommand.do";
+var g_HistoryCommand		= "${pageContext.request.contextPath}/HistoryCommand.do";
+var g_RootURL					= "${pageContext.request.contextPath}/";
+var g_XPI_URL					= "${pageContext.request.contextPath}/js/localWAS/OfficeXPI.js";
 var g_DOWN_URL				= g_RootURL+"<%=downURL%>";
 
 $(function(){
