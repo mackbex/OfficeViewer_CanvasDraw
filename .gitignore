@@ -8,3 +8,5 @@
 /.project
 # Project exclude paths
 /classes/
+/OfficeViewer.eml
+/OfficeViewer.iml
