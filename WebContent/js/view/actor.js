@@ -687,10 +687,14 @@ $.Actor = {
 
 					//var elThumb = elDest.find("[class=slip_item]");
 					//arElThumb.css("opacity","1");
-				setTimeout(function(){
-					elDest.masonry('layout');
+					if(arObjSlip[Object.keys(arObjSlip)[0]].SDOCNO_INDEX !== "1") {
+						$.grep(arElThumb, function(el){
+							el.css("display","block");
+						});
+					}
+					//
 					elDest.masonry('reloadItems');
-				}, 100);
+					elDest.masonry('layout');
 
 					$.Common.HideProgress("#slip_progress");
 					$("#area_slip").getNiceScroll().resize();
