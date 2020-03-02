@@ -33,6 +33,8 @@
 
 		pageContext.setAttribute("KEY",key);
 		pageContext.setAttribute("MULTI_KEY", isMultiKey);
+		pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO","FOLD", "T"));
+		pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO","MAXIMIZED", "F"));
 
 	%>
 	<script>
@@ -55,6 +57,8 @@
 				XPI_PORT				: "<c:url value ="${mParams['XPI_PORT'][0]}" />",
 				MULTI_KEY				: <c:out value="${MULTI_KEY}" />,
 				PAGE					:"ACTOR",
+				FOLD				:  "<c:out value="${FOLD}" />",
+				MAXIMIZED			:  "<c:out value="${MAXIMIZED}" />",
 
 			}
 
@@ -148,9 +152,9 @@
 					</div>
 				</div>
 			</div>
+			<div id="slip_progress" class="slip_progress"></div>
 			<div id="area_slip" class="area_slip">
 				<div>
-					<div id="slip_progress" class="slip_progress"></div>
 					<div id="slip_masonry" class="slip_masonry"></div>
 				</div>
 			</div>

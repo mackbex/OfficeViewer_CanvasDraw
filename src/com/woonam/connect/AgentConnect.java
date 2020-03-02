@@ -171,6 +171,10 @@ public class AgentConnect
 
 		String flag = "NS";
 
+		if(!"ORACLE".equalsIgnoreCase(m_Profile.getString("AGENT_INFO","DB","MSSQL"))) {
+			flag = "S";
+		}
+
 		StringBuffer buff = new StringBuffer()
 				.append( flag)
 				.append( strTemp )
@@ -204,6 +208,10 @@ public class AgentConnect
 		}//Cm.Getlength(strQuery);
 
 		String flag = "NQ";
+
+		if(!"ORACLE".equalsIgnoreCase(m_Profile.getString("AGENT_INFO","DB","MSSQL"))) {
+			flag = "Q";
+		}
 
 		StringBuffer buff = new StringBuffer()
 				.append( flag )
