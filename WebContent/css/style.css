@@ -807,7 +807,7 @@ table {
 .actor_right .slip_title .cb_slip_all > label {
 	top:7px;
 }
-.actor_right .progress_slip_scroll, .actor_right .progress_attach_scroll{
+.actor_right .progress_slip_scroll, .actor_right .progress_attach_scroll, .viewer_main .progress_slip_scroll{
 	display: none;
 	position: absolute;
 	left: 0;
@@ -2762,14 +2762,14 @@ div.menu_on {
 }
 .info_progress  {
 	position:absolute;
-	top:0;
+	top:48px;
 	left:0;
 	right:0;
 	bottom:0;
 	margin:auto;
 	z-index:10;
 }
-.viewer_left .info > div {
+.viewer_left .info > div:nth-child(2) {
 	position:relative;
 }
 .viewer_left .info .content_block {

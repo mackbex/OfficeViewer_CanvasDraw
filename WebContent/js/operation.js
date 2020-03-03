@@ -206,7 +206,7 @@ $.Operation  = {
 			var objSlipData = target.objSlipItem[value];
 
 			if("1" === objSlipData.SDOCNO_INDEX) {// .attr("first")) {
-				if("1" === objSlipData.IS_FOLD) {
+				if(objSlipData.IS_FOLD) {
 					field = "SDOC_NO";
 					value = objData.SDOC_NO;
 				}
@@ -227,7 +227,7 @@ $.Operation  = {
 					objSlipData.SLIP_ROTATE = calc+"";
 					//});
 					
-					target.Reload_Thumb(target, elTarget, objSlipData, objSlipData.IS_FOLD);
+					$.Actor.Reload_Thumb(target, elTarget, objSlipData, objSlipData.IS_FOLD);
 				}
 				else {
 					$.Common.simpleAlert(null,target.localeMsg[objRes.MSG]);
@@ -683,29 +683,29 @@ $.Operation  = {
 		
 			//Post submit to popup
 			var objParams = {};
-			objParams["KEY"] 			= target.params.KEY;
-			objParams["KEY_TITLE"] 			= encodeURIComponent(target.params.KEY_TITLE);
-			objParams["KEY_TYPE"] 		= target.params.KEY_TYPE;
-			objParams["LANG"] 				= target.params.LANG;
-			objParams["VIEW_MODE"] 		= target.params.VIEW_MODE;
-			objParams["SVR_MODE"]		= target.params.SVR_MODE;
-			objParams["SLIP_IRN"]			= objData.SLIP_IRN;
-			objParams["MENU"]				= target.params.MENU;
-			objParams["XPI_PORT"]			= target.params.XPI_PORT;
+			objParams["KEY"] 					= target.params.KEY;
+			objParams["KEY_TITLE"] 				= encodeURIComponent(target.params.KEY_TITLE);
+			objParams["KEY_TYPE"] 				= target.params.KEY_TYPE;
+			objParams["LANG"] 					= target.params.LANG;
+			objParams["VIEW_MODE"] 				= target.params.VIEW_MODE;
+			objParams["SVR_MODE"]				= target.params.SVR_MODE;
+			objParams["CLICKED_SLIP_IRN"]		= objData.SLIP_IRN;
+			objParams["MENU"]					= target.params.MENU;
+			objParams["XPI_PORT"]				= target.params.XPI_PORT;
 			
 			var elFirstGroupItem 			= $("[id=slip_item]");
 			
-			$.each(elFirstGroupItem, function() {
-				if($(this).attr("group") == objData.SDOC_NO)
-				{
-					objParams["FOLD"]			= $(this).attr("fold");
-					return false;
-				}
-			});
-			
-			if($.Common.isBlank(objParams["FOLD"])) {
-				objParams["FOLD"]	 = "";
-			}
+			// $.each(elFirstGroupItem, function() {
+			// 	if($(this).attr("group") == objData.SDOC_NO)
+			// 	{
+			// 		objParams["FOLD"]			= $(this).attr("fold");
+			// 		return false;
+			// 	}
+			// });
+			//
+			// if($.Common.isBlank(objParams["FOLD"])) {
+			// 	objParams["FOLD"]	 = "";
+			// }
 			
 			$.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
 			
@@ -832,7 +832,7 @@ $.Operation  = {
 			//	var elTarget = $(".slip_item[idx='"+objData.SLIP_IRN+"']");
 			//	var idx = elTarget.idx();
 				
-				if("1" === objData.IS_FOLD) {
+				if(objData.IS_FOLD) {
 					field 	= "SDOC_NO";
 					key 	= objData.SDOC_NO;
 				}
@@ -991,7 +991,7 @@ $.Operation  = {
 				
 				if("1" === isFirst) {
 					var isFold = objItemData.IS_FOLD;
-					if(isFold === "1") {
+					if(isFold) {
 						objCheckedSlip_SDocNoData.push(objItemData.SDOC_NO);
 					}
 					else {

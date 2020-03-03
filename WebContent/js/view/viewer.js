@@ -3,7 +3,7 @@ $.Viewer = {
 		localeMsg : null,
 		colorSet : null,
 		params : null,
-		slipRange : 99999,
+		slipRange : 10,
 		thumbWidth : 140,
 		startIdx : 0,
 		slipTotalCnt : 0,
@@ -14,23 +14,27 @@ $.Viewer = {
 		viewer : null,
 		is_Maximized : false,
 		currentKey : null,
+		IS_FOLD : true,
 		Cur_Slip : null,
 		init : function(params) {
 			
 			this.params 			= params;
 			this.currentKey 		= this.params.KEY;
-			
+			this.is_Maximized 	= params.MAXIMIZED === "T" ? true : false;
+			this.IS_FOLD 		= params.FOLD === "T" ? true : false;
+
+
 			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
 			$.Common.ShowProgress("#info_progress","Waiting..","000000","0.7");
 			$.Common.ShowProgress("#original_progress","Waiting..","000000","0.7");
 		
 			
 			$(window).on('resize', function() {
-				$.each($("[tag=drag]"), function(){
-					var elPrev = $(this).prev();
-					var left = elPrev.outerWidth() + parseInt(elPrev.offset().left) - $("#list_btnLeft").width();
-					$(this).css("left",left);
-				});
+				// $.each($("[tag=drag]"), function(){
+				// 	var elPrev = $(this).prev();
+				// 	var left = elPrev.outerWidth() + parseInt(elPrev.offset().left) - $("#list_btnLeft").width();
+				// 	$(this).css("left",left);
+				// });
 				
 			});
 			
@@ -75,99 +79,88 @@ $.Viewer = {
 				$(".viewer_right").css("width","100%");
 				$(".area_attach_list").hide();
 			}
-			
-			
-			
-			$('#slip_masonry').masonry({
-				  // options
-				  itemSelector: '#slip_item',
-				  columnWidth: $.Viewer.thumbWidth,
-				  horizontalOrder: true,
-				  isFitWidth: true,
-				  gutter:20
-				});
+
 			
 			$.Viewer.initializeSlip();
 			
 			
-			if("SIMPLE" !== $.Viewer.params.VIEW_MODE.toUpperCase()){
-				
-				//Set drag event
-			//	$.Viewer.setBorderDrag();
-				
-				//Toggle attachlist area
-				$.Viewer.getAttachList($.Viewer.params);
-
-
-			}
+			// if("SIMPLE" !== $.Viewer.params.VIEW_MODE.toUpperCase()){
+			//
+			// 	//Toggle attachlist area
+			// 	$.Viewer.getAttachList($.Viewer.params);
+			//
+			//
+			// }
 			$.Viewer.viewer = $.Viewer.setImageViewer();
 			
 		},
-// 		Reload_Thumb : function(target, elThumb, objData) {
-//
-// 			$.each(objData,function() {
-//
-// 				var sbImgURL = new StringBuffer();
-// 				sbImgURL.append(this.rootURL);
-// 				sbImgURL.append("DownloadImage.do?");
-// 				sbImgURL.append("ImgType=thumb");
-// 				sbImgURL.append("&DocIRN="+this.DOC_IRN);
-// 				sbImgURL.append("&Idx="+this.DOC_NO);
-// 				sbImgURL.append("&degree="+this.SLIP_ROTATE);
-// 				sbImgURL.append("&UserID="+target.params.USER_ID);
-// 				sbImgURL.append("&CorpNo="+target.params.CORP_NO);
-// 				sbImgURL.append('?'+Math.random());
-// //
-//
-//
-// 				var elThumb = $("#slip_masonry").find("[idx='" + this.SLIP_IRN + "']");
-// 				var elImg = elThumb.find(".link > img");
-// 				var imgURL = elImg.attr('src');
-// 				elImg.attr('src', sbImgURL.toString());
-//
-// 				setTimeout(function(){ $('#slip_masonry').masonry("layout"); }, 100);
-//
-// 			});
-//
-// 			$("#area_slip").getNiceScroll().resize();
-//
-// 			$(".context_wrapper").hide();
-// 			elThumb.find(".area_thumb").click();
-//
-// 		},
-		Reload_Thumb : function(target, elThumb, objData, isFold) {
 
-			if("1" === isFold) {
-				var groups = $("#slip_masonry").find("[group="+objData.SDOC_NO+"]");
-
-				$.each(groups, function(){
-					var slipIrn = $(this).attr("idx");
-
-					target.objSlipItem[slipIrn].SLIP_ROTATE = objData.SLIP_ROTATE;
-					var imageData = target.objSlipItem[slipIrn];
-
-					var elImg =  $(this).find(".link > img");
-					elImg.attr('src', $.Actor.Get_ImageURL(target, imageData));
-				});
-			}
-			else {
-
-				var elImg = elThumb.find(".link > img");
-				elImg.attr('src', $.Actor.Get_ImageURL(target, objData));
-			}
-
-			setTimeout(function(){ $('#slip_masonry').masonry("layout"); }, 400);
-
-			$("#area_slip").getNiceScroll().resize();
-			$(".context_wrapper").hide();
-
-		},
 		initializeSlip : function() {
-			$.Viewer.getSlipList();
 
-			if(!$.Common.isBlank($.Viewer.currentKey) && $.Viewer.currentKey.indexOf(",") <= -1) {
+			var params = $.Viewer.params;
+
+			var objListParams = {
+				KEY : params.KEY,
+				KEY_TYPE : params.KEY_TYPE,
+				USER_ID : params.USER_ID,
+				CORP_NO : params.CORP_NO,
+				LANG : params.LANG
+			};
+
+			$.when($.Actor.getSlipList($.Viewer, objListParams)).then(function(res){
+
+				if(!res) {
+					$.Common.HideProgress("#slip_progress");
+					return;
+				}
+
+				if(!$.Common.isBlank($.Viewer.params.CLICKED_SLIP_IRN))
+				{
+					$.Viewer.slipRange = Object.keys($.Viewer.objSlipItem).length;
+					$("#area_slip").unbind('scroll');
+				}
+
+				if($.Viewer.params.MULTI_KEY) {
+					$.Viewer.change_GroupKey($.Viewer.currentKey);
+				}
+				else {
+					$.Actor.displayThumb($.Viewer);
+				}
+
+			}, function (reason) {
+				$.Common.simpleToast("Failed to load thumbs.");
+				$.Common.HideProgress("#slip_progress");
+			});
+
+			if("SIMPLE" !== $.Viewer.params.VIEW_MODE.toUpperCase()) {
+				$.Viewer.getAttachList($.Viewer.params);
+			}
+			if(!$.Viewer.params.MULTI_KEY) {
 				$.Viewer.getCommentCnt();
 			}
+
+			$('#slip_masonry').masonry({
+				// options
+				itemSelector: '#slip_item',
+				columnWidth: $.Viewer.thumbWidth,
+				horizontalOrder: true,
+				isFitWidth: true,
+				gutter: 20
+			});
+
+
+			$.Actor.addScrollEvent($(".area_slip"), function(){
+				if(!$.Actor.isSlipLoading) {
+
+					//	var start = $(".slip_item").size() === 0 ? 0 : $(".slip_item").size() + 1;
+
+					$(".slip_wrapper").find('.progress_slip_scroll').show();
+					//$.Actor.getSlipList($.Actor.params,   $.Actor.slipRange);
+					$.Actor.displayThumb($.Viewer);
+				}
+			});
+
+
 		},
 		getCommentCnt: function() {
 			var objParams = {
@@ -265,6 +258,7 @@ $.Viewer = {
 		
 		},
 		change_GroupKey : function(option) {
+
 			var key = null;
 			if(typeof(option) === 'string' || option instanceof String) {
 				key = option;
@@ -273,20 +267,35 @@ $.Viewer = {
 				key = option.value;
 			}
 
-			if($.Common.isBlank(key)){
+			if( key.indexOf(",") !== -1 ) {
+				key = "";
+			}
+
+
+
+			if($.Common.isBlank(key) ){
 				key = $.Viewer.params.KEY;
 				$(".key_select option").eq(0).prop("selected",true);
 			}
 			else {
 				$(".key_select option[value=" + key + "]").prop('selected', true);
+				$.Viewer.params.CLICKED_SLIP_IRN = null;
+				$("#area_slip")[0].scrollTop = 0;
 			}
+
+			$("#slip_masonry").empty();
+			//	$.Actor.objSlipItem = null;
+			$("#area_attach").empty();
+			$("#originalImage").empty();
+
+			//	$.Actor.objAttachItem = null;
 
 			$.Viewer.currentKey = key;
 			
 			$.Viewer.Draw_MainContext();
 			$.Common.Draw_LeftMenu($.Viewer);
-			
-			$.Viewer.addSlipItem($.Viewer.objSlipItem, $("#slip_masonry"), key);
+
+			$.Actor.displayThumb($.Viewer);
 			
 			var elAttachArea = $("#viewer_right_extra");
 			var isShown = elAttachArea.attr("show");
@@ -305,20 +314,8 @@ $.Viewer = {
 			//	$.Common.postSubmit(g_RootURL + "/slip_actor.jsp", $.Actor.params, "post");
 			$.Viewer.reset();
 
-			if(!$.Common.isBlank($.Viewer.currentKey) && $.Viewer.currentKey.indexOf(",") === -1) {
 
-				$.Viewer.getSlipList(true);
-				$.Viewer.getAttachList($.Viewer.params, true);
-			}
-			else {
-				$.Viewer.initializeSlip();
-				$.Viewer.getAttachList($.Viewer.params);
-			}
-
-
-				//$.Viewer.initializeSlip();
-			//	$.Viewer.getAttachList($.Viewer.params);
-				//$.Viewer.resetViewer();
+			$.Viewer.initializeSlip();
 		},
 		reset : function() {
 			$(".slip_masonry").empty();
@@ -330,6 +327,7 @@ $.Viewer = {
 			$.Viewer.slipTotalCnt = 0;
 			$.Viewer.attachTotalCnt = 0;
 			$.Viewer.startIdx = 0;
+			$.Viewer.params.CLICKED_SLIP_IRN = null;
 		},
 		initButtons : function()
 		{
@@ -356,297 +354,21 @@ $.Viewer = {
 	        	    },
 	        	    /*click: function() {
 	        	    	var isCSOperation = $(this).attr("cs_operation");
-	        	    	
+
 	        	    	if("1" === isCSOperation)
         	    		{
         	    			$.Common.simpleAlert("확인",$.Actor.localeMsg.CHECKING_XPI, 0.3);
         	    		}
-	        	    	
+
 	        	    }*/
 	        	});
 			});
 		},
-		setBorderPosition : function() {
-			$('#dragBar_viewer').css("left",$(".viewer_left").outerWidth());
-			$('#dragBar_extra').css("left",$(".viewer_left").outerWidth() + $(".viewer_right").outerWidth());
-			
-		},
-		setBorderEvent : function(elBorder) {
-			
-			var elPrevID = elBorder.prev().attr("id");
-        	var elNextID = elBorder.next().attr("id");
-        	var minAreaX = 0;
-        	var maxAreaX = 0;
-			
-			elBorder.mousedown(function(e){
-					minAreaX = 0;
-					maxAreaX = 0;
-					//Get min width
-		        	$.each(elBorder.siblings(), function(){
-		    			if($(this).attr("id") == elPrevID)
-		    			{
-		    				minAreaX += parseInt($(this).attr("min-width"));
-		    				return false;
-		    			}
-		    			minAreaX += $(this).outerWidth();
-		        	});
-		        	
-		        	//Get max width
-		        	$.each(elBorder.siblings(), function(){
-		    			if($(this).attr("id") == elNextID)
-		    			{
-		    				maxAreaX =  $(document).width() - parseInt($(this).attr("min-width")) ;
-		    				
-		    				var elLast = elBorder.siblings("[align=last]");
-		    				
-		    				if(elNextID != elLast.attr("id"))
-		    				{
-			    				if(elLast.is(":visible")) {
-			    					var lastLeft =  elLast.offset().left;
-			    					maxAreaX  =  maxAreaX - ($(document).width() - lastLeft) ;
-			    				}
-		    				}
-		    				return false;
-		    			}
-		        	});
-		        	
-				   $(this).attr("dragging","1");
-			       var elSlip 		= $(".slip_wrapper");
-			       var areaDragBar	= $(document.createElement('div'))
-			       							.attr({
-			       								id:"dragBarArea",
-			       							})
-			       							.css({
-			       								position:"absolute",
-			       								top:0,
-			       								right:0,
-			       								bottom:0,
-			       								left:0,
-			       								width:"100%",
-			       								height:"100%",
-			       							}).appendTo('.wrapper');
-			       
-			       var ghostBar 	= $(document.createElement('div'))
-			       							.attr({
-			       								id:'ghostBar',
-			       							})
-					                        .css({
-					    	   					width: "2px",
-			    	   							height: elBorder.outerHeight(),
-			    	   							top: $(".area_viewer_title").height(),
-			    	   							left: elBorder.offset().left - 1,
-			    	   							background:"rgba(0,0,0,0.4)",
-			    	   							position:"absolute"
-					                        }).appendTo(areaDragBar);
-			       
-			       minAreaX += 10;
-			       
-			        $(document).off("mousemove").mousemove(function(e){
-			        	e.preventDefault();
-			        	
-			        	if(e.clientX >= minAreaX && e.clientX <=  maxAreaX)
-			        	{
-			        		ghostBar.css("left", e.clientX);
-			        	}
-			        	else
-			        	{
-			        		if(e.clientX < minAreaX) ghostBar.css("left", minAreaX);
-			        		if(e.clientX > maxAreaX) ghostBar.css("left", maxAreaX);
-			        	}
-			       });
-			    });
-			
 
-			   $(document).mouseup(function(e){
-
-				  var isDragging = elBorder.attr("dragging");
-				  if("1" == isDragging)
-			      {
-					  var left 			= $('#ghostBar').offset().left;
-					  if("1" == $.Viewer.params.MENU) {
-						  left -= $("#list_btnLeft").width();
-					  }
-					  var beforeLeft 	= elBorder.offset().left;
-					  if("1" == $.Viewer.params.MENU) {
-						  beforeLeft -= $("#list_btnLeft").width();
-					  }
-					  
-					  elBorder.css("left", left);
-					  
-					  var moveWidth = left - beforeLeft;
-					  var moveWidthPercent = $.Common.round(moveWidth / $(".area_viewer_content").outerWidth() * 100, 1); // Math.round(moveWidth / $(document).outerWidth() * 100, 1);
-				
-					  if(moveWidthPercent != 0)
-					  {
-						  var prevWidthPercent = $.Common.getWidthPercent(elBorder.prev());
-						  var prevWidth = prevWidthPercent + moveWidthPercent;
-						  
-						  
-						  
-						  elBorder.prev().css("width", prevWidth+"%");
-	
-						  var elLast = elBorder.siblings(":last");
-						  
-				
-						  moveWidthPercent = -moveWidthPercent;
-						  var nextWidthPercent =  $.Common.getWidthPercent(elBorder.next());
-						  var nextWidth = nextWidthPercent + (moveWidthPercent);
-						  
-						 nextWidth = $.Viewer.Verify_Width(elBorder.next(), nextWidth);
-						  
-						  
-
-
-						  elBorder.next().css("width", nextWidth+"%");
-					  }
-					  $('#ghostBar').remove();
-					  $("#dragBarArea").remove();
-					  
-					  $(document).unbind('mousemove');
-					  elBorder.attr("dragging","0");
-					  
-					  $('#slip_masonry').masonry('layout');
-					  
-					  if($("#area_slip").is(":visible")) {
-						  $("#area_slip").getNiceScroll().resize();
-					  }
-					  
-					  $.Viewer.resetViewer();
-			       }
-			    });
-		},
-		Verify_Width : function(elTarget, targetWidth){
-			var totalWidthPercent = 0;
-			var res = targetWidth;
-			$.each($(".area_viewer_content").children("div"), function() {
-				
-				if($(this).attr("tag") == "drag") {
-					return true;
-				}
-
-				if(this == elTarget[0]) {
-					return true;
-				}
-
-				totalWidthPercent += $.Common.getWidthPercent($(this));
-			});
-
-			totalWidthPercent += targetWidth;
-
-			if(totalWidthPercent > 100 ) {
-				res = res - (totalWidthPercent - 100);
-			}
-
-			return res;
-		},
-		setBorderDrag : function() {
-			
-			$.Viewer.setBorderPosition();
-			$.Viewer.setBorderEvent($('#dragBar_viewer'));
-			$.Viewer.setBorderEvent($('#dragBar_extra'));
-			
-		},
-		getSlipList : function(isMultiKey) {
-		
-			var params = $.Viewer.params;
-			var objCntParams = {
-					KEY :  $.Common.get_ObjectValue(params.KEY),
-					KEY_TYPE : params.KEY_TYPE,
-					USER_ID : params.USER_ID,
-					CORP_NO : params.CORP_NO,
-					LANG : params.LANG
-			};
-			
-			var objListParams = {
-					KEY : params.KEY,
-					KEY_TYPE : params.KEY_TYPE,
-					USER_ID : params.USER_ID,
-					CORP_NO : params.CORP_NO,
-					LANG : params.LANG,
-					START_IDX : $.Viewer.startIdx,
-					PER : $.Viewer.slipRange
-			};
-
-			// $.when($.Common.RunCommand(g_ActorCommand, "GET_THUMB_COUNT", objCntParams),
-			// 		$.Common.RunCommand(g_ActorCommand, "GET_THUMB_LIST", objListParams)).done(function(res1, res2) {
-			// 		$.Viewer.slipTotalCnt = parseInt(res1.THUMB_CNT);
-			// 		if($.Viewer.slipTotalCnt > 0)
-			// 		{
-			// 			$.Viewer.arObjSlipItem = res2;
-			// 			$.Viewer.addSlipItem(res2, $("#slip_masonry"));
-			// 			$.Viewer.startIdx = ($.Viewer.startIdx + $.Viewer.slipRange) + 1;
-			//
-			// 		}
-			// 		else
-			// 		{
-			// 		//	$.Common.HideProgress("#slip_progress");
-			// 		}
-			//
-			// 	})
-			$.when($.Common.RunCommand(g_ActorCommand, "GET_SLIP_LIST", objListParams)).done(function(res) {
-				// if(res != null && res.length > 0) {
-				// 	var thumbCnt = 0;
-				// 	$.each(res, function(){
-				// 		if("0" === this.DOC_NO) {
-				// 			thumbCnt++;
-				// 		}
-				// 	});
-				// 	$.Viewer.slipTotalCnt = thumbCnt;
-
-					$.Viewer.objSlipItem = res;
-					$.Viewer.addSlipItem(res, $("#slip_masonry"));
-					$.Viewer.startIdx = ($.Viewer.startIdx + $.Viewer.slipRange) + 1;
-
-
-					if(isMultiKey) {
-							$.Viewer.change_GroupKey($.Viewer.currentKey);
-					}
-				// }
-				// else {
-				// 	$.Common.HideProgress("#slip_progress");
-				// }
-
-
-			})
-			.fail(function(res){
-				alert("Failed to load thumbs.");
-		//
-
-			}).always(function(){
-				$.Common.HideProgress("#info_progress");
-				$.Common.HideProgress("#slip_progress");
-			});
-		
-		},
-	// 	getAttachCount : function(params) {
-	//
-	// 		var objCntParams = {
-	// 				KEY :  $.Common.get_ObjectValue(params.KEY),
-	// 				KEY_TYPE : params.KEY_TYPE,
-	// 				USER_ID : params.USER_ID,
-	// 				CORP_NO : params.CORP_NO,
-	// 				LANG : params.LANG
-	// 		};
-	//
-	// 		$.when($.Common.RunCommand(g_ActorCommand, "GET_ATTACH_LIST", objCntParams)).done(function(res) {
-	// 					$.Viewer.attachCnt = Object.keys(res).length;
-	// 			if($.Viewer.attachCnt > 0) {
-	// 				$.Viewer.toggleAttachList();
-	// 			}
-	//
-	// 		}).fail(function(res){
-	// 	//		alert("Failed to load attach.");
-	// 		}).always(function(){
-	//
-	// //			$.Common.HideProgress("#attach_progress");
-	//
-	// 		});
-	//
-	// 	},
 		getAttachList : function(params, isMultiKey)
 		{
 			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
-			
+
 			var objListParams = {
 					KEY :  params.KEY,
 					KEY_TYPE : params.KEY_TYPE,
@@ -654,7 +376,7 @@ $.Viewer = {
 					CORP_NO : params.CORP_NO,
 					LANG : params.LANG,
 			};
-			
+
 			$.when($.Common.RunCommand(g_ActorCommand, "GET_ATTACH_LIST", objListParams)).done(function(res) {
 
 				$.Viewer.attachCnt = Object.keys(res).length;
@@ -665,7 +387,7 @@ $.Viewer = {
 				// if($.Viewer.attachCnt > 0) {
 				// 	$.Viewer.toggleAttachList();
 				// }
-				
+
 				$("#area_attach").niceScroll({horizrailenabled: false, cursorcolor:"#"+$.Viewer.colorSet.NAVIGATION});
 
 
@@ -676,16 +398,16 @@ $.Viewer = {
 				}
 				else {
 					if($.Viewer.attachCnt > 0) {
-						$.Viewer.toggleAttachList();
+						$.Viewer.showAttachList();
 					}
 				}
-				
+
 			}).fail(function(res){
 	//			alert("Failed to load attach.");
 			}).always(function(){
-				
+
 				$.Common.HideProgress("#attach_progress");
-				
+
 			});
 		},
 		addAttachItem : function(arObjAttach, elDest, specificKey) {
@@ -782,33 +504,6 @@ $.Viewer = {
 				$.Viewer.colorSet = objColor;
 			}
 		},
-		
-		addContextMenu : function(elTarget, menuGroup, objData, viewMode, option) {
-			//Set click event
-			var fnClick = function(e) {
-				
-			}
-			//Add icon
-			var iconURL = g_RootURL+"image/common/option";
-			
-			var elBtn = $(document.createElement('div'));
-			elBtn.unbind().bind("click",fnClick);
-			elBtn.appendTo(elTarget);
-			
-			var elImg = $(document.createElement('img')).attr("src",iconURL + ".png");
-			elImg.unbind('mouseenter mouseleave').hover(function(){
-				$(this).css("opacity","0.7");
-			},function(){
-				$(this).css("opacity","1");
-			});
-			
-			elImg.appendTo(elBtn);		
-			
-			var arObjMenu = $.Common.sortContextMenuItem($.Viewer.localeMsg, menuGroup, viewMode);
-			
-			$.ContextMenu.getMenu($.Viewer, elTarget, elBtn, arObjMenu, objData, option);
-			
-		},
 		removeSlipElement : function(elTarget) {
 			
 			$.each(elTarget,function(){
@@ -828,143 +523,135 @@ $.Viewer = {
 			
 			$("#area_attach").getNiceScroll().resize();
 		},
-		addSlipItem : function(arObjSlip, elDest, specificKey)
+
+		getThumbElement : function(objData, callerObjData)
 		{
-			elDest.empty();
-			elDest.masonry("layout");
+			//Draw thumb outline
+			var idx 		= objData.SLIP_IRN;
+			var group 	= objData.SDOC_NO;
 
-			if(arObjSlip == null) return;
-
-			var arElThumb = [];
-			
-		//	var lastSDocNo = null;
-			$.each(arObjSlip,function(i){
-
-				if(!$.Common.isBlank(specificKey) && specificKey.indexOf(",") === -1 && this.JDOC_NO !== specificKey) return true;
-
-				var elThumb = $.Actor.getThumbElement(this, $.Viewer);
-
-				if(elThumb != null)
-				{
-					elDest.masonry('appended', elThumb);
-					elThumb.css("opacity","0");
-					elThumb.appendTo(elDest);
-					$.Viewer.setThumbMouseEvent(elThumb.find(".area_thumb"));
-
-					arElThumb.push(elThumb);
-				}
+			var elThumb = $(document.createElement('div'));
+			elThumb.addClass("slip_item");
+			elThumb.attr("idx", idx);
+			elThumb.attr("group", group);
+			elThumb.css({
+				"width" : callerObjData.thumbWidth
 			});
-			
-			elDest.imagesLoaded(function(){
+			elThumb.attr("id","slip_item");
 
-				$.Common.HideProgress("[id=slip_progress]");
+			if("1" === objData.SDOC_ONE)
+			{
+				elThumb.addClass("oneSlip");
+			}
 
-				elDest.masonry('layout');
-				elDest.masonry('reloadItems');
+			//Draw thumb Title area
+			var elThumbTitleArea = $(document.createElement('div'));
+			elThumbTitleArea.addClass("area_title");
+			//elThumbTitleArea.css("background-color","rgb("+objData.KIND_COLOR+")");
+			elThumbTitleArea.appendTo(elThumb);
 
-				$.Common.HideProgress("#slip_progress");
-				$("#area_slip").getNiceScroll().resize();
+			if("1" === objData.SDOC_AFTER) {
+				elThumbTitleArea.addClass("after");
+			}
 
+			//Draw checkbox area
+			var elTitleCheckbox = $(document.createElement('div'));
+			elTitleCheckbox.addClass("area_cb");
+			elTitleCheckbox.appendTo(elThumbTitleArea);
 
-				var version = $.Common.GetBrowserVersion().ActingVersion;
-				if(version < 9)
-				{
-					if(Selectivizr != null)
-					{
-						Selectivizr.init(); //Refresh selectivizr if brower is under IE8
-					}
-				}
+			//Draw checkbox
+			var elCheckbox =  $(document.createElement('label'));
+			elCheckbox.addClass("cb_container");
+			elCheckbox.addClass("slip_check");
+			elCheckbox.append($(document.createElement('input')).attr({"id":"chk","type":"checkbox"}));
+			elCheckbox.append($(document.createElement('span')).addClass("checkbox"));
+			elCheckbox.appendTo(elTitleCheckbox);
 
-				if(version >= 9)
-				{
-					//Add ripple effect.
-					// arElThumb.find('.area_effect').ripple({
-					// 	maxDiameter: "200%"
-					// });
-
-					//Add thumb options
-					$.each(arElThumb, function(){
-
-						$(this).css("opacity","1");
-						$(this).find('.area_effect').ripple({
-							maxDiameter: "200%"
-						});
-
-						var idx = $(this).attr("idx");
-
-						var elTitleArea = $(this).find(".area_title_btn");
-
-						//Draw fold icon
-						$.Actor.addFoldIcon($.Viewer, elTitleArea, idx);
-
-						if("1" === $.Viewer.objSlipItem[idx].SDOCNO_INDEX)
-						{
-							$.Actor.fold($.Viewer, idx);
-						}
-
-						//Draw option icon
-						$.Viewer.addContextMenu(elTitleArea, $.Viewer.contextMenu["Thumb"], this, $.Viewer.params.VIEW_MODE);
+			//Draw option btn area
+			var elTypeColor = $(document.createElement('div'));
+			elTypeColor.attr("id","type_color");
+			elTypeColor.css("background-color","rgb("+objData.KIND_COLOR+")");
+			elTypeColor.appendTo(elThumbTitleArea);
 
 
-						var curObj 			= $.Viewer.objSlipItem[idx];
-
-						var bookmarkItem = curObj["BOOKMARKS"];
-						//
-						// $.each(bookmarkItem, function(){
-
-						var bookmark = $(document.createElement('canvas'))[0];
-						$(bookmark).attr({
-							"width": $(this).find(".area_thumb").width(),
-							"height": $(this).find(".area_thumb").height()
-						});
-
-						$(bookmark).insertAfter($(this).find(".link"));
-
-						$.Bookmark.Draw_BookmarkItem(bookmark, bookmarkItem, curObj["SLIP_ROTATE"]);
-
-					});
-				}
+			//Draw thumb title
+			var elThumbTitle = $(document.createElement('div'));
+			elThumbTitle.addClass("thumb_title");
+			elThumbTitle.append($(document.createElement('span')).html(objData.SDOC_KINDNM));
+			elThumbTitle.appendTo(elThumbTitleArea);
 
 
-				// $.each(elDest.children('[id="slip_item"]'), function(){
-				// 	$(this).css("opacity","1");
-				// });
-				// elDest.masonry('layout');
-				//
-				// //Finish UI Setting
-				// $.each($("#slip_masonry").find('[id="slip_item"]'), function(){
-				// 	$(this).css("opacity","1");
-				//
-				// 	var idx = $(this).attr("idx");
-				// 	if("1" === $.Viewer.objSlipItem[idx].SDOCNO_INDEX)
-				// 	{
-				// 		$.Actor.fold($.Viewer, idx);
-				// 	}
-				// });
-				// $('#slip_masonry').masonry('reloadItems');
-				//
-				// $.Common.HideProgress("[id=slip_progress]");
-				// $("#area_slip").getNiceScroll().resize();
-				//
-				// var version = $.Common.GetBrowserVersion().ActingVersion;
-				// if(version < 9)
-				// {
-				// 	if(Selectivizr != null)
-				// 	{
-				// 		Selectivizr.init(); //Refresh selectivizr if brower is under IE8
-				// 	}
-				// }
-				
+			if("1" === objData.SDOCNO_INDEX)
+			{
+				var elThumbBtnArea = $(document.createElement('div'));
+				elThumbBtnArea.addClass("area_title_btn");
+				elThumbBtnArea.attr("type","SLIP");
+				elThumbBtnArea.appendTo(elThumbTitleArea);
+				objData.IS_FOLD = callerObjData.IS_FOLD;
+				//	elThumb.attr("first","1");
+				//	elThumb.attr("fold","1");
+			}
+			// else
+			// {
+			// 	elThumb.css("display","none");
+			// }
 
-				//select first item
-				$.Viewer.selectSlipFromThumb();
-			});
+
+
+			//Draw image area
+			var elThumbImgArea = $(document.createElement('div'));
+			elThumbImgArea.css("position","relative");
+			elThumbImgArea.attr("class","area_thumb");
+			elThumbImgArea.appendTo(elThumb);
+
+			//Add link
+			var vElImageHref = $(document.createElement('a'));
+			vElImageHref.addClass("link");
+			vElImageHref.appendTo(elThumbImgArea);
+
+			//Add image
+			var sbImgURL = new StringBuffer();
+			sbImgURL.append(this.rootURL);
+			sbImgURL.append("DownloadImage.do?");
+			sbImgURL.append("ImgType=thumb");
+			sbImgURL.append("&DocIRN="+objData.DOC_IRN);
+			sbImgURL.append("&Idx="+objData.DOC_NO);
+			sbImgURL.append("&degree="+objData.SLIP_ROTATE);
+			sbImgURL.append("&UserID="+callerObjData.params.USER_ID);
+			sbImgURL.append("&CorpNo="+callerObjData.params.CORP_NO);
+			sbImgURL.append('?'+Math.random());
+
+			var vElImage = $(document.createElement('img'));
+			vElImage.attr("src",sbImgURL);
+			vElImage.attr("class","thumb_img");
+
+			$(vElImageHref).append(vElImage);
+
+
+
+			var sbSlipInfo = new StringBuffer();
+			sbSlipInfo.append(objData.SDOC_NAME);
+			sbSlipInfo.append("<br/>"+objData.REG_USERNM);
+
+			//Draw thumb Info area
+			var elThumbInfoArea = $(document.createElement('div'));
+			elThumbInfoArea.addClass("area_info");
+
+			elThumbInfoArea.html(sbSlipInfo.toString());
+			elThumbInfoArea.appendTo(elThumbImgArea);
+
+			//Draw thumb effect area
+			var elThumbEffectArea = $(document.createElement('div'));
+			elThumbEffectArea.addClass("area_effect");
+			elThumbEffectArea.appendTo(elThumbImgArea);
+
+			//Add image
+
+			return elThumb;
 		},
-		selectSlipFromThumb : function() {
-			var selectedIdx 	= $.Viewer.params.SLIP_IRN;
-			var isFold 			= $.Viewer.params.IS_SELECTED_FOLD;
-			
-			if(!$.Common.isBlank($.Viewer.currentKey)) {
+		selectSlipFromThumb : function(idx) {
+
+			if($.Common.isBlank(idx)) {
 				var selectedSlip = $("#slip_item:first");
 				if(selectedSlip != null)
 				{
@@ -973,40 +660,37 @@ $.Viewer = {
 				
 				return;
 			}
-			
-			if(!$.Common.isBlank(selectedIdx))
-			{
-				$.each($("[id=slip_item]"), function(){
-					
-					if(selectedIdx == $(this).attr("idx"))
-					{
-						
-						if("0" == isFold) {
-							var objData = $.Common.getObjByValue($.Viewer.arObjSlipItem,"SLIP_IRN",selectedIdx)[0];
-							var elParent = $("[group="+objData.SDOC_NO+"]").eq(0);
-						//	elParent.attr("fold","1");
-							$.Actor.fold($.Viewer, elParent.attr("idx"));
-							elParent.attr("fold","1");
-						//	
-							
-						}
-						
-						$(this).find(".area_thumb").click();
-//						var item = $("[id=slip_item]:first").find(".area_thumb");
-//						item.click();
-						return false;
-					}
-				});
-				
-			}
-			else
-			{
-				var selectedSlip = $("#slip_item:first");
-				if(selectedSlip != null)
+			else {
+				var selectedItem 	= $.Viewer.objSlipItem[idx];
+				if(selectedItem !== null)
 				{
-					selectedSlip.find(".area_thumb").click();
+					var elTarget = null;
+					if("1" === selectedItem.SDOCNO_INDEX) {
+						elTarget = $("#slip_masonry").find("[idx="+selectedItem.SLIP_IRN+"]");
+						elTarget.find(".area_thumb").click();
+					}
+					else {
+						elTarget = $("#slip_masonry").find("[group="+selectedItem.SDOC_NO+"]:first");
+
+						$.Actor.displayFoldThumb($.Viewer, elTarget.attr("idx"), selectedItem.SDOC_NO);
+
+						elTarget.find(".area_thumb").click();
+					}
+
+					setTimeout(function() {
+						$("#area_slip")[0].scrollTop = elTarget.position().top;
+					},400);
+				}
+				else
+				{
+					var selectedSlip = $("#slip_item:first");
+					if(selectedSlip != null)
+					{
+						selectedSlip.find(".area_thumb").click();
+					}
 				}
 			}
+
 		},
 		displaySlipInfo : function(objData){
 			
@@ -1016,6 +700,8 @@ $.Viewer = {
 			$(".info_content").append($.Viewer.getInfoElement($.Viewer.localeMsg.CORP_NO, objData.CORP_NM + "(" +objData.CORP_NO + ")"));
 			$(".info_content").append($.Viewer.getInfoElement($.Viewer.localeMsg.PART_NO, objData.PART_NM + "(" +objData.PART_NO + ")"));
 			$(".info_content").append($.Viewer.getInfoElement($.Viewer.localeMsg.REG_USER, objData.REG_USERNM + "(" +objData.REG_USER + ")"));
+
+			$.Common.HideProgress("#info_progress");
 		},
 		
 		getInfoElement : function(title, value) {
@@ -1038,9 +724,9 @@ $.Viewer = {
 		/**
 		 * Display original image
 		 */
-		displayOriginal : function(elTarget, objData){
-			
-			elTarget.empty();
+		displayOriginal : function(objData){
+
+			$("#originalImage").empty();
 			$.Common.ShowProgress("#original_progress","Waiting..","000000","0.7");
 			
 			var sbImgURL = new StringBuffer();
@@ -1054,13 +740,13 @@ $.Viewer = {
 			
 			var elCenterVerticalHelper = $(document.createElement('span'));
 			elCenterVerticalHelper.addClass("helper");
-			elCenterVerticalHelper.appendTo(elTarget);
+			elCenterVerticalHelper.appendTo($("#originalImage"));
 			
 			var elImage = $(document.createElement('img'));
 			elImage.attr({
 				"src":sbImgURL.toString()
 			});
-			elImage.appendTo(elTarget);
+			elImage.appendTo($("#originalImage"));
 			elImage.load(function() {
 				var version = $.Common.GetBrowserVersion().ActingVersion;
 				if(version >= 9) {
@@ -1074,14 +760,16 @@ $.Viewer = {
 							"id": "bookmark",
 							"class": "bookmark"
 						});
-						bookmark.appendTo(elTarget);
+						bookmark.appendTo($("#originalImage"));
 
 						$.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
 					}
 				}
+
+				$.Common.HideProgress("#original_progress");
 			});
 
-			$.Common.HideProgress("#original_progress");
+
 			
 			$.Viewer.resetViewer();
 		},
@@ -1113,7 +801,9 @@ $.Viewer = {
 		 * Set mouse events on target thumb.
 		 */
 		setThumbMouseEvent : function(elThumb) {
-			
+
+			$.Common.ShowProgress("#original_progress","Waiting..","000000","0.7");
+
 			var version = $.Common.GetBrowserVersion().ActingVersion;
 
 			var idx = elThumb.closest("#slip_item").attr("idx");
@@ -1141,7 +831,7 @@ $.Viewer = {
 					$.Viewer.displaySlipInfo(objSelelctedItem);
 
 					//Show original image
-					$.Viewer.displayOriginal($("#originalImage"), objSelelctedItem);
+					$.Viewer.displayOriginal(objSelelctedItem);
 				}
 				var cb = elThumb.closest("#slip_item").find("#chk")[0];
 				cb.checked = !cb.checked;
@@ -1227,10 +917,13 @@ $.Viewer = {
 		close : function() {
 			window.close();
 		},
-		// showAttachList : function() {
-		// //	$("#viewer_right_extra").attr("show","0");
-		// 	$.Viewer.toggleAttachList();
-		// },
+		showAttachList : function() {
+			var widthLeft = $.Common.getWidthPercent($(".viewer_left"));
+			$(".viewer_right").css("width",100 - widthLeft + "%");
+			$("#viewer_right_extra").hide();
+			$("#viewer_right_extra").attr("show","0");
+			$.Viewer.toggleAttachList();
+		},
 		//Toggle attach list
 		toggleAttachList : function() {
 			
@@ -1238,34 +931,29 @@ $.Viewer = {
 			var isShown = elAttachArea.attr("show");
 			if("0" == isShown) 
 			{
-				
 				var widthLeft = $.Common.getWidthPercent($(".viewer_left"));
 				var widthViewer = $.Common.getWidthPercent($(".viewer_right"));
 				var widthAttach = $.Common.getWidthPercent(elAttachArea);
-					
+
 				var viewerMin =  $.Common.round(parseInt($(".viewer_right").attr("min-width")) / $(document).outerWidth() * 100, 1);
-				
+
 				var expectedWidth = widthViewer - widthAttach;
-				
+
 				if(expectedWidth < viewerMin)
 				{
 					$(".viewer_left").css("width",(widthLeft - widthAttach) + "%");
-//					
+//
 					$('#slip_masonry').masonry('layout');
-					  
-					  if($("#area_slip").is(":visible")) {
-						  $("#area_slip").getNiceScroll().resize();
-					  }
+
+					if($("#area_slip").is(":visible")) {
+						$("#area_slip").getNiceScroll().resize();
+					}
 				}
 				else
 				{
 					$(".viewer_right").css("width",(widthViewer - widthAttach) + "%");
 				}
-				
-				
 
-				
-				
 				elAttachArea.show();
 				elAttachArea.attr("show","1");
 				

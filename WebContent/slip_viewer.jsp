@@ -27,6 +27,8 @@
 
 			pageContext.setAttribute("KEY",key);
 			pageContext.setAttribute("MULTI_KEY", isMultiKey);
+			pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO","FOLD", "T"));
+			pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO","MAXIMIZED", "F"));
 
 		}
 		catch(Exception e) {
@@ -44,19 +46,20 @@
 				CORP_NO 				: "<c:out value="${sessionScope.CORP_NO}" />",
 				USER_ID 				: "<c:out value="${sessionScope.USER_ID}" />",
 				PART_NO 				: "<c:out value="${sessionScope.PART_NO}" />",
-				SERVER_KEY 			: "<c:out value="${SERVER_KEY}" />",
-				LANG 						: "<c:out value="${mParams['LANG'][0]}" />",
+				SERVER_KEY 				: "<c:out value="${SERVER_KEY}" />",
+				LANG 					: "<c:out value="${mParams['LANG'][0]}" />",
 				KEY_TYPE 				: "<c:out value="${mParams['KEY_TYPE'][0]}" />",
 				KEY		 				: "<c:out value="${KEY}" />",
 				KEY_TITLE		 		: "<c:out value="${KEY_TITLE}" />",
-				IS_SELECTED_FOLD 	: "<c:out value="${mParams['FOLD'][0]}" />",
-				VIEW_MODE 			: "<c:out value="${mParams['VIEW_MODE'][0]}" />",
-				SLIP_IRN					:  "<c:out value="${mParams['SLIP_IRN'][0]}" />",
+				VIEW_MODE 				: "<c:out value="${mParams['VIEW_MODE'][0]}" />",
 				SVR_MODE				:  "<c:out value="${mParams['SVR_MODE'][0]}" />",
-				MENU						:  "<c:out value="${mParams['MENU'][0]}" />",
+				MENU					:  "<c:out value="${mParams['MENU'][0]}" />",
 				XPI_PORT				: "<c:url value ="${mParams['XPI_PORT'][0]}" />",
-				MULTI_KEY				: <c:out value="${MULTI_KEY}" />,
-				PAGE					:"VIEWER",
+				MULTI_KEY				:  <c:out value="${MULTI_KEY}" />,
+				PAGE					:	"VIEWER",
+				FOLD					:  "<c:out value="${FOLD}" />",
+				MAXIMIZED				:  "<c:out value="${MAXIMIZED}" />",
+				CLICKED_SLIP_IRN		:  "<c:out value="${mParams['CLICKED_SLIP_IRN'][0]}" />",
 			}
 
 			$.Viewer.init(ViewerParams);
@@ -140,8 +143,8 @@
 					<div class="viewer_info">
 						<div class="info_title"><span class="title" data-i18n="INFO_TITLE"></span></div>
 						<div class="info" id="slip_info">
+							<div id="info_progress" class="info_progress"></div>
 							<div>
-								<div id="info_progress" class="info_progress"></div>
 								<div class="info_content">
 								</div>
 							</div>
@@ -167,9 +170,11 @@
 							</div>
 							<div id="area_slip" class="area_slip">
 								<div>
-									<div id="slip_progress" class="slip_progress"></div>
 									<div id="slip_masonry" class="slip_masonry"></div>
 								</div>
+							</div>
+							<div class="progress_slip_scroll">
+								Loading...
 							</div>
 						</div>
 					</div>

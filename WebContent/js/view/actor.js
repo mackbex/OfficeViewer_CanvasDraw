@@ -138,10 +138,9 @@ $.Actor = {
 		
 		change_GroupKey : function(option) {
 
-			$.Actor.ZoomOut_Thumb();
+		//	$.Actor.ZoomOut_Thumb();
 
 			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
-
 			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
 
 			$("#slip_masonry").empty();
@@ -306,7 +305,7 @@ $.Actor = {
 		initializeSlip : function()
 		{
 
-			$.when($.Actor.getSlipList($.Actor.params)).then(function(res){
+			$.when($.Actor.getSlipList($.Actor, $.Actor.params)).then(function(res){
 
 				if(!res) {
 					$.Common.HideProgress("#slip_progress");
@@ -327,7 +326,7 @@ $.Actor = {
 			});
 
 
-			$.Actor.getAttachList($.Actor.params, $.Actor.attachRange);
+			$.Actor.getAttachList($.Actor, $.Actor.params, $.Actor.attachRange);
 			
 			if(!$.Actor.params.MULTI_KEY) {
 				$.Actor.getCommentCnt();
@@ -357,7 +356,7 @@ $.Actor = {
 			$.Actor.addScrollEvent($(".area_attach"), function(){
 				if(!$.Actor.isAttachLoading) {
 					$(".attach_wrapper").find('.progress_attach_scroll').show();
-					$.Actor.getAttachList($.Actor.params,   $.Actor.attachRange);
+					$.Actor.getAttachList($.Actor, $.Actor.params, $.Actor.attachRange);
 				}
 			});
 
@@ -484,17 +483,17 @@ $.Actor = {
 			       }
 			    });
 		},
-		getAttachList : function(params, loadCnt, isMultiKey)
+		getAttachList : function(parent, params, loadCnt, isMultiKey)
 		{
 
 			var start = $(".attach_item").size() == 0 ? 0 : $(".attach_item").size() + 1;
 			var per = loadCnt;
 
-			if($.Actor.params.MULTI_KEY) {
-				start = null;
-				per = null;
-				$("#area_attach").unbind('scroll');
-			}
+			// if(params.MULTI_KEY) {
+			// 	start = null;
+			// 	per = null;
+			// 	$("#area_attach").unbind('scroll');
+			// }
 
 			var objListParams = {
 					KEY : params.KEY,
@@ -514,16 +513,17 @@ $.Actor = {
 					return;
 				}
 
-				if($.Actor.objAttachItem == null) {
-					$.Actor.objAttachItem = res;
+				if(parent.objAttachItem == null) {
+					parent.objAttachItem = res;
 				}
 				else {
+
 					Object.keys(res).forEach(function(dataKey) {
-						$.Actor.objAttachItem[dataKey] = res[dataKey];
+						parent.objAttachItem[dataKey] = res[dataKey];
 					});
 				}
 
-				$.Actor.addAttachItem(res, $("#area_attach"), $.Actor.currentKey);
+				parent.addAttachItem(res, $("#area_attach"), $.Actor.currentKey);
 
 				if(resCnt !== $.Actor.attachRange) {
 					$("#area_attach").unbind('scroll');
@@ -543,9 +543,9 @@ $.Actor = {
 			});
 		},
 		//Load thumb images
-		getSlipList : function(params)
+		getSlipList : function(parent, params)
 		{
-			if($.Actor.params.MULTI_KEY) {
+			if(params.MULTI_KEY) {
 				$("#area_slip").unbind('scroll');
 			}
 
@@ -566,7 +566,7 @@ $.Actor = {
 					deferred.resolve(false);
 				}
 
-				$.Actor.objSlipItem = res;
+				parent.objSlipItem = res;
 				deferred.resolve(true);
 
 			},function(reason){
@@ -635,7 +635,7 @@ $.Actor = {
 		// 	});
 		// },
 		
-		addContextMenu : function(elTarget, menuGroup, objData, viewMode, option) {
+		addContextMenu : function(parent, elTarget, menuGroup, objData, viewMode, option) {
 			//Set click event
 			var fnClick = function(e) {
 				
@@ -656,11 +656,11 @@ $.Actor = {
 			
 			elImg.appendTo(elBtn);		
 			
-			var arObjMenu = $.Common.sortContextMenuItem($.Actor.localeMsg, menuGroup, viewMode, $.Actor.currentKey);
-			$.ContextMenu.getMenu($.Actor, elTarget, elBtn, arObjMenu, objData, option);
+			var arObjMenu = $.Common.sortContextMenuItem(parent.localeMsg, menuGroup, viewMode, $.Actor.currentKey);
+			$.ContextMenu.getMenu(parent, elTarget, elBtn, arObjMenu, objData, option);
 		},
 	
-		addAttachItem : function(arObjAttach,elDest, specificKey)
+		addAttachItem : function(arObjAttach, elDest, specificKey)
 		{
 		//	elDest.empty();
 
@@ -675,7 +675,7 @@ $.Actor = {
 				
 				var elTitleArea = elAttach.find(".area_btn");
 				//Draw option icon
-				$.Actor.addContextMenu(elTitleArea, $.Actor.contextMenu["Attach"], this, $.Actor.params.VIEW_MODE, {bottom_align:true});
+				$.Actor.addContextMenu($.Actor, elTitleArea, $.Actor.contextMenu["Attach"], this, $.Actor.params.VIEW_MODE, {bottom_align:true});
 				
 				elAttach.appendTo(elDest);
 				$.Actor.setAttachMouseEvent(elAttach);
@@ -686,16 +686,16 @@ $.Actor = {
 			$("#area_attach").getNiceScroll().resize();
 			
 		},
-		displayThumb : function(elDest) {
+		displayThumb : function(parent) {
 
-			var arThumbInfo = Object.keys(elDest.objSlipItem);
+			var arThumbInfo = Object.keys(parent.objSlipItem);
 
 			var arItems = {};
-			if(!$.Common.isBlank($.Actor.currentKey) && $.Actor.currentKey.indexOf(",") === -1 && $.Actor.params.MULTI_KEY) {
+			if(!$.Common.isBlank(parent.currentKey) && parent.currentKey.indexOf(",") === -1 && parent.params.MULTI_KEY) {
 				for(var i = 0; i < arThumbInfo.length; i++) {
 
-					var item = elDest.objSlipItem[arThumbInfo[i]];
-					if(item.JDOC_NO !== $.Actor.currentKey) {
+					var item = parent.objSlipItem[arThumbInfo[i]];
+					if(item.JDOC_NO !== parent.currentKey) {
 						continue;
 					}
 					else {
@@ -706,7 +706,7 @@ $.Actor = {
 				arThumbInfo = Object.keys(arItems);
 			}
 			else {
-				arItems = elDest.objSlipItem;
+				arItems = parent.objSlipItem;
 			}
 
 		//	var visibleCnt = $(".slip_item").size();
@@ -723,12 +723,12 @@ $.Actor = {
 				 	continue;
 				}
 				else {
-					if(targetItem.length < elDest.slipRange) {
+					if(targetItem.length < parent.slipRange) {
 						if("1" === item.SDOCNO_INDEX) {
 							targetItem.push(item);
 						}
 						else {
-							if(elDest.IS_FOLD) {
+							if(parent.IS_FOLD) {
 								continue;
 							}
 							else {
@@ -740,39 +740,37 @@ $.Actor = {
 						break;
 					}
 
-					// if("1" === item.SDOCNO_INDEX) {
-					// 	if(targetItem.length < elDest.slipRange) {
-					// 		targetItem.push(item);
-					// 	}
-					// 	else {
-					// 		if(elDest.IS_FOLD) {
-					// 			break;
-					// 		}
-					// 		else {
-					// 			if(targetItem.length < elDest.slipRange) {
-					// 				targetItem.push(item);
-					// 			}
-					// 		}
-					// 	}
-					// }
 				}
 			}
 
 			if(targetItem == null || targetItem.length <= 0) {
+
 				$.Common.HideProgress("#slip_progress");
+				$('.progress_slip_scroll').hide();
 				return;
 			}
 			else {
-				$.Actor.addSlipItem(targetItem);
+				$.Actor.addSlipItem(parent, targetItem);
 			}
 
-			if(elDest.slipRange > targetItem.length) {
+			if(parent.slipRange > targetItem.length) {
 				$("#area_slip").unbind('scroll');
 			}
+			else {
+				$.Actor.addScrollEvent($(".area_slip"), function(){
+					if(!$.Actor.isSlipLoading) {
 
+						//	var start = $(".slip_item").size() === 0 ? 0 : $(".slip_item").size() + 1;
+
+						$(".slip_wrapper").find('.progress_slip_scroll').show();
+						//$.Actor.getSlipList($.Actor.params,   $.Actor.slipRange);
+						$.Actor.displayThumb($.Actor);
+					}
+				});
+			}
 		},
 
-		addSlipItem : function(item)
+		addSlipItem : function(parent, item)
 		{
 			$.Actor.isSlipLoading = true;
 			var arElThumb = [];
@@ -781,7 +779,7 @@ $.Actor = {
 
 				//if(!$.Common.isBlank(specificKey) && specificKey.indexOf(",") === -1 && this.JDOC_NO !== specificKey) return true;
 
-				var elThumb = $.Actor.getThumbElement(this, $.Actor);
+				var elThumb = parent.getThumbElement(this, parent);
 
 				if(elThumb != null)
 				{
@@ -796,7 +794,7 @@ $.Actor = {
 
 					$('#slip_masonry').masonry('appended', elThumb);
 					elThumb.css("opacity","0");
-					$.Actor.setThumbMouseEvent(elThumb.find(".area_thumb"));
+					parent.setThumbMouseEvent(elThumb.find(".area_thumb"));
 
 					arElThumb.push(elThumb);
 				}
@@ -812,7 +810,7 @@ $.Actor = {
 				//arElThumb.css("opacity","1");
 				setTimeout(function(){
 
-					if($.Actor.is_Maximized) {
+					if(parent.is_Maximized) {
 						$('#slip_masonry').masonry({
 							columnWidth: $(".area_slip").width() - 40
 						});
@@ -820,14 +818,20 @@ $.Actor = {
 					}
 					else {
 						$('#slip_masonry').masonry({
-							columnWidth:  $.Actor.thumbWidth
+							columnWidth:  parent.thumbWidth
 						});
-						$(".slip_item").css("width",  $.Actor.thumbWidth);
+						$(".slip_item").css("width",  parent.thumbWidth);
 					}
 
 						$('#slip_masonry').masonry('reloadItems');
 					$('#slip_masonry').masonry('layout');
-					$("#area_slip").getNiceScroll().resize();
+					setTimeout(function() {
+						$("#area_slip").getNiceScroll().resize();
+					},400);
+					if(parent === $.Viewer) {
+						$.Viewer.selectSlipFromThumb($.Viewer.params.CLICKED_SLIP_IRN);
+
+					}
 
 				}, 100);
 
@@ -856,21 +860,16 @@ $.Actor = {
 					var elTitleArea = $(this).find(".area_title_btn");
 
 					//Draw fold icon
-					$.Actor.addFoldIcon($.Actor, elTitleArea, idx);
+					$.Actor.addFoldIcon(parent, elTitleArea, idx);
 
-					// if("1" === $.Actor.objSlipItem[idx].SDOCNO_INDEX)
-					// {
-					// 	$.Actor.fold($.Actor, idx);
-					// }
-
-					if("1" !== $.Actor.objSlipItem[idx].SDOCNO_INDEX)
+					if("1" !== parent.objSlipItem[idx].SDOCNO_INDEX)
 					{
 						//$.Actor.fold($.Actor, idx);
-						var sdocNo = $.Actor.objSlipItem[idx].SDOC_NO;
+						var sdocNo = parent.objSlipItem[idx].SDOC_NO;
 
 						var first = null;
 
-						$.each($.Actor.objSlipItem, function(){
+						$.each(parent.objSlipItem, function(){
 							if(this.SDOC_NO === sdocNo) {
 								first = this;
 								return false;
@@ -889,10 +888,10 @@ $.Actor = {
 					}
 
 					//Draw option icon
-					$.Actor.addContextMenu(elTitleArea, $.Actor.contextMenu["Thumb"], $.Actor.objSlipItem[idx], $.Actor.params.VIEW_MODE);
+					$.Actor.addContextMenu(parent, elTitleArea, parent.contextMenu["Thumb"], parent.objSlipItem[idx], parent.params.VIEW_MODE);
 
 
-					var curObj 			= $.Actor.objSlipItem[idx];
+					var curObj 			= parent.objSlipItem[idx];
 
 					var bookmarkItem = curObj["BOOKMARKS"];
 					//
@@ -1130,35 +1129,26 @@ $.Actor = {
 				"width" : callerObjData.thumbWidth
 			});
 			elThumb.attr("id","slip_item");
-		//	elThumb.attr("command","VIEW_ORIGINAL_SLIP");
+
 			if("1" === objData.SDOC_ONE)
 			{
 				elThumb.addClass("oneSlip");
 			}
-
-		//	elThumb.attr("follow",objData.SDOC_FOLLOW);
-			
 
 			//Draw thumb Title area
 			var elThumbTitleArea = $(document.createElement('div'));
 			elThumbTitleArea.addClass("area_title");
 			//elThumbTitleArea.css("background-color","rgb("+objData.KIND_COLOR+")");
 			elThumbTitleArea.appendTo(elThumb);
-			
-		//	if("AFTER" == callerObjData.params.VIEW_MODE) {
-				
-				if("1" === objData.SDOC_AFTER) {
-					elThumbTitleArea.addClass("after");	
-				}
-		//	}
-			
-			
+
+			if("1" === objData.SDOC_AFTER) {
+				elThumbTitleArea.addClass("after");
+			}
+
 			//Draw checkbox area
 			var elTitleCheckbox = $(document.createElement('div'));
 			elTitleCheckbox.addClass("area_cb");
 			elTitleCheckbox.appendTo(elThumbTitleArea);
-			
-			
 
 			//Draw checkbox
 			var elCheckbox =  $(document.createElement('label'));
@@ -1299,9 +1289,9 @@ $.Actor = {
 			curItem.IS_FOLD = !curItem.IS_FOLD;
 
 		},
-		displayFoldThumb : function(target, id, groupNo) {
+		displayFoldThumb : function(parent, id, groupNo) {
 
-			var arThumbInfo = Object.keys(target.objSlipItem);
+			var arThumbInfo = Object.keys(parent.objSlipItem);
 
 			var itemIdx = $("#slip_masonry").find("[idx=" + id + "]").index();
 
@@ -1318,7 +1308,7 @@ $.Actor = {
 
 			for(var i = 0; i < arThumbInfo.length; i++) {
 				var res = null;
-				var item = target.objSlipItem[arThumbInfo[i]];
+				var item = parent.objSlipItem[arThumbInfo[i]];
 
 				if(arThumbInfo.indexOf(item.SLIP_IRN) < arThumbInfo.indexOf(id)) {
 					continue;
@@ -1371,7 +1361,7 @@ $.Actor = {
             $("#area_slip").getNiceScroll().resize();
 
 			if(filteredTargetThumbs.length > 0) {
-				$.Actor.addSlipItem(filteredTargetThumbs);
+				$.Actor.addSlipItem(parent, filteredTargetThumbs);
 			}
 			else {
 				$.Common.HideProgress("#slip_progress");
@@ -1380,9 +1370,9 @@ $.Actor = {
 			$("#slip_masonry").find("[idx="+id+"]").find("#btn_fold").find("img").attr("src", g_RootURL+"image/common/unfold.png");
 
 		},
-		hideFoldThumb : function(target, id, groupNo)
+		hideFoldThumb : function(parent, id, groupNo)
 		{
-            var arThumbInfo = Object.keys(target.objSlipItem);
+            var arThumbInfo = Object.keys(parent.objSlipItem);
 
 			var itemIdx = $("#slip_masonry").find("[idx=" + id + "]").index();
 			$('[id=slip_item]:gt(' + (itemIdx) + ')').hide();
@@ -1402,7 +1392,7 @@ $.Actor = {
 
 			for(var i = 0; i < arThumbInfo.length; i++) {
 				var res = null;
-				var item = target.objSlipItem[arThumbInfo[i]];
+				var item = parent.objSlipItem[arThumbInfo[i]];
 
 				if (arThumbInfo.indexOf(item.SLIP_IRN) < arThumbInfo.indexOf(id) || item.SDOC_NO === groupNo) {
 					continue;
@@ -1448,7 +1438,7 @@ $.Actor = {
             $("#area_slip").getNiceScroll().resize();
 
             if(filteredTargetThumbs.length > 0) {
-                $.Actor.addSlipItem(filteredTargetThumbs);
+                $.Actor.addSlipItem(parent, filteredTargetThumbs);
             }
 		},
 //		drawThumbOptionBtn: function(elThumb, objData, attrVal, imgURL, clickEvent) {
@@ -1764,7 +1754,7 @@ $.Actor = {
 					$.Actor.addFoldIcon($.Actor, elThumbBtnArea, idx);
 
 					//Draw option icon
-					$.Actor.addContextMenu(elThumbBtnArea, $.Actor.contextMenu["Thumb"], objData, $.Actor.params.VIEW_MODE);
+					$.Actor.addContextMenu($.Actor, elThumbBtnArea, $.Actor.contextMenu["Thumb"], objData, $.Actor.params.VIEW_MODE);
 				}
 
 
@@ -1804,7 +1794,7 @@ $.Actor = {
 
 		Reload_Thumb : function(target, elThumb, objData, isFold) {
 
-			if("1" === isFold) {
+			if(isFold) {
 				var groups = $("#slip_masonry").find("[group="+objData.SDOC_NO+"]");
 
 				$.each(groups, function(){
@@ -1814,7 +1804,7 @@ $.Actor = {
 					var imageData = target.objSlipItem[slipIrn];
 
 					var elImg =  $(this).find(".link > img");
-					elImg.attr('src', target.Get_ImageURL(target, imageData));
+					elImg.attr('src', $.Actor.Get_ImageURL(target, imageData));
 				});
 			}
 			else {
@@ -1828,6 +1818,9 @@ $.Actor = {
 			$("#area_slip").getNiceScroll().resize();
 			$(".context_wrapper").hide();
 			
+			if(target === $.Viewer) {
+				target.displayOriginal(objData);
+			}
 		},
 		reset: function() {
 			$("#slip_masonry").empty();
