@@ -13,8 +13,8 @@ import java.util.Vector;
 
 public class Profile_old 
 {
-	private 	String[]	m_arrStrInput;			// 파일 내용
-//	private    String	 	m_strFileName;			// 파일 이름
+	private 	String[]	m_arrStrInput;
+//	private    String	 	m_strFileName;
 	
 //    public static final String m_strWorkDir 		= System.getProperty ("user.dir").replace('\\','/');
 //    public static final String m_strConf			= System.getProperty ("user.dir").replace('\\','/')  + "/System/DBAgent.ini";
@@ -64,23 +64,22 @@ public class Profile_old
 					String strLine = new String(lineData);
 					//System.out.println( "strLine : " + strLine);
 					strLine.trim();
-					if(strLine.length() == 0)				// 라인에 문자가 없으면 다음 라인으로 이동 
+					if(strLine.length() == 0)
 					{ 
 						bReadLine = false;  
 						continue; 
 					}
-					if(!strLine.startsWith("'"))				// ' 는 주석 
-						vector.addElement(strLine); 	//주석이 아니면 Vector에 저장 
+					if(!strLine.startsWith("'"))
+						vector.addElement(strLine);
 				} 
-				else  // 파일안에 문자가 없으면 루프 종료 
+				else
 					bReadLine = false;
 			}
 			inputStream.close();
 		} 
 		catch(Exception e) 
 		{
-			System.out.println(strFileName + "읽기 실패");
-			/*logger.writeException("읽기 실패", e);*/
+			System.out.println(strFileName + " Exception");
 			return false;
 		}
 
@@ -110,7 +109,7 @@ public class Profile_old
     	    for (; i < 1024 ; i++) {
     	        c = is.read();
     	        if (c == -1)  {
-    	            c = 10; //EOF가 오면 지금까지 읽은 내용만 리턴. 
+    	            c = 10; //EOF
     	        }
     	        switch(c) {
     	            case 0 : c = ' '; // convert null to space.
@@ -136,8 +135,8 @@ public class Profile_old
 	    }
     }
     
-    //섹션 모든 값 가져오기.
-    public HashMap<String ,String> GetAllSectionValues(String strSection)
+
+     public HashMap<String ,String> GetAllSectionValues(String strSection)
     {
     	HashMap<String, String> mapVals = new HashMap<String, String>();
     	String 	strLine			="";
@@ -152,9 +151,9 @@ public class Profile_old
         	strLine = m_arrStrInput[nIndex];
         	if (strLine.indexOf("[") == 0)
 			{
-        		int nLoc = strLine.indexOf("]"); // 지정 문자의 위치 구하기
+        		int nLoc = strLine.indexOf("]");
 				//if ( nLoc >=0 )			System.out.println(strLine.substring(1, nLoc).trim());
-				if(nLoc >= 0 && strSection.equalsIgnoreCase(strLine.substring(1, nLoc).trim()))	// SECTION 찾기  
+				if(nLoc >= 0 && strSection.equalsIgnoreCase(strLine.substring(1, nLoc).trim()))	// SECTION
 				{
 					bFoundLine = true;
 					for( int i=nIndex+1; i< nSize; i++)
@@ -168,8 +167,8 @@ public class Profile_old
 						nLoc = strLine.indexOf("=");
 						if(nLoc > -1)
 						{
-							String strKey 		= strLine.substring(0, nLoc).trim();   // KEY 값 구하기 
-							String strValue 	= strLine.substring(nLoc+1).trim();   // KEY 값 구하기 
+							String strKey 		= strLine.substring(0, nLoc).trim();   // KEY
+							String strValue 	= strLine.substring(nLoc+1).trim();   // KEY
 						
 							if(!isBlank(strKey) && !isBlank(strValue))
 							{
@@ -187,7 +186,7 @@ public class Profile_old
     	return mapVals;
     }
     
-    public String get_profile_string(String strSection, String strKey) 		// KEY 값 구하기 
+    public String get_profile_string(String strSection, String strKey)
     {
         String 	strLine			="";
         String 	strKeyValue = "";
@@ -198,9 +197,9 @@ public class Profile_old
 			//System.out.println(strLine);
 			if (strLine.indexOf("[") == 0)
 			{
-				int nLoc = strLine.indexOf("]"); // 지정 문자의 위치 구하기
+				int nLoc = strLine.indexOf("]");
 				//if ( nLoc >=0 )			System.out.println(strLine.substring(1, nLoc).trim());
-				if(nLoc >= 0 && strSection.equalsIgnoreCase(strLine.substring(1, nLoc).trim()))	// SECTION 찾기  
+				if(nLoc >= 0 && strSection.equalsIgnoreCase(strLine.substring(1, nLoc).trim()))	// SECTION
 				{
 					for( int i=nIndex+1; i< nSize; i++)
 					{
@@ -211,12 +210,12 @@ public class Profile_old
 						if ( nLoc == 0 )		break;
 						
 						nLoc = strLine.indexOf("=");
-						if(nLoc >= 0 && strKey.equalsIgnoreCase(strLine.substring(0, nLoc).trim()))	// SECTION 찾기  
+						if(nLoc >= 0 && strKey.equalsIgnoreCase(strLine.substring(0, nLoc).trim()))	// SECTION
 						{
 							//System.out.print( strKey + "=");
 							//System.out.println( strKeyValue );
-							strKeyValue = strLine.substring(nLoc+1).trim();   // KEY 값 구하기 
-							strKeyValue.trim();	// 공백 제거
+							strKeyValue = strLine.substring(nLoc+1).trim();   // KEY
+							strKeyValue.trim();
 							return strKeyValue; 
 						}
 					}
@@ -229,8 +228,7 @@ public class Profile_old
     public String GetString(String strSection, String strKey, String strDefault) 
     {
         String strValue = get_profile_string(strSection, strKey);
-		//System.out.println("섹션  =  " + strSection + ",  키값  = " + strKey + ", 찾은 값 = " + strValue );
-       	if ( strValue.length() !=0 ) 	return strValue;
+		if ( strValue.length() !=0 ) 	return strValue;
        	else								return strDefault;
     }
     
@@ -240,7 +238,7 @@ public class Profile_old
     {
         try {
 
-            if(m_arrStrInput == null)				 //Section이 없는경우 
+            if(m_arrStrInput == null)
             { 
                 Vector v = new Vector();
                 v.addElement("["+sec+"]");
@@ -248,11 +246,11 @@ public class Profile_old
                 saveToFile(file, true, v);
                 return true;
             }
-            else											//Section이 있는경우 
+            else
             { 
                 String str = "";
                 int nSize = m_arrStrInput.length;
-                for(int nIndex= 0; nIndex < nSize; nIndex++)		//key가 있는 경우 
+                for(int nIndex= 0; nIndex < nSize; nIndex++)
                 {  
                     str = m_arrStrInput[nIndex];
                     if(str.startsWith(key+"=")) 
@@ -262,11 +260,11 @@ public class Profile_old
                     }
                 }
                 
-                insertKey(file, sec, key, data); //key가 없는 경우
+                insertKey(file, sec, key, data);
             }
         }
         catch(Exception e) {
-            System.out.println("WritePrivateDataString 실패 : "+file);
+            System.out.println("WritePrivateDataString Exception : "+file);
             return false;
         }
         return false;
@@ -312,7 +310,7 @@ public class Profile_old
             out.close();
         }
         catch(IOException e) {            
-            System.out.println(fileName + "파일생성 실패");
+            System.out.println(fileName + "Exception");
             return false;
         }        
         return true;
@@ -341,7 +339,7 @@ public class Profile_old
 			outputstream.close();
         }
         catch(IOException e) {
-            System.out.println(fileName + "파일생성 실패");
+            System.out.println(fileName + "Exception");
             return false;
         }
         return true;

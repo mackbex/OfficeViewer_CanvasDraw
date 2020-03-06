@@ -12,17 +12,17 @@ import com.woonam.util.Profile;
 
 
 public class XvarmFile {
-	
+
 	private Profile 			profile				=	null;
 	public String 				m_strXvarmGateWay	=	null;
 	public asysConnectData		conXvarm = null;
-	
-	
-	
+
+
+
 	public XvarmFile(Profile profile)
 	{
 		this.profile = profile;
-		
+
 		String strSvrMode		=	profile.getString("AGENT_INFO", "SERVER", "");
 		String strXvarm			=	strSvrMode + "_XVARM";
 		String xvarm_ip 		= 	profile.getString(strXvarm, "XVARM_IP","");
@@ -32,25 +32,25 @@ public class XvarmFile {
 		String xvarm_pw 		= 	profile.getString(strXvarm, "XVARM_PW","");
 		this.m_strXvarmGateWay	=	profile.getString(strXvarm, "XVARM_GATEWAY", "XVARM_MAIN");
 		conXvarm = new asysConnectData(xvarm_ip, xvarm_port, xvarm_client, xvarm_id, xvarm_pw);
-		
+
 	}
-	
+
 	public byte[] Download(String _wdDocIrn, String _wdDocNo, String _DocTable)
 	{
 		String 	 strWhere	=	"doc_irn="+_wdDocIrn+";page_num="+_wdDocNo;
 		String 	 strFileInfo = umGetElementId(_DocTable, strWhere);
 		String[] arrFileinfo	=	strFileInfo.split(";");
 		String	 xvarm_eid		=	arrFileinfo[0];
-		
+
 		ByteArrayOutputStream baosFile	=	exportFiletoByte(xvarm_eid);
-		
+
 		return baosFile.toByteArray();
 	}
 
 	private ByteArrayOutputStream exportFiletoByte(String strElementId)
-  	{
-  		boolean bRet = false;
-  		if (conXvarm == null) {
+	{
+		boolean bRet = false;
+		if (conXvarm == null) {
 			//m_strError = "FILE DOWNLOAD FAIL : The connection require.";
 			bRet = false;
 		}
@@ -59,15 +59,15 @@ public class XvarmFile {
 			bRet = false;
 		}
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try 
+		try
 		{
 			asysUsrElement aue = new asysUsrElement(conXvarm);
 			aue.m_elementId = "XVARM_MAIN::" + strElementId.trim() + "::IMAGE";
 			int i_Return = aue.getContent(out, "", "");//getContent(out,"");
-			
+
 			if (i_Return != 0)
-			//	m_strError = "FILE DOWNLOAD FAIL : " + aue.getLastError();
-			aue = null;
+				//	m_strError = "FILE DOWNLOAD FAIL : " + aue.getLastError();
+				aue = null;
 		} catch(Exception e) {
 			//m_strError = "FILE DOWNLOAD FAIL[E] : " + e.getMessage();
 		}
@@ -80,51 +80,51 @@ public class XvarmFile {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return out;
-  	}
-	
-	/** 
-	 * ÆÄÀÏÀ» ´Ù¿î·Îµå ÇÑ´Ù.
+	}
+
+	/**
+	 * íŒŒì¼ì„ ë‹¤ìš´ë¡œë“œ í•œë‹¤.
 	 *
-	 * @param strIndexId 		»öÀÎ ÇÁ·ÎÇÊ ID.
-	 * @param strIndexInfo 		»öÀÎ Á¤º¸ (ex: field1=value1;field2=value2;....)
-	 * @param strLocalFilePath	ÀÔ·ÂÇÒ ÆÄÀÏÀÇ ¿ÏÀüÇÑ °æ·Î
-	 * return ¼º°ø½Ã true, ½ÇÆĞ½Ã false (¿À·ù ¸Ş½ÃÁö: m_strError)
+	 * @param strIndexId 		ìƒ‰ì¸ í”„ë¡œí•„ ID.
+	 * @param strIndexInfo 		ìƒ‰ì¸ ì •ë³´ (ex: field1=value1;field2=value2;....)
+	 * @param strLocalFilePath	ì…ë ¥í•  íŒŒì¼ì˜ ì™„ì „í•œ ê²½ë¡œ
+	 * return ì„±ê³µì‹œ true, ì‹¤íŒ¨ì‹œ false (ì˜¤ë¥˜ ë©”ì‹œì§€: m_strError)
 	 */
 	public boolean exportFileByIndex(String strIndexId, String strIndexInfo, String strLocalFilePath) {
 		if (conXvarm == null) {
-		//	m_strError = "FILE DOWNLOAD FAIL : The connection require.";
+			//	m_strError = "FILE DOWNLOAD FAIL : The connection require.";
 			return false;
 		}
 		if (strIndexId.trim().equals("")) {
-		//	m_strError = "FILE DOWNLOAD FAIL : There are no ELEMENTID.";
+			//	m_strError = "FILE DOWNLOAD FAIL : There are no ELEMENTID.";
 			return false;
 		}
 		if (strLocalFilePath.equals("")) {
-		//	m_strError = "FILE DOWNLOAD FAIL : There are no file information";
+			//	m_strError = "FILE DOWNLOAD FAIL : There are no file information";
 			return false;
 		}
-		
+
 		if (!isExistFolder(strLocalFilePath, true)) {
-		//	m_strError = "FILE DOWNLOAD FAIL : There are no directory for file download. " + strLocalFilePath;
+			//	m_strError = "FILE DOWNLOAD FAIL : There are no directory for file download. " + strLocalFilePath;
 			return false;
 		}
-		
+
 		String strElemId = umGetElementId(strIndexId, strIndexInfo);
-		
+
 		if (strElemId.equals(""))
 			return false;
 
 		return exportFile(strElemId, strLocalFilePath);
 	}
-	
+
 	/**
-	 * ÆÄÀÏÀ» ´Ù¿î·ÎµåÇÑ´Ù.
+	 * íŒŒì¼ì„ ë‹¤ìš´ë¡œë“œí•œë‹¤.
 	 *
-	 * @param strElementId 		µî·ÏµÈ ÆÄÀÏÀÇ elementid.
-	 * @param strLocalFilePath	´Ù¿î·ÎµåÇÏ¿© ÀúÀåÇÏ±â À§ÇÑ ¿ÏÀüÇÑ °æ·Î
-	 * return ¼º°ø½Ã true, ½ÇÆĞ½Ã false (¿À·ù ¸Ş½ÃÁö: m_strError)
+	 * @param strElementId 		ë“±ë¡ëœ íŒŒì¼ì˜ elementid.
+	 * @param strLocalFilePath	ë‹¤ìš´ë¡œë“œí•˜ì—¬ ì €ì¥í•˜ê¸° ìœ„í•œ ì™„ì „í•œ ê²½ë¡œ
+	 * return ì„±ê³µì‹œ true, ì‹¤íŒ¨ì‹œ false (ì˜¤ë¥˜ ë©”ì‹œì§€: m_strError)
 	 */
 	public boolean exportFile(String strElementId, String strLocalFile) {
 		if (conXvarm == null) {
@@ -144,50 +144,50 @@ public class XvarmFile {
 //			m_strError = "FILE DOWNLOAD FAIL : There are no directory for file download. " + strLocalFile;
 			return false;
 		}
-		
+
 		try {
 			asysUsrElement aue = new asysUsrElement(conXvarm);
 			aue.m_elementId = "XVARM_MAIN::" + strElementId.trim() + "::IMAGE";
 			int i_Return = aue.getContent(strLocalFile);
 			if (i_Return != 0)
-			//	m_strError = "FILE DOWNLOAD FAIL : " + aue.getLastError();
-			aue = null;
+				//	m_strError = "FILE DOWNLOAD FAIL : " + aue.getLastError();
+				aue = null;
 			if (i_Return == 0)
 				return true;
 			else
 				return false;
 		} catch(Exception e) {
-		//	m_strError = "FILE DOWNLOAD FAIL[E] : " + e.getMessage();
+			//	m_strError = "FILE DOWNLOAD FAIL[E] : " + e.getMessage();
 			return false;
 		}
 	}
-	
-	// Æú´õ°¡ Á¸ÀçÇÏ´ÂÁö °Ë»ç
-  	public static boolean isExistFolder(String strPath, boolean bFile) {
-  		File objFolder = null;
-  		boolean bExist = false;
-  		
-  		if (bFile) {
-  			File objFile = new File(strPath);
-  			objFolder = new File(objFile.getParent());
-  			objFile = null;
-  		} else
-  			objFolder = new File(strPath);
 
-	    if (null != objFolder)
-	    	bExist = objFolder.exists();
+	// í´ë”ê°€ ì¡´ì¬í•˜ëŠ”ì§€ ê²€ì‚¬
+	public static boolean isExistFolder(String strPath, boolean bFile) {
+		File objFolder = null;
+		boolean bExist = false;
+
+		if (bFile) {
+			File objFile = new File(strPath);
+			objFolder = new File(objFile.getParent());
+			objFile = null;
+		} else
+			objFolder = new File(strPath);
+
+		if (null != objFolder)
+			bExist = objFolder.exists();
 
 		objFolder = null;
 		return bExist;
-  	}
-  	
-	
-	
+	}
+
+
+
 	private String umGetElementId(String strIndexId, String strIndexInfo) {
-		//È®ÀÎÄõ¸®¸¦ ÀÛ¼ºÇÑ´Ù.
+		//í™•ì¸ì¿¼ë¦¬ë¥¼ ì‘ì„±í•œë‹¤.
 		String s_SQL = "SELECT COUNT(*) FROM " + strIndexId;
 		String s_SQLWhere = "";
-		
+
 		String[] arrTemp = strIndexInfo.split(";");
 		for (int i=0; i < arrTemp.length; i++) {
 			String[] arrTemp2 = arrTemp[i].split("=");
@@ -201,75 +201,75 @@ public class XvarmFile {
 				s_SQLWhere = s_SQLWhere + " AND " + arrTemp2[0] + " = '" + arrTemp2[1] + "'";
 			}
 		}
-		
-		//simplesql¿¡ ¿¬°áÇÏ¿© ´ë»ó°ÇÀ» Ä«¿îÆ® ÇÑ´Ù. (¹İµå½Ã indexid = table name ÀÎ °æ¿ì¿¡¸¸ °¡´ÉÇÏ´Ù.)
+
+		//simplesqlì— ì—°ê²°í•˜ì—¬ ëŒ€ìƒê±´ì„ ì¹´ìš´íŠ¸ í•œë‹¤. (ë°˜ë“œì‹œ indexid = table name ì¸ ê²½ìš°ì—ë§Œ ê°€ëŠ¥í•˜ë‹¤.)
 		int i_Count = umGetCount(s_SQL+s_SQLWhere);
 		if (i_Count < 0) {
 			return "";
 		} else if(i_Count == 0) {
-	//		m_strError = "INDEX SEARCH FAIL : There are no data for the sql conditions.";
+			//		m_strError = "INDEX SEARCH FAIL : There are no data for the sql conditions.";
 			return "";
 		} else if(i_Count > 1) {
-		//	m_strError = "INDEX SEARCH FAIL : There are 1 more files for the sql conditions.";
+			//	m_strError = "INDEX SEARCH FAIL : There are 1 more files for the sql conditions.";
 			return "";
 		}
-		
+
 		s_SQL = "SELECT ElementId, file_name FROM " + strIndexId;
 		String strElemId = umGetDBString(s_SQL+s_SQLWhere);
-		
+
 		if (null == strElemId)
 			strElemId = "";
-		
+
 //		if (strElemId.equals("")) {
 //			return "";
 //		}
 		return strElemId.trim();
 	}
-	
+
 
 	private String umGetDBString(String strSQL) {
 		String s_Return = "";
 		if (strSQL.equals("")) {
-		//	m_strError = "SQL FAIL : There are no sql contidions.";
+			//	m_strError = "SQL FAIL : There are no sql contidions.";
 			return "";
 		}
-		
+
 		try {
 			asysUsrSql altusrsql = new asysUsrSql(conXvarm);
 			asysDataResult altdataresult = null;
 			int ret = altusrsql.retrieve("SIMPLESQL_MAIN", strSQL, 1);
 			if ( ret == 0 ) {
-		        altdataresult = altusrsql.getResult();
-		        for(boolean flag = altdataresult.nextRow(); flag; flag = altdataresult.nextRow())
-		        	s_Return = altdataresult.getColValue(0).trim()+";"+altdataresult.getColValue(1).trim();
+				altdataresult = altusrsql.getResult();
+				for(boolean flag = altdataresult.nextRow(); flag; flag = altdataresult.nextRow())
+					s_Return = altdataresult.getColValue(0).trim()+";"+altdataresult.getColValue(1).trim();
 				altdataresult.close();
 			} else {
-			//	m_strError = "SQL FAIL : " + m_conn.getLastError();
+				//	m_strError = "SQL FAIL : " + m_conn.getLastError();
 			}
 			altdataresult = null;
 			altusrsql = null;
 		} catch(Exception e) {
-		//	m_strError = "SQL FAIL[E] : " + e.getMessage();
+			//	m_strError = "SQL FAIL[E] : " + e.getMessage();
 		}
 		return s_Return;
 	}
-	
+
 	private int umGetCount(String strSQL) {
 		int i_Return = -1;
-		
+
 		if (strSQL.equals("")) {
 			//m_strError = "QUERY FAIL : There are no sql contidions.";
 			return -1;
 		}
-		
+
 		try {
 			asysUsrSql altusrsql = new asysUsrSql(conXvarm);
 			asysDataResult altdataresult = null;
 			int ret = altusrsql.retrieve("SIMPLESQL_MAIN", strSQL, 1);
 			if ( ret == 0 ) {
-		        altdataresult = altusrsql.getResult();
-		        for(boolean flag = altdataresult.nextRow(); flag; flag = altdataresult.nextRow())
-		        	i_Return = Integer.parseInt(altdataresult.getColValue(0).trim());
+				altdataresult = altusrsql.getResult();
+				for(boolean flag = altdataresult.nextRow(); flag; flag = altdataresult.nextRow())
+					i_Return = Integer.parseInt(altdataresult.getColValue(0).trim());
 				altdataresult.close();
 			} else {
 				//m_strError = "QUERY FAIL : " + altusrsql.getLastError();

@@ -450,11 +450,6 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		boolean bRes = false;
 		if (m_AC == null)	return bRes;
 
-//		@JdocNo			varchar(70),							-- w
-//		@IsSystem		char(1),		-- 0 or 1				-- �ý������� ������ ������ ����
-//		@SdocKind		varchar(4),								-- �����ϱ� ���� ���� ���� �ڵ�
-//		@NotJdocNo		varchar(max) = null		
-		
 		String key		= m_C.getParamValue(mapParams, "KEY", "");
 		String isSystem		= m_C.getParamValue(mapParams, "IS_SYSTEM", "0");
 		String kind		= m_C.getParamValue(mapParams, "KIND", "");

@@ -77,16 +77,14 @@ public class HistoryController extends HttpServlet{
 		
 		String strCommand			= m_C.getParamValue(mapParams, "Command", null);
 		
-		//�Ķ���� �˻�
-    	if(m_C.isBlank(strCommand))
+		if(m_C.isBlank(strCommand))
 		{
     		logger.error("Command is null");
     		out.print(m_C.writeResultMsg("F", "COMMAND_IS_NULL"));
 			return;
 		}
     	
-    	//������ �˻�
-	   	if(m_C.IsInjection(req.getParameterMap()))
+      	if(m_C.IsInjection(req.getParameterMap()))
 	   	{
 	 		logger.error("Injection detected.");
     		out.print(m_C.writeResultMsg("F", "INJECTION_DETECTED"));

@@ -64,7 +64,6 @@ public class DownloadAttachController extends HttpServlet {
 		
 	
 		
-		//������ �˻�
 	   	if(m_C.IsInjection(req.getParameterMap()))
 	   	{
 	 		logger.error("Injection detected.");

@@ -157,7 +157,7 @@ public class Recycle extends HttpServlet{
 		if(obj_resImage == null || obj_resImage.size() <= 0) {
 			return false;
 		}
-		obj_resImage.addProperty("SDOC_NAME", "���ּ�");
+		obj_resImage.addProperty("SDOC_NAME", "발주서");
 	
 		UploadSlip upload = new UploadSlip(profile);
 		

@@ -23,7 +23,7 @@ public class Profile
 	private String commentSign 	= "##";
 	private HashMap<String, HashMap<String, String>> m_mapItems = new HashMap();
 	private Common m_C 			= new Common();
-	private 	String[]	m_arrStrInput;			// 파일 내용
+	private 	String[]	m_arrStrInput;
 
 	/**
 	 *  load configuration file.

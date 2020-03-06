@@ -137,16 +137,14 @@ public class MultipartController extends HttpServlet{
 //		
 //		String strCommand			= m_C.getParamValue(mapParams, "Command", null);
 //		
-//		//파라미터 검사
-//    	if(m_C.isBlank(strCommand))
+//			if(m_C.isBlank(strCommand))
 //		{
 //    		Logger.write("Command is null", 5);
 //    		out.print(m_C.writeResultMsg("F", "COMMAND_IS_NULL"));
 //			return;
 //		}
 //    	
-//    	//인젝션 검사
-//	   	if(m_C.IsInjection(req.getParameterMap()))
+//     	if(m_C.IsInjection(req.getParameterMap()))
 //	   	{
 //	 		Logger.write("Injection detected.", 5);
 //    		out.print(m_C.writeResultMsg("F", "INJECTION_DETECTED"));

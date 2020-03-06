@@ -30,7 +30,7 @@ public class AgentConnect
 	private Profile m_Profile	=	null; 
 	private Common C = new Common();
 	private Logger logger = null;
-	//������
+
 	public AgentConnect(Profile profile)
 	{
 		this.m_Profile	= profile;
@@ -271,38 +271,7 @@ public class AgentConnect
 		arrNodeList 			=  	AG.GetSelectList("//ListData/Row");
 		arrNodeListLen			=	arrNodeList.length;
 	}
-	
-	/*
-	 * //SELECT ���� public void GetData(String strQuery, String strSession) { String
-	 * strTemp = strServerKey +
-	 * "                                                                                                                                                           "
-	 * ; strTemp = strTemp.substring(0,32);
-	 * 
-	 * Logger.
-	 * write("------------------------------GetData query--------------------------------\n"
-	 * +strQuery+"\n", 6);
-	 * 
-	 * int Querylength = 0; try { Querylength =
-	 * strQuery.getBytes(strCharSet).length; } catch (UnsupportedEncodingException
-	 * e) { // TODO Auto-generated catch block e.printStackTrace();
-	 * Logger.writeException("GetData Exception", e, 1); }//Cm.Getlength(strQuery);
-	 * 
-	 * StringBuffer buff = new StringBuffer() .append( "S" ) .append( strTemp )
-	 * .append((new DecimalFormat("000000000000")).format(Querylength))
-	 * .append(strQuery);
-	 * 
-	 * SocketConnect skc = new SocketConnect(); String strResult =
-	 * skc.request(strServerIp, nServerPort, buff.toString(),"", strCharSet);
-	 * 
-	 * // < (less-than sign) &lt; // > (greater-than sign) &gt; // & (ampersand)
-	 * &amp; Logger.write("Result : "+strResult, 5); strResult =
-	 * strResult.replaceAll("&", "&amp;");
-	 * 
-	 * strResult = strResult.replaceAll("'", "&apos;"); strResult =
-	 * strResult.replaceAll("\"", "&quot;"); AgentParser AG = new
-	 * AgentParser(strResult); arrNodeList = AG.GetSelectList("//ListData/Row");
-	 * arrNodeListLen = arrNodeList.length; }
-	 */
+
 	public String SetData(String strQuery, String strFuncName)
 	{
 		String strRet 		= "";

@@ -834,7 +834,6 @@ public class ARIAChiper {
 			 		 return bIsSuccess;
 			 	}
 			 
-			 //º¹È£È­
 			 public  byte[] ARIA_Decode(byte[] byteEncData) throws java.io.UnsupportedEncodingException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException
 			 {
 				 int nKeySize = 16;

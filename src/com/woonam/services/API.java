@@ -465,7 +465,6 @@ public class API {
 						
 						JsonArray ar_orderItemList = m_GM.Get_orderItemConverList(mapParamVals);
 						
-						// �̹��� ����
 						String vdCD = obj_orderInfo.get("VD_CD").getAsString();
 						TemplateImpl orderForm =  null;
 						
@@ -493,7 +492,7 @@ public class API {
 							return ResultMsg("F", "FAILED_CREATE_ORDER");
 						}
 						String convertKey = obj_resImage.get("CONVERT_KEY").getAsString();
-						obj_resImage.addProperty("SDOC_NAME", "���ּ�");
+						obj_resImage.addProperty("SDOC_NAME", "발주서");
 						UploadSlip upload = new UploadSlip(profile);
 						JsonObject res = upload.run(obj_resImage, params, sbWorkPath.toString());
 						
@@ -696,7 +695,6 @@ public class API {
 //				resStat = "00";
 				switch (resStat) {
 				case "00":
-					// �̹��� ����
 					CoCard cardForm 				= new CoCard(profile);
 					
 					// Set work path

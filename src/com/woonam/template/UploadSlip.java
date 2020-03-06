@@ -130,7 +130,6 @@ public class UploadSlip {
 					objData.get("CONVERT_KEY").getAsString()
 				)) {
 				
-				//��ó��
 				m_SM.Copy_Replace(objData.get("CONVERT_KEY").getAsString(), sdocNo, corpNo, userId);
 				
 				m_SM.Add_History(sdocNo, "S10", corpNo, userId);

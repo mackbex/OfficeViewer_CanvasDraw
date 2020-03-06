@@ -65,8 +65,7 @@ public class DownloadOriginalController extends HttpServlet {
 		
 	
 		
-		//������ �˻�
-	   	if(m_C.IsInjection(req.getParameterMap()))
+		 	if(m_C.IsInjection(req.getParameterMap()))
 	   	{
 	 		logger.error("Injection detected.");
 	 		resp.getWriter().print(m_C.writeResultMsg("F", "INJECTION_DETECTED"));

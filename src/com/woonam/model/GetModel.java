@@ -1118,7 +1118,7 @@ public class GetModel {
 					obj_Item.addProperty("MY_COMT", "0");
 				}
 				String comtData = obj_Item.get("COMT_DATA").getAsString();
-				obj_Item.addProperty("COMT_DATA", comtData.replaceAll("��br��", "<br>"));
+				obj_Item.addProperty("COMT_DATA", comtData.replaceAll("〈br〉", "<br>"));
 				arObjRes.add(obj_Item);
 				
 			}

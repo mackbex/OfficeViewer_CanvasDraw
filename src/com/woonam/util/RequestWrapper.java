@@ -39,22 +39,22 @@ public class RequestWrapper extends HttpServletRequestWrapper
         return cleanXSS(value);
  
     }
- 
+
     private String cleanXSS(String value) {
-    	
-    	value = value.replaceAll("<", "°¥").replaceAll(">", "°µ");
+
+        value = value.replaceAll("<", "„Äà").replaceAll(">", "„Äâ");
         value = value.replaceAll("\\(", "(").replaceAll("\\)", ")");
         value = value.replaceAll("eval\\((.*)\\)", "");
         value = value.replaceAll("[\\\"\\\'][\\s]*javascript:(.*)[\\\"\\\']", "\"\"");
         value = value.replaceAll("script", "");
-        value = value.replaceAll("'--", "°©°©");
+        value = value.replaceAll("'--", "¬≠¬≠");
         value = value.replaceAll("\\n", "&ltbr&gt");
         value = value.replaceAll("'", "''");
-        value = value.replaceAll("!", "£°");
-        //value = value.replaceAll("%", "£•");
-        value = value.replaceAll("&amp", "£€");
-        value = value.replaceAll("&ampquot", "£›");
-        value = value.replaceAll("&", "£¶");
+        value = value.replaceAll("!", "ÔºÅ");
+        value = value.replaceAll("%", "ÔºÖ");
+        value = value.replaceAll("&amp", "Ôºª");
+        value = value.replaceAll("&ampquot", "ÔºΩ");
+        value = value.replaceAll("&", "ÔºÜ");
         
        /* value = value.replaceAll("<", "& lt;").replaceAll(">", "& gt;");
         value = value.replaceAll("\\(", "& #40;").replaceAll("\\)", "& #41;");

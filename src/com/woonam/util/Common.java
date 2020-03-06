@@ -103,8 +103,8 @@ public class Common {
 	    }
 	    return data;
 	}
-	
-	//���� ������
+
+
 	public boolean ReNameFile(String strFilePath, String strOldFileName)
 	{
 		File file	=	new File(strOldFileName);
@@ -116,20 +116,14 @@ public class Common {
 		{
 			if(!file.renameTo(file2))
 			{
-				//if (logLevel >= 7) logger.write("���ϸ��� ���� : "+strOldFilePath+"->"+strNewFilePath);	
-			//.out.println("���ϸ�ٲٱ����.");
 			}
 			else
 			{
-				//if (logLevel >= 7) logger.write("���ϸ��� ���� : "+strOldFilePath+"->"+strNewFilePath);	
-			//	System.out.println("���ϸ�ٲٱ⼺��.");
 				return true;
 			}
 		}
 		else
 		{
-			//if (logLevel >= 7) logger.write("�ش� ������ ���������ʽ��ϴ�.");
-		//	System.out.println("�ش� ������ ���������ʽ��ϴ�.");
 		}
 		}
 		catch(Exception e)
@@ -142,7 +136,7 @@ public class Common {
 	}
 	
 	/**
-	 * Root ��� ������.
+	 * Root
 	 * @param ctx
 	 * @param
 	 * @return
@@ -192,11 +186,7 @@ public class Common {
 		return sbRootPath.toString();
 	}
 	
-	/**
-	 * Root ��� ������.
-	 * @return
-	 */
-		
+
 	public String Get_RootPathForJava()
 	{
 		StringBuffer sbRootPath 	= new StringBuffer();
@@ -334,7 +324,6 @@ public class Common {
         return res;
     }
 	
-	//���˴�� ���� ��¥�θ���
 	public String getToday(String strFormat)
 	{
 		Date dateNow = Calendar.getInstance(new SimpleTimeZone(0x1ee6280, "KST")).getTime();
@@ -376,12 +365,6 @@ public class Common {
 		return false;
 	}
 	
-	/**
-	 * �Ķ���� ���� ��Ű�� ����Ǿ��ִ��� Ȯ��. 
-	 * @param cookie
-	 * @param strParam
-	 * @return ������ String ����. ������ ""(Not null)
-	 */
 	public String FindParameterFromCookie(HttpServletResponse response, CookieUtil cookie, String strParam)
 	{
 		String strRes = "";
@@ -399,12 +382,7 @@ public class Common {
     	return strRes;
 	}
 	
-	/**
-	 * �Ķ���� ���� ��Ű�� ����Ǿ��ִ��� Ȯ��. 
-	 * @param cookie
-	 * @param strParam
-	 * @return ������ String ����. ������ ""(Not null)
-	 */
+
 	public String FindParameterFromCookie(HttpServletResponse response, CookieUtil cookie, String strParam, String strDefVal)
 	{
 		String strRes = strDefVal;
@@ -463,8 +441,7 @@ public class Common {
 		String strServerIP		= profile.getString(strServerFlag,"IP","");
 		
 		String strRes	= "";
-		//IP���ϱ�
-	
+
 		InetAddress giriAddress 		= null;
 		try
 		{
@@ -478,36 +455,31 @@ public class Common {
 		}
 		return strRes;
 	}
-	
+
 	/**
-	 * Ư������ ��ȯ
+	 * 특수문자 변환
 	 */
 	public String ConvertSpecialChar(String str)
 	{
 		str = str.replaceAll("\\n", "&ltbr&gt");
-		str = str.replaceAll(">", "��");
-		str = str.replaceAll("<", "��");
+		str = str.replaceAll(">", "〉");
+		str = str.replaceAll("<", "〈");
 		str = str.replaceAll("'", "''");
-		str = str.replaceAll("!", "��");
-		str = str.replaceAll("%", "��");
-		str = str.replaceAll("&gt", "��");
-		str = str.replaceAll("&lt", "��");
-		str = str.replaceAll("&amp", "��");
-		str = str.replaceAll("&ampquot", "��");
-		str = str.replaceAll("&", "��");
-		str = str.replaceAll("'", "��");
-//		str = str.replaceAll("-", "��");
-		str = str.replaceAll("\\$", "��");
-		str = str.replaceAll("#", "��");
-		
+		str = str.replaceAll("!", "！");
+		str = str.replaceAll("%", "％");
+		str = str.replaceAll("&gt", "〉");
+		str = str.replaceAll("&lt", "〈");
+		str = str.replaceAll("&amp", "［");
+		str = str.replaceAll("&ampquot", "］");
+		str = str.replaceAll("&", "＆");
+		str = str.replaceAll("'", "’");
+//		str = str.replaceAll("-", "­");
+		str = str.replaceAll("\\$", "＄");
+		str = str.replaceAll("#", "＃");
+
 		return str;
 	}
 	
-	/**
-	 * ������ �˻�
-	 * @param
-	 * @return
-	 */
 	public boolean IsInjection(String str) {
 		
 		str = ConvertSpecialChar(str);
@@ -526,11 +498,6 @@ public class Common {
 		return false;
 	}
 	
-	/**
-	 * ������ �˻�
-	 * @param map
-	 * @return
-	 */
 	public boolean IsInjection(Map<String, String[]> map) {
 		
 		for( String strKey : map.keySet() )
@@ -550,26 +517,6 @@ public class Common {
 						return true;
 					}
 				}
-			//	{
-				/*	 strVal.replace("'", "��");
-					 strVal.replace("--", "����");
-					 strVal.replace("|", "��");
-					 strVal.replace("\"", "��");
-					 strVal.replace("/", "��");
-					 strVal.replace("\\", "��");
-					 strVal.replace(":", "��");
-					 strVal.replace(";", "��");
-					 strVal.replace("%", "��");
-					 strVal.replace("+", "��");
-					 strVal.replace("<", "��");
-					 strVal.replace(">", "��");
-					 strVal.replace("#", "��");
-					 strVal.replace("&", "��");
-					 strVal.replace("(", "��");
-					 strVal.replace(")", "��");*/
-				
-				//	 return true;
-				//}
 			}
         }
 		return false;

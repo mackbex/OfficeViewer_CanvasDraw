@@ -326,7 +326,7 @@ public class Office3GL
 
 		if(bufImage != null)
 		{
-			writeToFile(strSavePath, bufImage);
+			saveFile = writeToFile(strSavePath, bufImage);
 		}
 
 		return saveFile;
