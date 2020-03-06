@@ -21,8 +21,9 @@ $(function(){
 	
 	var CommentParams = {
 			CORP_NO 				: "<c:out value="${sessionScope.CORP_NO}" />", 
-			USER_ID 				: "<c:out value="${sessionScope.USER_ID}" />", 
-			LANG 						: "<c:out value="${mParams['LANG'][0]}" />",
+			USER_ID 				: "<c:out value="${sessionScope.USER_ID}" />",
+			AUTH 					: "<c:out value="${sessionScope.AUTH}" />",
+			LANG 					: "<c:out value="${mParams['LANG'][0]}" />",
 			KEY		 				: "<c:out value="${mParams['KEY'][0]}" />",
 			OPENER					: "<c:out value="${mParams['PAGE'][0]}" />"
 	}

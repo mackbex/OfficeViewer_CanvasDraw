@@ -100,6 +100,7 @@
 		session.setAttribute("USER_NM", 	strResUserNM);
 		session.setAttribute("USER_LANG",	strLang.toLowerCase());
 		session.setAttribute("VIEW_MODE",	strViewMode);
+		session.setAttribute("AUTH",		objUserInfo.get("AUTH").getAsString());
 	
 	}
 	catch(Exception e)

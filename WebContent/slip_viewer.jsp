@@ -46,6 +46,7 @@
 				CORP_NO 				: "<c:out value="${sessionScope.CORP_NO}" />",
 				USER_ID 				: "<c:out value="${sessionScope.USER_ID}" />",
 				PART_NO 				: "<c:out value="${sessionScope.PART_NO}" />",
+				AUTH 					: "<c:out value="${sessionScope.AUTH}" />",
 				SERVER_KEY 				: "<c:out value="${SERVER_KEY}" />",
 				LANG 					: "<c:out value="${mParams['LANG'][0]}" />",
 				KEY_TYPE 				: "<c:out value="${mParams['KEY_TYPE'][0]}" />",
