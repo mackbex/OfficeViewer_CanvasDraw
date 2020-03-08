@@ -228,8 +228,14 @@ $.Viewer = {
 				
 				//Load XPI Script
 				$.getScript(g_XPI_URL, function() {
-				
-					var localWAS_URL = location.protocol + "//127.0.0.1:" +  $.Viewer.params.XPI_PORT;
+
+					var localWAS_URL =  null;
+					if(location.protocol.indexOf("https") > -1) {
+						localWAS_URL = "https://127.0.0.1:" +  $.Viewer.params.XPI_PORT_HTTPS;
+					}
+					else {
+						localWAS_URL = "http://127.0.0.1:" +  $.Viewer.params.XPI_PORT_HTTP;
+					}
 					
 					var XPIParams = {
 							LOCAL_WAS_URL		: localWAS_URL,

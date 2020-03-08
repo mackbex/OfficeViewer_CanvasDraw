@@ -50,7 +50,8 @@
 		
 	String strUseMobile									= g_profile.getString("WAS_INFO", "MOBILE_USE", "F").toUpperCase();
 	//String strMobileMode									= g_profile.getString("WAS_INFO", "MOBILE_MODE", "VIEW").toUpperCase();
-	String localWAS_Port								= g_profile.getString("LOCAL_WAS",request.getScheme().toUpperCase(), "");
+	String localWAS_Port_HTTP								= g_profile.getString("LOCAL_WAS","HTTP", "");
+	String localWAS_Port_HTTPS								= g_profile.getString("LOCAL_WAS","HTTPS", "");
 
 	String command 										= request.getParameter("COMMAND");
 	String isInterface 									= request.getParameter("INTERFACE");
@@ -135,7 +136,8 @@ $(function(){
 	objParams["USER_NM"] 			= "<%=strResUserNM %>";
 	objParams["CORP_NM"] 			= "<%=strResCorpNM %>";
 	objParams["MENU"] 				= "<%=strMenu %>";
-	objParams["XPI_PORT"]			= "<%=localWAS_Port%>";
+	objParams["XPI_PORT_HTTP"]			= "<%=localWAS_Port_HTTP%>";
+	objParams["XPI_PORT_HTTPS"]			= "<%=localWAS_Port_HTTPS%>";
 
 	var useMobile = "<%=strUseMobile%>";
 	var targetURL = "<c:url value='/slip_actor.jsp' />";

@@ -691,7 +691,7 @@ $.Operation  = {
 			objParams["SVR_MODE"]				= target.params.SVR_MODE;
 			objParams["CLICKED_SLIP_IRN"]		= objData.SLIP_IRN;
 			objParams["MENU"]					= target.params.MENU;
-			objParams["XPI_PORT"]				= target.params.XPI_PORT;
+		//	objParams["XPI_PORT"]				= target.params.XPI_PORT;
 			
 			var elFirstGroupItem 			= $("[id=slip_item]");
 			
