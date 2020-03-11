@@ -10,7 +10,14 @@ StringBuffer.prototype.toString = function()
 {
     return this.buffer.join("");
 };
+String.prototype.insert = function(index, string) {
+	if (index > 0)
+	{
+		return this.substring(0, index) + string + this.substring(index, this.length);
+	}
 
+	return string + this;
+};
 if (typeof Array.prototype.forEach != 'function') {
 	Array.prototype.forEach = function(callback){
 		for (var i = 0; i < this.length; i++){
@@ -39,6 +46,20 @@ $.fn.insertAt = function(index, $parent) {
         }
     });
 }
+$.fn.inputFilter = function(inputFilter) {
+	return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+		if (inputFilter(this.value)) {
+			this.oldValue = this.value;
+			this.oldSelectionStart = this.selectionStart;
+			this.oldSelectionEnd = this.selectionEnd;
+		} else if (this.hasOwnProperty("oldValue")) {
+			this.value = this.oldValue;
+			this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+		} else {
+			this.value = "";
+		}
+	});
+};
 
 if (!('remove' in Element.prototype)) {
     Element.prototype.remove = function() {
@@ -141,6 +162,17 @@ $.Common = {
 			    document.body.appendChild(form);
 			    form.submit();
 			    form.remove();
+		},
+		stringToDate(str,divider) {
+
+			if($.Common.isBlank(divider)) {
+				str = str.insert(4,"-").insert(7,"-")
+				return new Date(str);
+			}
+			else {
+				return new Date(str.replace( /(\d{2})-(\d{2})-(\d{4})/, "$2"+divider+"$1"+divider+"$3"));
+			}
+
 		},
 		getDateWithFormat : function(date, format) {
 			var year 	= "" + date.getFullYear();
