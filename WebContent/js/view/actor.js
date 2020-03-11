@@ -86,10 +86,10 @@ $.Actor = {
 
 					var localWAS_URL =  null;
 					if(location.protocol.indexOf("https") > -1) {
-						localWAS_URL = "https://127.0.0.1:" +  $.Viewer.params.XPI_PORT_HTTPS;
+						localWAS_URL = "https://127.0.0.1:" +  $.Actor.params.XPI_PORT_HTTPS;
 					}
 					else {
-						localWAS_URL = "http://127.0.0.1:" +  $.Viewer.params.XPI_PORT_HTTP;
+						localWAS_URL = "http://127.0.0.1:" +  $.Actor.params.XPI_PORT_HTTP;
 					}
 
 					var XPIParams = {
