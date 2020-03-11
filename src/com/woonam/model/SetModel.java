@@ -295,7 +295,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return res;
 	}
 	
-	public int Change_JDocNo(Map<String, String[]> mapParams)
+	public int Change_JDocNo(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		int nResCnt	 = -1;
@@ -333,7 +333,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return nResCnt;
 	}
 	
-	public boolean removeComment(Map<String, String[]> mapParams)
+	public boolean removeComment(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean bRes = false;
@@ -372,7 +372,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return bRes;
 	}
 	
-	public boolean modifyComment(Map<String, String[]> mapParams)
+	public boolean modifyComment(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean bRes = false;
@@ -413,7 +413,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 	}
 
 
-	public boolean updateCoCardAppr(Map<String, String[]> mapParams) {
+	public boolean updateCoCardAppr(Map<String, Object> mapParams) {
 		boolean res = false;
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		if (m_AC == null)	return false;
@@ -444,7 +444,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		return res;
 	}
 	
-	public boolean Remove_byKind(Map<String, String[]> mapParams) {
+	public boolean Remove_byKind(Map<String, Object> mapParams) {
 		
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean bRes = false;
@@ -487,7 +487,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 	
 	}
 	
-	public boolean removeAll(Map<String, String[]> mapParams)
+	public boolean removeAll(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean bRes = false;
@@ -525,7 +525,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return bRes;
 	}
 	
-	public boolean Change_Step(Map<String, String[]> mapParams)
+	public boolean Change_Step(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean bRes = false;
@@ -562,7 +562,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 	}
 	
 
-	public boolean Unmapping_Card(Map<String, String[]> mapParams)
+	public boolean Unmapping_Card(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean nRes = false;
@@ -599,7 +599,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 		return nRes;
 	}
-	public boolean Rotate_Slip(Map<String, String[]> mapParams) {
+	public boolean Rotate_Slip(Map<String, Object> mapParams) {
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean bRes = false;
 		if (m_AC == null)	return bRes;
@@ -636,7 +636,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return bRes;
 	}
 	
-	public int removeSlip(Map<String, String[]> mapParams)
+	public int removeSlip(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		int nRes = 0;
@@ -674,7 +674,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return nRes;
 	}
 	
-	public int removeAttach(Map<String, String[]> mapParams)
+	public int removeAttach(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		int nRes = -1;
@@ -712,7 +712,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return nRes;
 	}
 	
-	public boolean writeComment(Map<String, String[]> mapParams)
+	public boolean writeComment(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		boolean bRes = false;
@@ -758,7 +758,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return bRes;
 	}
 	
-	public int Copy_SlipDoc(Map<String, String[]> mapParams)
+	public int Copy_SlipDoc(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		int nResCnt	 = -1;

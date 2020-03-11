@@ -113,7 +113,7 @@ public class Recycle extends HttpServlet{
 	
 	private boolean Upload_Order(String ptiKey, Profile profile) {
 		
-		HashMap<String, String[]> mapVals = new HashMap<>();
+		HashMap<String, Object> mapVals = new HashMap<>();
 		String[] key = {ptiKey};
 		mapVals.put("APPR_NO", key);
 		

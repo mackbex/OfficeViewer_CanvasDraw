@@ -80,7 +80,7 @@ public class GetModel {
 	}
 	
 	
-	public JsonObject getOriginalInfo(Map<String, String[]> mapParams) {
+	public JsonObject getOriginalInfo(Map<String, Object> mapParams) {
 		
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject obj_Res 			= new JsonObject();
@@ -111,7 +111,7 @@ public class GetModel {
     	return obj_Res;
 	}
 	
-	public String getAttachFileName(Map<String, String[]> mapParams) {
+	public String getAttachFileName(Map<String, Object> mapParams) {
 		
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		String strRes 			= null;
@@ -140,7 +140,7 @@ public class GetModel {
     	return strRes;
 	}
 	
-	public JsonArray Get_SlipCnt(Map<String, String[]> mapParams)
+	public JsonArray Get_SlipCnt(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray ar_res = new JsonArray();
@@ -204,7 +204,7 @@ public class GetModel {
     	return arObj_Res;
 	}
 	
-	public JsonArray Get_SlipInfo(Map<String, String[]> mapParams)
+	public JsonArray Get_SlipInfo(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObj_Res = new JsonArray();
@@ -346,7 +346,7 @@ public class GetModel {
 	}
 	
 
-	public JsonArray Get_AttachInfo(Map<String, String[]> mapParams)
+	public JsonArray Get_AttachInfo(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObj_Res = new JsonArray();
@@ -381,7 +381,7 @@ public class GetModel {
     	return arObj_Res;
 	}
 	
-	public JsonArray Get_SlipList(Map<String, String[]> mapParams)
+	public JsonArray Get_SlipList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObj_Res = new JsonArray();
@@ -419,7 +419,7 @@ public class GetModel {
     	return arObj_Res;
 	}
 	
-	public JsonArray Get_CardData(Map<String, String[]> mapParams)
+	public JsonArray Get_CardData(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObj_Res = new JsonArray();
@@ -457,7 +457,7 @@ public class GetModel {
     	return arObj_Res;
 	}
 	
-	public JsonObject Get_cardConverList(Map<String, String[]> mapParams)
+	public JsonObject Get_cardConverList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject obj_res = new JsonObject();
@@ -502,7 +502,7 @@ public class GetModel {
     	return obj_res;
 	}
 	
-	public JsonArray Get_reportConverList(Map<String, String[]> mapParams) throws Exception
+	public JsonArray Get_reportConverList(Map<String, Object> mapParams) throws Exception
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray ar_res = new JsonArray();
@@ -552,7 +552,7 @@ public class GetModel {
     	return ar_res;
 	}
 	
-	public JsonObject Get_orderConverList(Map<String, String[]> mapParams)
+	public JsonObject Get_orderConverList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject obj_res = new JsonObject();
@@ -597,7 +597,7 @@ public class GetModel {
     	return obj_res;
 	}
 	
-	public JsonObject Get_taxConverList(Map<String, String[]> mapParams)
+	public JsonObject Get_taxConverList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject obj_Res = new JsonObject();
@@ -643,7 +643,7 @@ public class GetModel {
 	}
 	
 
-	public JsonArray Get_taxItemConverList(Map<String, String[]> mapParams)
+	public JsonArray Get_taxItemConverList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObj_Res = new JsonArray();
@@ -673,7 +673,7 @@ public class GetModel {
 		return arObj_Res;
 	}
 	
-	public JsonArray Get_orderItemConverList(Map<String, String[]> mapParams)
+	public JsonArray Get_orderItemConverList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObj_Res = new JsonArray();
@@ -703,7 +703,7 @@ public class GetModel {
 		return arObj_Res;
 	}
 	
-//	public JsonObject getAttachCount(Map<String, String[]> mapParams)
+//	public JsonObject getAttachCount(Map<String, Object> mapParams)
 //	{
 //		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 //		JsonObject objRes = new JsonObject();
@@ -739,7 +739,7 @@ public class GetModel {
 //    	return objRes;
 //	}
 //
-//	public JsonObject getThumbCount(Map<String, String[]> mapParams)
+//	public JsonObject getThumbCount(Map<String, Object> mapParams)
 //	{
 //		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 //		JsonObject objRes = new JsonObject();
@@ -774,7 +774,7 @@ public class GetModel {
 //    	return objRes;
 //	}
 
-	public JsonObject getCocardList(Map<String, String[]> mapParams)
+	public JsonObject getCocardList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject objRes = new JsonObject();
@@ -818,7 +818,7 @@ public class GetModel {
 	}
 
 
-	public int Mapping_CardMulti(Map<String, String[]> mapParams)
+	public int Mapping_CardMulti(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		int nRes = 0;
@@ -865,7 +865,7 @@ public class GetModel {
 		return nRes;
 	}
 
-	public JsonObject getAttachList(Map<String, String[]> mapParams)
+	public JsonObject getAttachList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject objRes = new JsonObject();
@@ -915,7 +915,7 @@ public class GetModel {
 		return objRes;
 	}
 
-	public JsonObject getCoCardSlipList(Map<String, String[]> mapParams)
+	public JsonObject getCoCardSlipList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject objRes = new JsonObject();
@@ -955,7 +955,7 @@ public class GetModel {
 		return objRes;
 	}
 
-	public JsonObject getSlipList(Map<String, String[]> mapParams)
+	public JsonObject getSlipList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject objRes = new JsonObject();
@@ -1042,7 +1042,7 @@ public class GetModel {
 		return arObjRes;
 	}
 
-	public JsonObject getCommentCount(Map<String, String[]> mapParams)
+	public JsonObject getCommentCount(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject objRes = new JsonObject();
@@ -1079,7 +1079,7 @@ public class GetModel {
     	return objRes;
 	}
 	
-	public JsonArray getCommentList(Map<String, String[]> mapParams)
+	public JsonArray getCommentList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObjRes = new JsonArray();
@@ -1131,7 +1131,7 @@ public class GetModel {
     	return arObjRes;
 	}
 	
-	public JsonArray getHistoryList(Map<String, String[]> mapParams)
+	public JsonArray getHistoryList(Map<String, Object> mapParams)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObjRes = new JsonArray();

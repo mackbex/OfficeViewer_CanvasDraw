@@ -537,7 +537,7 @@ public class Common {
 		return strRes;
 	}
 	
-	public String getParamValue(Map<String, String[]> mapParams, String strParamName, String strDefaultVal )
+	public String getParamValue(Map<String, Object> mapParams, String strParamName, String strDefaultVal )
 	{
 		String strVal = isBlank(parseParameter(mapParams, strParamName)) ? strDefaultVal : parseParameter(mapParams, strParamName);
 		if(isBlank(strVal))
@@ -548,14 +548,14 @@ public class Common {
 		return strVal;
 	}
 	
-	public String[] getParamValue(Map<String, String[]> mapParams, String strParamName)
+	public String[] getParamValue(Map<String, Object> mapParams, String strParamName)
 	{
 		String[] arVal = null;
 		try {
-			 arVal = mapParams.get(strParamName);
+			 arVal = (String[]) mapParams.get(strParamName);
 			if (arVal == null || arVal.length <= 0) {
 				strParamName += "[]";
-				arVal = mapParams.get(strParamName);
+				arVal = (String[]) mapParams.get(strParamName);
 			}
 
 			if (arVal != null) {
@@ -575,21 +575,37 @@ public class Common {
 		return arVal;
 	}
 	
-	private String parseParameter(Map<String, String[]> map, String strParamName)
+	private String parseParameter(Map<String, Object> map, String strParamName)
 	{
 		StringBuffer sbParam = new StringBuffer();
 
-		if(map.get(strParamName) != null)
+		Object data = map.get(strParamName);
+
+		if(data != null)
 		{
-			for(String str : map.get(strParamName))
-			{
+			if(data instanceof String[]) {
+				for (String str : (String[]) data) {
+					try {
+						str = URLDecoder.decode(ConvertSpecialChar(str), "utf-8");
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					sbParam.append(ConvertSpecialChar(str));
+				}
+			}
+			else if(data instanceof String) {
+				String str = null;
 				try {
-					str = URLDecoder.decode(ConvertSpecialChar(str), "utf-8");
+					str = URLDecoder.decode(ConvertSpecialChar((String) data), "utf-8");
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				sbParam.append(ConvertSpecialChar(str));
+			}
+			else {
+				return null;
 			}
 		}
 		return sbParam.toString();

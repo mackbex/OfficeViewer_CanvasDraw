@@ -74,7 +74,7 @@ public class MultipartController extends HttpServlet{
 		PrintWriter out			= resp.getWriter();
 
 		ArrayList<FileItem> al_file = new ArrayList<>();
-		Map<String, String[]> mapParams = new HashMap<>();
+		Map<String, Object> mapParams = new HashMap<>();
 		try {
 
     		boolean isMultipart = ServletFileUpload.isMultipartContent(req);

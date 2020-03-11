@@ -5,6 +5,8 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,12 +60,11 @@ public class DownloadAttachController extends HttpServlet {
 		HttpSession session		= req.getSession();
 		Profile profile				= new Profile(m_ConfPath);
 
+		Map mapParams = new HashMap<String, Object>(req.getParameterMap());
 		String docIRN 			= req.getParameter("DOC_IRN");
 		String strUserID 		= session.getAttribute("USER_ID") == null ? null : (String)session.getAttribute("USER_ID");
 		String strCoCD 		= session.getAttribute("CORP_NO") == null ? null : (String)session.getAttribute("CORP_NO");
-		
-	
-		
+
 	   	if(m_C.IsInjection(req.getParameterMap()))
 	   	{
 	 		logger.error("Injection detected.");
@@ -82,7 +83,7 @@ public class DownloadAttachController extends HttpServlet {
 		try
 		{
 		
-			String fileName = m_GM.getAttachFileName(req.getParameterMap());
+			String fileName = m_GM.getAttachFileName(mapParams);
 			
 			if(m_C.isBlank(fileName)) {
 				resp.getWriter().print(m_C.writeResultMsg("F", "FAILED_GET_FILEAME"));

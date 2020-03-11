@@ -5,6 +5,8 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -71,8 +73,9 @@ public class DownloadOriginalController extends HttpServlet {
 	 		resp.getWriter().print(m_C.writeResultMsg("F", "INJECTION_DETECTED"));
 			return;
 	   	}
-	   	
-	   	String strTable = "IMG_ORGFILE_X";
+
+		Map mapParams = new HashMap<String, Object>(req.getParameterMap());
+		String strTable = "IMG_ORGFILE_X";
 	   	
 	   	this.m_AC 	= new AgentConnect(profile);
 		this.m_GM 	= new GetModel(m_AC, session);
@@ -83,7 +86,7 @@ public class DownloadOriginalController extends HttpServlet {
 		try
 		{
 		
-			JsonObject obj_ORG = m_GM.getOriginalInfo(req.getParameterMap());
+			JsonObject obj_ORG = m_GM.getOriginalInfo(mapParams);
 			
 			if(obj_ORG == null || obj_ORG.size() <= 0) {
 				resp.getWriter().print(m_C.writeResultMsg("F", "FAILED_GET_ORIGINAL_INFO"));

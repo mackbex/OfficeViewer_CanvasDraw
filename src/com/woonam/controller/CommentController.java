@@ -74,7 +74,7 @@ public class CommentController extends HttpServlet{
 
 		PrintWriter out			= resp.getWriter();
 
-		Map<String, String[]> mapParams = new HashMap<String, String[]>(req.getParameterMap());
+		Map mapParams = new HashMap<String, Object>(req.getParameterMap());
 		String strClientIP = m_C.getClientIP(profile, req);
 		String[] arClientIP = {strClientIP};
 		mapParams.put("ClientIP", arClientIP);
