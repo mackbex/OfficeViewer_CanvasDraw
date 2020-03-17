@@ -121,7 +121,6 @@ public class CommentController extends HttpServlet{
 						out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
 						return;
 					}
-
 					JsonArray arObjRes = m_GM.getCommentList(mapParams);
 					if(arObjRes == null)
 					{

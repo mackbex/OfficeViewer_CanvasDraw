@@ -123,7 +123,7 @@ $(function(){
 	g_ViewMode = "<%=strViewMode %>";
 	
 	var objParams = {};
-	objParams["KEY"] 					= encodeURIComponent("<%=strKey %>");
+	objParams["KEY"] 					= "<%=strKey %>";
 	objParams["KEY_TYPE"] 		= "<%=strKeyType %>";
 	objParams["SVR_MODE"] 		= "<%=strServerMode %>";
 	objParams["CALL_GROUP"] 		= "<%=strCallGroup %>";

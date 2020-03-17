@@ -33,8 +33,11 @@
 	if(!C.isBlank(key)) {
 		if(key.indexOf(',') > -1) isMultiKey = true;
 	}
-	
+
+	pageContext.setAttribute("KEY",key);
 	pageContext.setAttribute("MULTI_KEY", isMultiKey);
+	pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO","FOLD", "T"));
+	pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO","MAXIMIZED", "F"));
 
 %>
 <script>
@@ -55,7 +58,9 @@ $(function(){
 			MENU						: "<c:url value ="${mParams['MENU'][0]}" />",
 		XPI_PORT_HTTP			: "<c:url value ="${mParams['XPI_PORT_HTTP'][0]}" />",
 		XPI_PORT_HTTPS			: "<c:url value ="${mParams['XPI_PORT_HTTPS'][0]}" />",
-			MULTI_KEY				: <c:out value="${MULTI_KEY}" />,	
+			MULTI_KEY				: <c:out value="${MULTI_KEY}" />,
+			FOLD					:  "<c:out value="${FOLD}" />",
+			MAXIMIZED				:  "<c:out value="${MAXIMIZED}" />",
 	}
 	
     $.Mobile.init(MobileParams);
@@ -136,16 +141,22 @@ $(function(){
     			<span class="evidence" data-i18n="ATTACH"></span>
     		</div>
     	</div>
-    	
+
     	<div class="view_wrapper" id="view-wrapper">
 	    	<div class="slip_wrapper" id="slip-wrapper" >
 	    			<div id="slip_progress"></div>
 	    			<div id="slip_masonry" class="slip_masonry"></div>
+				<div class="progress_slip_scroll">
+					Loading...
+				</div>
 	    	</div>
     	
 	    	<div class="attach_wrapper"  id="attach-wrapper"  >
 	    			<div id="attach_progress"></div>
-	    			<div id="area-attach"  class="area-attach"></div>
+	    			<div id="area_attach"  class="area_attach"></div>
+				<div class="progress_attach_scroll">
+					Loading...
+				</div>
 	    	</div>
         
     	</div>
@@ -220,10 +231,11 @@ $(function(){
 <script src="<c:url value='/js/mobile/touch-swipe.min.js' />"></script>
 <script src="<c:url value='/js/mobile/slide-menu.min.js' />"></script>
 <script src="<c:url value='/js/menu/context-menu.js' />"></script>
+<script src="<c:url value='js/bookmark/bookmark.js' />"></script>
 <script src="<c:url value='/js/effect/ripple.js' />"></script>
 <script src="<c:url value='/js/operation.js' />"></script>
 <script src="<c:url value='/js/masonry/masonry.pkgd.min.js' />"></script>
 <script src="<c:url value='/js/masonry/imagesloaded.pkgd.min.js' />"></script>
 <script src="<c:url value='/js/mobile/photoswipe/photoswipe-ui-default.min.js' />"></script>
-<script src="<c:url value='/js/mobile/photoswipe/photoswipe.min.js' />"></script>
+<script src="<c:url value='/js/mobile/photoswipe/photoswipe.js' />"></script>
 </html>

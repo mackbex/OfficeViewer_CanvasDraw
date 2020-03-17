@@ -449,6 +449,7 @@ img ~ .legitRipple-ripple {
 	justify-content: flex-end;
 }
 
+
 #attach_progress {
 	position:absolute;
 	z-index:1;
@@ -569,6 +570,15 @@ width: 100%;
 .slip_item {
 	border-radius:10px;
 }
+.slip_item .area_thumb > canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
 .slip_item .area_title #type_color {
 	width: 10px;
     height: 10px;
@@ -652,6 +662,7 @@ width: 100%;
 	width:100%;
 	height:100%;
 	display:none;
+    overflow: auto;
 	
 }
 
@@ -666,12 +677,31 @@ width: 100%;
 	cursor:pointer;
 }
 
+.progress_slip_scroll , .progress_attach_scroll {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+    text-align: center;
+    background-color: #000000;
+    line-height: 40px;
+    opacity:0.2;
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: 'Dotum', Gulim, Helvetica, sans-serif, 'NanumGothic', 'Nanum Gothic', 'Malgun Gothic', AppleSDGothicNeo-Regular, HelveticaNeue, sans-serif;
+    color: #fff;
+}
+
 .attach_wrapper {
 	width:100%;
 	height:100%;
 	display:none;
+    overflow: auto;
 }
-.area-attach {
+.area_attach {
 	    position: absolute;
     left: 0;
     right: 0;
@@ -812,6 +842,6 @@ width: 100%;
 .frame-main {
 	width:100%;
 	    border: 0;
-    border-radius: 20px;
+    border-radius: 10px;
 	height:100%;
 }

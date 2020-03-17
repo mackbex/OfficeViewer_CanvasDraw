@@ -540,7 +540,7 @@ $.Actor = {
 				}
 			
 			}).fail(function(res){
-				alert("Failed to load attach.");
+				$.Common.simpleToast("Failed to load attach.");
 
 			}).always(function(){
 				
@@ -551,9 +551,9 @@ $.Actor = {
 		//Load thumb images
 		getSlipList : function(parent, params)
 		{
-			if(params.MULTI_KEY) {
-				$("#area_slip").unbind('scroll');
-			}
+			// if(params.MULTI_KEY) {
+			// 	$("#area_slip").unbind('scroll');
+			// }
 
 			var objListParams = {
 				KEY : params.KEY,
@@ -829,7 +829,7 @@ $.Actor = {
 						$(".slip_item").css("width",  parent.thumbWidth);
 					}
 
-						$('#slip_masonry').masonry('reloadItems');
+					$('#slip_masonry').masonry('reloadItems');
 					$('#slip_masonry').masonry('layout');
 					setTimeout(function() {
 						$("#area_slip").getNiceScroll().resize();
@@ -1404,7 +1404,7 @@ $.Actor = {
 					continue;
 				} else {
 					if(item.SDOCNO_INDEX === "1") {
-						parentFold = item.IS_FOLD;
+						parentFold = item.IS_FOLD ? item.IS_FOLD : parent.IS_FOLD;
 						res = item;
 					}
 					else {
@@ -1434,9 +1434,9 @@ $.Actor = {
 				if (elItem.length) {
 					elItem.show();
 				} else {
-					if(this.SDOC_NO === groupNo) {
+			//		if(this.SDOC_NO === groupNo) {
 						filteredTargetThumbs.push(this);
-					}
+			//		}
 				}
 			});
 
@@ -1444,7 +1444,8 @@ $.Actor = {
             $("#area_slip").getNiceScroll().resize();
 
             if(filteredTargetThumbs.length > 0) {
-                $.Actor.addSlipItem(parent, filteredTargetThumbs);
+				$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
+				$.Actor.addSlipItem(parent, filteredTargetThumbs);
             }
 		},
 //		drawThumbOptionBtn: function(elThumb, objData, attrVal, imgURL, clickEvent) {
