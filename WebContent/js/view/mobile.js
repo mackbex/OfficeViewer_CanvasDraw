@@ -37,14 +37,9 @@ $.Mobile = {
 		$.Mobile.Set_ButtonEffect();
 
 		$("#show-slip").click();
-
-
 	},
 	Init_Navi : function() {
 
-		// $("#navi-close").on("click",function(){
-		// 	  $('.ssm-toggle-nav').trigger("click");
-		// });
 		$("#nav-user-info").html($.Mobile.params.USER_NM + "(" +$.Mobile.params.USER_ID+")");
 		$("#nav-part-info").html($.Mobile.params.PART_NM);
 
@@ -54,13 +49,6 @@ $.Mobile = {
 		else {
 			$(".navi-menu").show();
 		}
-
-
-
-
-	//	$.Mobile.getAttachList($.Mobile, $.Mobile.params, $.Mobile.attachRange);
-
-
 	},
 
 	addScrollEvent : function(element, callback) {
@@ -85,88 +73,6 @@ $.Mobile = {
 		});
 
 	},
-	//Load thumb images
-	getSlipList : function(parent, params)
-	{
-		var objListParams = {
-			KEY : params.KEY,
-			KEY_TYPE : params.KEY_TYPE,
-			USER_ID : params.USER_ID,
-			CORP_NO : params.CORP_NO,
-			LANG : params.LANG
-		};
-
-		var deferred = $.Deferred();
-
-		$.when($.Common.RunCommand(g_ActorCommand, "GET_SLIP_LIST", objListParams)).then(function(res) {
-
-
-			deferred.resolve(true);
-
-		},function(reason){
-			deferred.reject(reason);
-		});
-		return deferred.promise();
-	},
-	// getAttachList : function(parent, params, loadCnt, isMultiKey)
-	// {
-	//
-	// 	var start = $(".attach_item").size() == 0 ? 0 : $(".attach_item").size() + 1;
-	// 	var per = loadCnt;
-	//
-	// 	// if(params.MULTI_KEY) {
-	// 	// 	start = null;
-	// 	// 	per = null;
-	// 	// 	$("#area_attach").unbind('scroll');
-	// 	// }
-	//
-	// 	var objListParams = {
-	// 		KEY : params.KEY,
-	// 		KEY_TYPE : params.KEY_TYPE,
-	// 		USER_ID : params.USER_ID,
-	// 		CORP_NO : params.CORP_NO,
-	// 		LANG : params.LANG,
-	// 		// START_IDX : start,
-	// 		// PER : per
-	// 	};
-	//
-	// 	$.when($.Common.RunCommand(g_ActorCommand, "GET_ATTACH_LIST", objListParams)).done(function(res) {
-	//
-	// 		var resCnt = Object.keys(res) == null ? 0 : Object.keys(res).length;
-	// 		if(res == null || resCnt <= 0) {
-	// 			$('.progress_attach_scroll').hide();
-	// 			return;
-	// 		}
-	//
-	// 		if(parent.objAttachItem == null) {
-	// 			parent.objAttachItem = res;
-	// 		}
-	// 		else {
-	//
-	// 			Object.keys(res).forEach(function(dataKey) {
-	// 				parent.objAttachItem[dataKey] = res[dataKey];
-	// 			});
-	// 		}
-	//
-	// 		parent.addAttachItem(res, $("#area_attach"), $.Mobile.currentKey);
-	//
-	// 		if(resCnt !== $.Mobile.attachRange) {
-	// 			$("#area_attach").unbind('scroll');
-	// 		}
-	//
-	// 		if(isMultiKey) {
-	// 			$.Mobile.change_GroupKey($.Mobile.currentKey);
-	// 		}
-	//
-	// 	}).fail(function(res){
-	// 		alert("Failed to load attach.");
-	//
-	// 	}).always(function(){
-	//
-	// 		$.Common.HideProgress("#attach_progress");
-	// 		$('.progress_attach_scroll').hide();
-	// 	});
-	// },
 
 	Open_Viewer : function(slipIrn, index) {
 
@@ -186,8 +92,6 @@ $.Mobile = {
 		    		},
 	    		    getThumbBoundsFn: function(index) {
 
-	    		    //	var nSlipIdx = $.Actor.m_GalleryItem[index].SlipIdx;//.map(function(e) { return e.SlipIdx; }).indexOf(index);
-
 	    		    	// find thumbnail element
 		    		    var thumbnail = $("#slip_masonry").find("[idx="+slipIrn+"]")[0];
 
@@ -200,13 +104,11 @@ $.Mobile = {
 
 		    		    // w = width
 		    		    return {x:rect.left, y:rect.top + pageYScroll + 40, w:rect.width};
-
 		    		},
 		    		history:false
 		    };
 
 			this.m_Viewer 					= new PhotoSwipe($('.pswp')[0], PhotoSwipeUI_Default, $.Mobile.m_ViewerItem , swipe_Options);
-
 
 			this.m_Viewer.listen('afterChange', function() {
 
@@ -252,22 +154,6 @@ $.Mobile = {
 				else {
 					$("[id=loadingBookmark]").hide();
 				}
-
-				// var url = $(elImg).attr('src');
-				// if($.Common.isBlank(url)) {
-				// 	return;
-				// // }
-				// var img = new Image();
-				// img.src = elImg;
-				// img.onload = function() {
-				// 	$(elCur).find("img").attr("src", $(this).attr('src'));
-				//
-				//
-				//
-				// };
-				// img.src = elImg;
-
-
 			});
 
 		this.m_Viewer.init();
@@ -303,21 +189,8 @@ $.Mobile = {
 		$("#btn-menu").ripple({
 					maxDiameter: "200%"
 		});
-		// $("#navi-close").ripple({
-		// 			maxDiameter: "200%",
-		// });
-
-		// $("#navi-open-comment").ripple({
-		// 			maxDiameter: "200%",
-		// });
-
-		// $("#navi-open-history").ripple({
-		// 			maxDiameter: "200%",
-		// });
-		
-
-		
 	},
+
 	Close_frame : function()
 		{
 			$('.area-layout').fadeOut(333, function(){
@@ -491,19 +364,7 @@ $.Mobile = {
 				$.Mobile.m_ViewerItem[i] = {};
 			}
 
-
 			$.Mobile.displayThumb($.Mobile);
-
-
-			//$.Mobile.addSlipItem(res);
-
-			// if($.Mobile.params.MULTI_KEY) {
-			// 	$.Actor.change_GroupKey($.Actor.currentKey);
-			// }
-			// else {
-			// 	$.Actor.displayThumb($.Actor);
-			// }
-
 
 		}, function (reason) {
 			$.Common.simpleToast("Failed to load thumbs.");
@@ -558,10 +419,6 @@ $.Mobile = {
 			arItems = parent.objSlipItem;
 		}
 
-		//	var visibleCnt = $(".slip_item").size();
-		//	var start = parseInt(visibleCnt / elDest.slipRange) * 10 + elDest.slipRange;
-
-
 		var targetItem = [];
 		for(var i = 0; i < arThumbInfo.length; i++) {
 
@@ -608,8 +465,6 @@ $.Mobile = {
 		else {
 			$.Mobile.addScrollEvent($(".slip_wrapper"), function(){
 				if(!$.Mobile.isSlipLoading) {
-
-					//	var start = $(".slip_item").size() === 0 ? 0 : $(".slip_item").size() + 1;
 
 					$(".slip_wrapper").find('.progress_slip_scroll').show();
 					//$.Actor.getSlipList($.Actor.params,   $.Actor.slipRange);
@@ -822,52 +677,7 @@ $.Mobile = {
 		var helper = $(document.createElement('span'));
 		helper.addClass("helper");
 		helper.appendTo(elContents);
-
-	// 	var elImage = $(document.createElement('img'));
-	// //	elImage.attr("src",sbImageURL.toString());
-	// 	elImage.addClass("original");
-	// 	elImage.attr("id","original");
-	// 	elImage.appendTo(elContents);
 		objItem.ORIGINAL_URL = sbImageURL.toString();
-
-
-
-		// $(elImage).load(function(){
-		//
-		// 	//var canvas = $($.Mobile.m_Viewer.container).find("canvas");
-		// 	var canvas = $($.Mobile.m_Viewer.container).find("[idx="+objItem.SLIP_IRN+"]")[0];
-		// 	$(canvas).attr({
-		// 		"width" : $(".original").width(),
-		// 		"height": $(".original").height(),
-		// 		//	"class" : "bookmark"
-		// 	});
-		//
-		// 	$.Bookmark.Draw_BookmarkItem($(canvas)[0], objItem.BOOKMARKS, objItem.SLIP_ROTATE);
-		//
-		//
-		// });
-
-
-
-	/*	$(elImage).load(function(){
-			var bookmark = $(".original-wrapper").find("bookmark [slip_irn="+objItem.SLIP_IRN+"]")[0];
-			$(bookmark).attr({
-				"width" : this.naturalWidth,
-				"height": this.naturalHeight,
-			//	"class" : "bookmark"
-			});
-			*/
-		//
-		// 	$.Bookmark.Draw_BookmarkItem(bookmark, objItem.BOOKMARKS, objItem.SLIP_ROTATE);
-		//
-	//	});
-
-		// elOriginal.append(bookmark);
-	//	elOriginal.append("<img class='original' src="+sbImageURL.toString()+"/>");
-
-
-
-
 
 		$.Mobile.m_ViewerItem[imageIdx] = {
 			// src: sbImageURL.toString(),
@@ -878,9 +688,6 @@ $.Mobile = {
 			title:elTitleArea.prop("outerHTML"),
 			//  SlipIdx:nRealIdx
 		};
-
-
-						
 	},
 
 	Set_ImageDimension : function(index, callback)
@@ -897,24 +704,8 @@ $.Mobile = {
 			$(img).load(function() {
 				//$.Mobile.m_ViewerItem[index].w = img.naturalWidth;
 				//$.Mobile.m_ViewerItem[index].h = img.naturalHeight;
-
-				// var bookmark = $(html).find("#bookmark")[0];
-				// $(bookmark).attr({
-				// 	"width": 500,
-				// 	"height": 500,
-				// });
-				// var ctx = bookmark.getContext("2d");
-				// ctx.fillStyle = "#FF0000";
-				// ctx.fillRect(0, 0, 150, 75);
-				// sets a flag that slides should be updated
-			//	$.Mobile.m_Viewer.invalidateCurrItems();
-				// updates the content of slides
-			//	$.Mobile.m_Viewer.updateSize(true);
 				callback();
-				//$(this) = null;
 			});
-		
-
 		},
 
 	getThumbElement : function(objData, callerObjData, thumbIdx)
@@ -977,13 +768,7 @@ $.Mobile = {
 				// elThumb.attr("first","1");
 				// elThumb.attr("fold","1");
 			}
-			// else
-			// {
-			// 	elThumb.css("display","none");
-			// }
-			
-			
-			
+
 			//Draw image area
 			var elThumbImgArea = $(document.createElement('div'));
 			elThumbImgArea.css("position","relative");
@@ -1064,23 +849,6 @@ $.Mobile = {
 				elImg.appendTo(elBtn);
 			}
 		},
-//		drawThumbOptionBtn: function(elThumb, objData, attrVal, imgURL, clickEvent) {
-//			//Draw fold/unfold button
-//			var elBtn = $(document.createElement('div'));
-//				elBtn.attr(attrVal);
-//				elBtn.unbind().bind("click",clickEvent);
-//				elBtn.appendTo(elThumb);
-//				
-//				var elImg = $(document.createElement('img')).attr("src",imgURL + ".png");
-//				elImg.unbind('mouseenter mouseleave').hover(function(){
-//					$(this).css("opacity","0.7");
-//				},function(){
-//					$(this).css("opacity","1");
-//				});
-//				
-//				elImg.appendTo(elBtn);
-//			
-//		},
 
 		addFoldIcon : function(target, elTarget, idx) {
 
@@ -1102,9 +870,6 @@ $.Mobile = {
 				else {
 					iconURL = g_RootURL+"image/common/unfold.png";
 				}
-	//				if("0" == elTarget.closest("#slip_item").attr("fold")) {
-	//					 iconURL = g_RootURL+"image/common/fold.png";
-	//				}
 
 				var elImg = $(document.createElement('img')).attr("src",iconURL);
 				elImg.unbind('mouseenter mouseleave').hover(function(){
@@ -1175,14 +940,8 @@ $.Mobile = {
 					}
 				}
 
-				/*if(++limit > cntToDisplay) {
-					break;
-				}*/
-				// else
-				{
-					if(res !== null) {
-						targetThumbs.push(res);
-					}
+				if(res !== null) {
+					targetThumbs.push(res);
 				}
 			}
 
@@ -1253,14 +1012,8 @@ $.Mobile = {
 					}
 				}
 
-				/*if(++limit > cntToDisplay) {
-					break;
-				}*/
-				// else
-				{
-					if(res !== null) {
-						targetThumbs.push(res);
-					}
+				if(res !== null) {
+					targetThumbs.push(res);
 				}
 			}
 
@@ -1270,14 +1023,13 @@ $.Mobile = {
 				if (elItem.length) {
 					elItem.show();
 				} else {
-					//		if(this.SDOC_NO === groupNo) {
+
 					filteredTargetThumbs.push(this);
-					//		}
+
 				}
 			});
 
 			$('#slip_masonry').masonry('layout');
-		//	$("#area_slip").getNiceScroll().resize();
 
 			if(filteredTargetThumbs.length > 0) {
 				$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
@@ -1290,7 +1042,6 @@ $.Mobile = {
 		 * Set mouse events on target thumb.
 		 */
 		setThumbMouseEvent : function(elThumb) {
-			
 
 		},
 		Display_MainView : function(element) {
@@ -1338,24 +1089,12 @@ $.Mobile = {
 		},
 		Draw_AttachList : function(params){
 
-
-			var start = $(".attach-item").size() == 0 ? 0 : $(".attach-item").size() + 1;
-			var per =  $.Mobile.attachRange;
-
-			// if(params.MULTI_KEY) {
-			// 	start = null;
-			// 	per = null;
-			// 	$("#area_attach").unbind('scroll');
-			// }
-
 			var objListParams = {
 				KEY : params.KEY,
 				KEY_TYPE : params.KEY_TYPE,
 				USER_ID : params.USER_ID,
 				CORP_NO : params.CORP_NO,
 				LANG : params.LANG,
-				// START_IDX : start,
-				// PER : per
 			};
 
 			$.when($.Common.RunCommand(g_ActorCommand, "GET_ATTACH_LIST", objListParams)).done(function(res) {
@@ -1377,27 +1116,6 @@ $.Mobile = {
 				}
 
 				$.Mobile.addAttachItem(res, $("#area_attach"), $.Mobile.currentKey);
-				//
-				// if(resCnt !== $.Mobile.attachRange) {
-				// 	$("#area_attach").unbind('scroll');
-				// }
-				// else {
-				// 	$.Mobile.addScrollEvent($(".attach_wrapper"), function(){
-				// 		if(!$.Mobile.isAttachLoading) {
-				//
-				// 			//	var start = $(".slip_item").size() === 0 ? 0 : $(".slip_item").size() + 1;
-				//
-				// 			$(".attach_wrapper").find('.progress_attach_scroll').show();
-				// 			//$.Actor.getSlipList($.Actor.params,   $.Actor.slipRange);
-				// 			//$.Mobile.Draw_AttachList($.Mobile.params);
-				// 			$.Mobile.addAttachItem(res, $("#area_attach"), $.Mobile.currentKey);
-				// 		}
-				// 	});
-				// }
-
-				// if(isMultiKey) {
-				// 	$.Actor.change_GroupKey($.Actor.currentKey);
-				// }
 
 			}).fail(function(res){
 				$.Common.simpleToast("Failed to load attach.");
@@ -1411,8 +1129,6 @@ $.Mobile = {
 
 		addAttachItem : function(arObjAttach,elDest, specificKey)
 		{
-			// elDest.empty();
-
 			var nProcCnt = 0;
 			$.each(arObjAttach,function(i){
 
@@ -1452,8 +1168,6 @@ $.Mobile = {
 			else {
 				$("#area_attach").unbind('scroll');
 			}
-
-			
 		},
 		Get_AttachElement : function(objData) {
 			var elAttach = $(document.createElement('div'));
@@ -1492,11 +1206,5 @@ $.Mobile = {
 			elDownBtn.appendTo(elRightArea);
 			
 			return elAttach;
-
 		},
-		Download_attach : function(sdocNo) {
-
-		}
-
-		
 }
