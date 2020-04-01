@@ -158,7 +158,7 @@ $(function(){
 					Loading...
 				</div>
 	    	</div>
-        
+
     	</div>
     	
     	<!-- Root element of PhotoSwipe. Must have class pswp. -->

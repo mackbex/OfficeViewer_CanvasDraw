@@ -852,7 +852,8 @@ $.Operation  = {
 					FIELD : field,
 					VALUE : key,
 					LANG : target.params.LANG,
-					VIEW_MODE : target.params.VIEW_MODE
+					VIEW_MODE : target.params.VIEW_MODE,
+					JDOC_NO : target.params.KEY
 			};
 			
 			

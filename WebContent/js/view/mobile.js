@@ -108,65 +108,65 @@ $.Mobile = {
 		});
 		return deferred.promise();
 	},
-	getAttachList : function(parent, params, loadCnt, isMultiKey)
-	{
-
-		var start = $(".attach_item").size() == 0 ? 0 : $(".attach_item").size() + 1;
-		var per = loadCnt;
-
-		// if(params.MULTI_KEY) {
-		// 	start = null;
-		// 	per = null;
-		// 	$("#area_attach").unbind('scroll');
-		// }
-
-		var objListParams = {
-			KEY : params.KEY,
-			KEY_TYPE : params.KEY_TYPE,
-			USER_ID : params.USER_ID,
-			CORP_NO : params.CORP_NO,
-			LANG : params.LANG,
-			START_IDX : start,
-			PER : per
-		};
-
-		$.when($.Common.RunCommand(g_ActorCommand, "GET_ATTACH_LIST", objListParams)).done(function(res) {
-
-			var resCnt = Object.keys(res) == null ? 0 : Object.keys(res).length;
-			if(res == null || resCnt <= 0) {
-				$('.progress_attach_scroll').hide();
-				return;
-			}
-
-			if(parent.objAttachItem == null) {
-				parent.objAttachItem = res;
-			}
-			else {
-
-				Object.keys(res).forEach(function(dataKey) {
-					parent.objAttachItem[dataKey] = res[dataKey];
-				});
-			}
-
-			parent.addAttachItem(res, $("#area_attach"), $.Mobile.currentKey);
-
-			if(resCnt !== $.Mobile.attachRange) {
-				$("#area_attach").unbind('scroll');
-			}
-
-			if(isMultiKey) {
-				$.Mobile.change_GroupKey($.Mobile.currentKey);
-			}
-
-		}).fail(function(res){
-			alert("Failed to load attach.");
-
-		}).always(function(){
-
-			$.Common.HideProgress("#attach_progress");
-			$('.progress_attach_scroll').hide();
-		});
-	},
+	// getAttachList : function(parent, params, loadCnt, isMultiKey)
+	// {
+	//
+	// 	var start = $(".attach_item").size() == 0 ? 0 : $(".attach_item").size() + 1;
+	// 	var per = loadCnt;
+	//
+	// 	// if(params.MULTI_KEY) {
+	// 	// 	start = null;
+	// 	// 	per = null;
+	// 	// 	$("#area_attach").unbind('scroll');
+	// 	// }
+	//
+	// 	var objListParams = {
+	// 		KEY : params.KEY,
+	// 		KEY_TYPE : params.KEY_TYPE,
+	// 		USER_ID : params.USER_ID,
+	// 		CORP_NO : params.CORP_NO,
+	// 		LANG : params.LANG,
+	// 		// START_IDX : start,
+	// 		// PER : per
+	// 	};
+	//
+	// 	$.when($.Common.RunCommand(g_ActorCommand, "GET_ATTACH_LIST", objListParams)).done(function(res) {
+	//
+	// 		var resCnt = Object.keys(res) == null ? 0 : Object.keys(res).length;
+	// 		if(res == null || resCnt <= 0) {
+	// 			$('.progress_attach_scroll').hide();
+	// 			return;
+	// 		}
+	//
+	// 		if(parent.objAttachItem == null) {
+	// 			parent.objAttachItem = res;
+	// 		}
+	// 		else {
+	//
+	// 			Object.keys(res).forEach(function(dataKey) {
+	// 				parent.objAttachItem[dataKey] = res[dataKey];
+	// 			});
+	// 		}
+	//
+	// 		parent.addAttachItem(res, $("#area_attach"), $.Mobile.currentKey);
+	//
+	// 		if(resCnt !== $.Mobile.attachRange) {
+	// 			$("#area_attach").unbind('scroll');
+	// 		}
+	//
+	// 		if(isMultiKey) {
+	// 			$.Mobile.change_GroupKey($.Mobile.currentKey);
+	// 		}
+	//
+	// 	}).fail(function(res){
+	// 		alert("Failed to load attach.");
+	//
+	// 	}).always(function(){
+	//
+	// 		$.Common.HideProgress("#attach_progress");
+	// 		$('.progress_attach_scroll').hide();
+	// 	});
+	// },
 
 	Open_Viewer : function(slipIrn, index) {
 
@@ -179,6 +179,7 @@ $.Mobile = {
 		    		showInfoEl:true,
 					loop:false,
 					shareEl:false,
+					arrowEl:false,
 		    	//	getDoubleTapZoom:true,
 		    		isClickableElement: function(el) {
 		    		    return el.tagName === 'SELECT';
@@ -206,82 +207,89 @@ $.Mobile = {
 
 			this.m_Viewer 					= new PhotoSwipe($('.pswp')[0], PhotoSwipeUI_Default, $.Mobile.m_ViewerItem , swipe_Options);
 
-			this.m_Viewer.listen('gettingData', function(index, item) {
-				// index - index of a slide that was loaded
-				// item - slide object
-				var items = item;
 
-					$.Mobile.Set_ImageDimension(index, function(){
-				//		$.Mobile.m_Viewer.invalidateCurrItems();
-						$.Mobile.m_Viewer.updateSize(true);
+			this.m_Viewer.listen('afterChange', function() {
+
+				$("[id=loadingBookmark]").show();
+				var curIdx = $.Mobile.m_Viewer.getCurrentIndex();
+				var curItem = $.Mobile.objSlipItem[Object.keys($.Mobile.objSlipItem)[curIdx]];
+				var elCur = $($.Mobile.m_Viewer.container).find("[idx="+curItem.SLIP_IRN+"]")[0];
+
+				if(elCur == null) {
+					$.Mobile.displayThumb($.Mobile);
+					// sets a flag that slides should be updated
+					$.Mobile.m_Viewer.invalidateCurrItems();
+					// updates the content of slides
+					$.Mobile.m_Viewer.updateSize(true);
+				}
+
+				if(!$(elCur).find("img").length) {
+
+					$(elCur).find("canvas").hide();
+
+					var imgUrl = curItem.ORIGINAL_URL;
+
+					var elImg = $("<img/>", {
+						load : function(){
+							var canvas = $(elCur).find("canvas")[0];
+							$(canvas).attr({
+								"width": $(elCur).find(".original").width(),
+								"height": $(elCur).find(".original").height(),
+							});
+
+						//	$.Mobile.m_ViewerItem[curIdx].w = this.naturalWidth;
+						//	$.Mobile.m_ViewerItem[curIdx].h = this.naturalHeight;
+
+							$("[id=loadingBookmark]").hide();
+							$(elCur).find("canvas").show();
+							$.Bookmark.Draw_BookmarkItem($(canvas)[0], curItem.BOOKMARKS, curItem.SLIP_ROTATE);
+						},
+						src : imgUrl
 					});
-				// e.g. change path to the image based on `something`
+					elImg.addClass("original");
+					elImg.appendTo($(elCur).find(".contents"));
+				}
+				else {
+					$("[id=loadingBookmark]").hide();
+				}
+
+				// var url = $(elImg).attr('src');
+				// if($.Common.isBlank(url)) {
+				// 	return;
+				// // }
+				// var img = new Image();
+				// img.src = elImg;
+				// img.onload = function() {
+				// 	$(elCur).find("img").attr("src", $(this).attr('src'));
+				//
+				//
+				//
+				// };
+				// img.src = elImg;
+
 
 			});
-			// this.m_Gallery.listen('beforeChange', function() {
-			// 	$(".area_info").fadeOut(222);
-			// 	var nCurIdx = this.getCurrentIndex();
-			// 	if($.Actor.m_vJSONResImgData.length > 0 && nCurIdx == ($.Actor.m_vThumbLastIdx - 1))
-			// 	{
-			// 		$.Actor.addSlipItem($('.grid'));
-			// 	}
-			// 	$.Actor.SetViewTitle();
-			// 	$("#btn_set_temp").unbind().bind("tap",function(){
-			// 		 $.Actor.SetTemp();
-			// 	});
-			// });
 
-
-			// this.m_Gallery.listen('afterChange',function(){
-
-			// 	var nGalleryIdx			= $.Actor.m_Gallery.getCurrentIndex();
-			// 	var nSlipIdx 				= $.Actor.m_GalleryItem[nGalleryIdx].SlipIdx;
-			// 	var arCurSlipInfo			= $.Actor.m_vJSONResImgData[nSlipIdx];
-
-			// 	$.Actor.SetSlipTitle(arCurSlipInfo);
-
-			// /* 	if("1" == arCurSlipInfo.imageInfo.IsOne)
-			// 	{
-			// 		$.Actor.SetOneSlipList(arCurSlipInfo.imageInfo);
-			// 	} */
-			// });
-
-			// this.m_Gallery.listen("close",function(){
-			// 	$(".area_info").hide();
-
-			// /* 	var arItems 	= $.Actor.m_Gallery.items;
-			//  	for(var i = 0 ; i < arItems.length; i++)
-			// 	{
-			// 		var item = arItems[i];
-			// 		if(item != null)
-			// 		{
-			// 			item.src 			= $.Actor.GetImageSrc("original",$.Actor.m_vJSONResImgData[i].imageInfo);
-			// 			item.imageIdx 	= 1;
-			// 		}
-			// 	}  */
-			// });
-			// this.m_Gallery.listen("close",function(){
-
-			// });
-		//
 		this.m_Viewer.init();
 	},
 	change_GroupKey : function(option) {
+
 		var key = option.value;
 		
 		if($.Common.isBlank(key)) key = null;//$.Mobile.params.KEY;
 		
 		$.Mobile.currentKey = key;
 		
-		if($.Mobile.objSlipItem != null) {
-			$.Mobile.addSlipItem($.Mobile.objSlipItem, $("#slip_masonry"), key);
+		if($($("#slip_masonry")).is(":visible") && !$.Mobile.isSlipLoading) {
+			$("#slip_masonry").empty();
+			$.Mobile.displayThumb($.Mobile);
 		}
-		if($.Mobile.objAttachItem != null) {
-			$.Mobile.addAttachItem($.Mobile.objAttachItem, $("#area-attach"), key);
+		if($($("#area_attach")).is(":visible") && !$.Mobile.isAttachLoading) {
+			$("#area_attach").empty();
+			$.Mobile.addAttachItem($.Mobile.objAttachItem, $("#area_attach"), $.Mobile.currentKey);
 		}
 
 		$.Mobile.Init_Navi();
-		
 	},
 
 	Set_ButtonEffect : function() {
@@ -739,41 +747,21 @@ $.Mobile = {
 
 			$('.progress_slip_scroll').hide();
 
-			// $.each(el_Dest.children('[id="slip_item"]'), function(){
-			// 	$(this).css("opacity","1");
-			// });
-			// el_Dest.masonry('layout');
-			//
-			// //Finish UI Setting
-			// $.each( $("#slip_masonry").find('[id="slip_item"]'), function(){
-			// 	if($(this).attr("first") == "1")
-			// 	{
-			// 			$.Mobile.fold($.Mobile.objSlipItem, "btn_fold", $(this).attr("idx"));
-			// 	}
-			// });
-			// $('#slip_masonry').masonry('reloadItems');
-			//
-			// $.Common.HideProgress("#slip_progress");
-			//
-			// //Add ripple effect.
-			// el_Dest.find('[class="area_effect"]').ripple({
-			// 		maxDiameter: "200%"
-			// });
 
 		});
 	},
 	Set_ImageOriginal : function(objItem) {
 
-		var sbThumbURL = new StringBuffer();
-		sbThumbURL.append(g_RootURL);
-		sbThumbURL.append("DownloadImage.do?");
-		sbThumbURL.append("ImgType=thumb");
-		sbThumbURL.append("&DocIRN="+objItem.DOC_IRN);
-		sbThumbURL.append("&Idx="+objItem.DOC_NO);
-		sbThumbURL.append("&degree="+objItem.SLIP_ROTATE);
-		sbThumbURL.append("&UserID="+$.Mobile.params.USER_ID);
-		sbThumbURL.append("&CorpNo="+$.Mobile.params.CORP_NO);
-		sbThumbURL.append('?'+Math.random());
+		// var sbThumbURL = new StringBuffer();
+		// sbThumbURL.append(g_RootURL);
+		// sbThumbURL.append("DownloadImage.do?");
+		// sbThumbURL.append("ImgType=thumb");
+		// sbThumbURL.append("&DocIRN="+objItem.DOC_IRN);
+		// sbThumbURL.append("&Idx="+objItem.DOC_NO);
+		// sbThumbURL.append("&degree="+objItem.SLIP_ROTATE);
+		// sbThumbURL.append("&UserID="+$.Mobile.params.USER_ID);
+		// sbThumbURL.append("&CorpNo="+$.Mobile.params.CORP_NO);
+		// sbThumbURL.append('?'+Math.random());
 
 		var sbImageURL = new StringBuffer();
 		sbImageURL.append(g_RootURL);
@@ -802,21 +790,92 @@ $.Mobile = {
 		elSlipType.html(objItem.SDOC_KINDNM);
 		elSlipType.appendTo(elTitleArea);
 
-
 		var imageIdx = 0;
 		for(var i = 0; i < $.Mobile.m_ViewerItem.length; i++) {
 
-			if($.Mobile.m_ViewerItem[i].src == null) {
+			if($.Mobile.m_ViewerItem[i].html == null) {
 				imageIdx = i;
 				break;
 			}
 		}
+
+		var elOriginal = $(document.createElement('div'));
+		elOriginal.attr("idx",objItem.SLIP_IRN);
+		elOriginal.addClass("original-wrapper");
+
+		var elContents = $(document.createElement('div'));
+		elContents.addClass("contents");
+		elContents.appendTo(elOriginal);
+
+		var elProgressBookmark = $(document.createElement('div'));
+		elProgressBookmark.attr("id","loadingBookmark");
+		elProgressBookmark.addClass("loadingBookmark");
+		elProgressBookmark.appendTo(elOriginal);
+
+		var bookmark = $(document.createElement('canvas'))[0];
+		//$(bookmark).attr("id","bookmark_"+objItem.SLIP_IRN);
+		$(bookmark).addClass("bookmark");
+
+		$(bookmark).appendTo(elContents);
+		// $.Bookmark.Draw_BookmarkItem(bookmark, objItem.BOOKMARKS, objItem.SLIP_ROTATE);
+
+		var helper = $(document.createElement('span'));
+		helper.addClass("helper");
+		helper.appendTo(elContents);
+
+	// 	var elImage = $(document.createElement('img'));
+	// //	elImage.attr("src",sbImageURL.toString());
+	// 	elImage.addClass("original");
+	// 	elImage.attr("id","original");
+	// 	elImage.appendTo(elContents);
+		objItem.ORIGINAL_URL = sbImageURL.toString();
+
+
+
+		// $(elImage).load(function(){
+		//
+		// 	//var canvas = $($.Mobile.m_Viewer.container).find("canvas");
+		// 	var canvas = $($.Mobile.m_Viewer.container).find("[idx="+objItem.SLIP_IRN+"]")[0];
+		// 	$(canvas).attr({
+		// 		"width" : $(".original").width(),
+		// 		"height": $(".original").height(),
+		// 		//	"class" : "bookmark"
+		// 	});
+		//
+		// 	$.Bookmark.Draw_BookmarkItem($(canvas)[0], objItem.BOOKMARKS, objItem.SLIP_ROTATE);
+		//
+		//
+		// });
+
+
+
+	/*	$(elImage).load(function(){
+			var bookmark = $(".original-wrapper").find("bookmark [slip_irn="+objItem.SLIP_IRN+"]")[0];
+			$(bookmark).attr({
+				"width" : this.naturalWidth,
+				"height": this.naturalHeight,
+			//	"class" : "bookmark"
+			});
+			*/
+		//
+		// 	$.Bookmark.Draw_BookmarkItem(bookmark, objItem.BOOKMARKS, objItem.SLIP_ROTATE);
+		//
+	//	});
+
+		// elOriginal.append(bookmark);
+	//	elOriginal.append("<img class='original' src="+sbImageURL.toString()+"/>");
+
+
+
+
+
 		$.Mobile.m_ViewerItem[imageIdx] = {
-			src: sbImageURL.toString(), 
-			msrc:sbThumbURL.toString(),
-			w:0,
-			h:0,
-			 title:elTitleArea.prop("outerHTML"),
+			// src: sbImageURL.toString(),
+			// msrc:sbThumbURL.toString(),
+			html: $(document.createElement('div')).append(elOriginal).html(),
+			//w:0,
+			//h:0,
+			title:elTitleArea.prop("outerHTML"),
 			//  SlipIdx:nRealIdx
 		};
 
@@ -826,7 +885,9 @@ $.Mobile = {
 
 	Set_ImageDimension : function(index, callback)
 		{
-			var url = $.Mobile.m_ViewerItem[index].src;
+			var html = $.Mobile.m_ViewerItem[index].html;
+
+			var url = $(html).find("img").attr('src');
 			if($.Common.isBlank(url)) {
 				return;
 			}
@@ -834,8 +895,17 @@ $.Mobile = {
 			img.src = url;
 
 			$(img).load(function() {
-				$.Mobile.m_ViewerItem[index].w = img.naturalWidth;
-				$.Mobile.m_ViewerItem[index].h = img.naturalHeight;
+				//$.Mobile.m_ViewerItem[index].w = img.naturalWidth;
+				//$.Mobile.m_ViewerItem[index].h = img.naturalHeight;
+
+				// var bookmark = $(html).find("#bookmark")[0];
+				// $(bookmark).attr({
+				// 	"width": 500,
+				// 	"height": 500,
+				// });
+				// var ctx = bookmark.getContext("2d");
+				// ctx.fillStyle = "#FF0000";
+				// ctx.fillRect(0, 0, 150, 75);
 				// sets a flag that slides should be updated
 			//	$.Mobile.m_Viewer.invalidateCurrItems();
 				// updates the content of slides
@@ -1269,7 +1339,7 @@ $.Mobile = {
 		Draw_AttachList : function(params){
 
 
-			var start = $(".attach_item").size() == 0 ? 0 : $(".attach_item").size() + 1;
+			var start = $(".attach-item").size() == 0 ? 0 : $(".attach-item").size() + 1;
 			var per =  $.Mobile.attachRange;
 
 			// if(params.MULTI_KEY) {
@@ -1284,8 +1354,8 @@ $.Mobile = {
 				USER_ID : params.USER_ID,
 				CORP_NO : params.CORP_NO,
 				LANG : params.LANG,
-				START_IDX : start,
-				PER : per
+				// START_IDX : start,
+				// PER : per
 			};
 
 			$.when($.Common.RunCommand(g_ActorCommand, "GET_ATTACH_LIST", objListParams)).done(function(res) {
@@ -1307,11 +1377,24 @@ $.Mobile = {
 				}
 
 				$.Mobile.addAttachItem(res, $("#area_attach"), $.Mobile.currentKey);
-
-				if(resCnt !== $.Mobile.attachRange) {
-					$("#area_attach").unbind('scroll');
-				}
 				//
+				// if(resCnt !== $.Mobile.attachRange) {
+				// 	$("#area_attach").unbind('scroll');
+				// }
+				// else {
+				// 	$.Mobile.addScrollEvent($(".attach_wrapper"), function(){
+				// 		if(!$.Mobile.isAttachLoading) {
+				//
+				// 			//	var start = $(".slip_item").size() === 0 ? 0 : $(".slip_item").size() + 1;
+				//
+				// 			$(".attach_wrapper").find('.progress_attach_scroll').show();
+				// 			//$.Actor.getSlipList($.Actor.params,   $.Actor.slipRange);
+				// 			//$.Mobile.Draw_AttachList($.Mobile.params);
+				// 			$.Mobile.addAttachItem(res, $("#area_attach"), $.Mobile.currentKey);
+				// 		}
+				// 	});
+				// }
+
 				// if(isMultiKey) {
 				// 	$.Actor.change_GroupKey($.Actor.currentKey);
 				// }
@@ -1328,18 +1411,47 @@ $.Mobile = {
 
 		addAttachItem : function(arObjAttach,elDest, specificKey)
 		{
-			elDest.empty();
-			
+			// elDest.empty();
+
+			var nProcCnt = 0;
 			$.each(arObjAttach,function(i){
-				
-				if(!$.Common.isBlank(specificKey) && this.JDOC_NO != specificKey) return true;
-				
-				var elAttach = $.Mobile.Get_AttachElement(this);
-				
-				elAttach.appendTo(elDest);
-				//$.Mobile.setAttachMouseEvent(elAttach);
-		
+
+				var elItem = $("#area_attach").find("[idx="+this.SDOC_NO+"]");
+
+				if (elItem.length) {
+					return true;
+				}
+				else {
+
+					if (!$.Common.isBlank(specificKey) && this.JDOC_NO != specificKey) return true;
+
+					var elAttach = $.Mobile.Get_AttachElement(this);
+
+					elAttach.appendTo(elDest);
+
+					nProcCnt ++ ;
+
+					if($.Mobile.attachRange <= nProcCnt) {
+						return false;
+					}
+				}
 			});
+
+			$('.progress_attach_scroll').hide();
+
+			if($.Mobile.attachRange === nProcCnt) {
+				$.Mobile.addScrollEvent($("#area_attach"), function(){
+					if(!$.Mobile.isAttachLoading) {
+						$('.progress_attach_scroll').show();
+						//$.Actor.getAttachList($.Actor, $.Actor.params, $.Actor.attachRange);
+
+						$.Mobile.addAttachItem($.Mobile.objAttachItem, $("#area_attach"), $.Mobile.currentKey);
+					}
+				});
+			}
+			else {
+				$("#area_attach").unbind('scroll');
+			}
 
 			
 		},
@@ -1347,6 +1459,7 @@ $.Mobile = {
 			var elAttach = $(document.createElement('div'));
 			elAttach.addClass("attach-item");
 			elAttach.attr("id","attach-item");
+			elAttach.attr("idx",objData.SDOC_NO);
 			
 			var elLeftArea = $(document.createElement('div'));
 			elLeftArea.addClass("attach-area-left");

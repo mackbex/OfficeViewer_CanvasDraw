@@ -163,7 +163,7 @@ $.Common = {
 			    form.submit();
 			    form.remove();
 		},
-		stringToDate(str,divider) {
+		stringToDate : function(str,divider) {
 
 			if($.Common.isBlank(divider)) {
 				str = str.insert(4,"-").insert(7,"-")
@@ -208,15 +208,15 @@ $.Common = {
 //				if($("#btn_add_slip") != null) $("#btn_add_slip").hide();
 //			}
 			
-			//show/hide comment button
-			if(!$.Common.isBlank(objMember.currentKey)  && objMember.currentKey.indexOf(",") <= -1 && "JDOC_NO" == objMember.params.KEY_TYPE)
-			{
-				if($("#btn_open_comment") != null) $("#btn_open_comment").show();
-			}
-			else
-			{
-				if($("#btn_open_comment") != null) $("#btn_open_comment").hide();
-			}
+			// //show/hide comment button
+			// if(!$.Common.isBlank(objMember.currentKey)  && objMember.currentKey.indexOf(",") <= -1 && "JDOC_NO" == objMember.params.KEY_TYPE)
+			// {
+			// 	if($("#btn_open_comment") != null) $("#btn_open_comment").show();
+			// }
+			// else
+			// {
+			// 	if($("#btn_open_comment") != null) $("#btn_open_comment").hide();
+			// }
 			
 			//show/hide history button
 			if(!$.Common.isBlank(objMember.currentKey)  && objMember.currentKey.indexOf(",") <= -1 && "JDOC_NO" == objMember.params.KEY_TYPE)

@@ -135,9 +135,9 @@ $.Viewer = {
 			if("SIMPLE" !== $.Viewer.params.VIEW_MODE.toUpperCase()) {
 				$.Viewer.getAttachList($.Viewer.params);
 			}
-			if(!$.Viewer.params.MULTI_KEY) {
+		//	if(!$.Viewer.params.MULTI_KEY) {
 				$.Viewer.getCommentCnt();
-			}
+		//	}
 
 			$('#slip_masonry').masonry({
 				// options
@@ -328,7 +328,7 @@ $.Viewer = {
 			$(".area_attach").empty();
 			
 
-			$(".key_select option").eq(0).prop("selected",true);
+		//	$(".key_select option").eq(0).prop("selected",true);
 			
 			$.Viewer.slipTotalCnt = 0;
 			$.Viewer.attachTotalCnt = 0;

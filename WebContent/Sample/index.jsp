@@ -25,7 +25,7 @@ $(function(){
 
 	var WebParams = {
 		XMLDATA_PATH	: "<c:url value='/Sample/Menu.xml' />",
-		WEB_URL			: "./"
+		WEB_URL			: g_RootURL
 	}
 	/* 
 	var url = location.href;

@@ -138,7 +138,9 @@ $.Lang = {
 				"CANNOT_REMOVE_IN_AFTER_MODE" : "후첨 모드에서 삭제할 수 없는 증빙이 선택되었습니다.",
 				"NO_ORIGINAL_EXISTS" : "원본이 존재하지 않습니다.",
 				"CONNECTED_SLIP_CANNOT_BE_REMOVED":"연결된 증빙은 삭제할 수 없습니다.",
-				"FAILED_ROTATE_SLIP" : "증빙 회전에 실패했습니다."
+				"FAILED_ROTATE_SLIP" : "증빙 회전에 실패했습니다.",
+				"ACCESS_DENIED" : "Access denied.",
+				"ERR_INVALID_PATH" : "Invalid path."
 			}
 		}
 }
@@ -516,10 +518,6 @@ $.Menu = {
 				{
 					"ID" : "REMOVE_SLIP",
 					"MODE" : "EDIT"
-				},
-				{
-					"ID" : "VIEW_PROPERTY",
-					"CS_OPERATION" :"1"
 				}
 			]
 		}

@@ -42,7 +42,8 @@ public class CrossScriptingFilter implements Filter {
         HttpServletResponse res 	= (HttpServletResponse) response;
         
         request.getParameterMap();
-        
+
+        res.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None");
         res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS, POST");
         res.setHeader("Access-Control-Max-Age", "0");
         res.setHeader("Access-Control-Allow-Headers", "origin, x-requested-with, content-type, accept");

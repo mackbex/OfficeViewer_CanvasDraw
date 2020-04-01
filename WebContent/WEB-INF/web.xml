@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0">
-  <welcome-file-list>
-    <welcome-file>Sample/index.jsp</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
-  <servlet>
+<welcome-file-list>
+	<!--    <welcome-file>Sample/index.jsp</welcome-file>-->
+	<welcome-file>slip_error.jsp</welcome-file>
+</welcome-file-list>
+<servlet>
 		<display-name>CXFNonSpringJaxrsServlet</display-name>
 		<servlet-name>CXFNonSpringJaxrsServlet</servlet-name>
 		<servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet
@@ -61,4 +61,45 @@
 		<param-name>isLog4jAutoInitializationDisabled</param-name>
 		<param-value>false</param-value>
 	</context-param>
+	<session-config>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
+
+	<error-page>
+		<error-code>401</error-code>
+		<location>/slip_error.jsp?ERR_MSG=ACCESS_DENIED</location>
+	</error-page>
+	<error-page>
+		<error-code>400</error-code>
+		<location>/slip_error.jsp?ERR_MSG=ACCESS_DENIED</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/slip_error.jsp?ERR_MSG=ACCESS_DENIED</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/slip_error.jsp?ERR_MSG=ACCESS_DENIED</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/slip_error.jsp?ERR_MSG=ACCESS_DENIED</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/slip_error.jsp?ERR_MSG=ACCESS_DENIED</location>
+	</error-page>
+	<error-page>
+		<exception-type>java.lang.NullPointerException</exception-type>
+		<location>/slip_error.jsp?ERR_MSG=ACCESS_DENIED</location>
+	</error-page>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name >conf</web-resource-name>
+			<url-pattern >/conf/conf.ini</url-pattern>
+		</web-resource-collection>
+		<auth-constraint/>
+	</security-constraint>
 </web-app>
