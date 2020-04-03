@@ -2,56 +2,44 @@
 <%@page import="com.google.gson.JsonObject"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
-<%@ include file="/common/common.jsp"%> 
-<%@ page import="com.woonam.util.CookieUtil" %>
+<%@ include file="/common/common.jsp"%>
 <%@ page import="com.woonam.connect.AgentConnect" %>
 <%@ page import="com.woonam.model.GetModel" %>
 <%
 	//Prepend session disappearing bugs on IE.
 	response.setHeader("P3P","CP='CAO PSA CONi OTR OUR DEM ONL'");
 
-	CookieUtil cookie = new CookieUtil(request);
+	Map mParams = request.getParameterMap();
+
+	String strKey 										= C.getParamValue(mParams, "KEY", "");
 	
-	String strKey 											= request.getParameter("KEY");
-	if(C.isBlank(strKey)) strKey 						= C.FindParameterFromCookie(response, cookie, "KEY");
+	String strKeyType 									= C.getParamValue(mParams, "KEY_TYPE", "JDOC_NO");
 	
-	String strKeyType 									= request.getParameter("KEY_TYPE");
-	if(C.isBlank(strKeyType)) strKeyType 			= C.FindParameterFromCookie(response, cookie, "KEY_TYPE","JDOC_NO");
+	String strServerMode 								= C.getParamValue(mParams, "SVR_MODE", "");
+	strServerMode = strServerMode.toUpperCase();
 	
-	String strServerMode 								= request.getParameter("SVR_MODE");
-	if(C.isBlank(strServerMode)) strServerMode 	= C.FindParameterFromCookie(response, cookie, "SVR_MODE","");
-	else strServerMode = strServerMode.toUpperCase();
+	String strCallGroup 								= C.getParamValue(mParams, "CALL_GROUP", "");
 	
-	String strCallGroup 									= request.getParameter("CALL_GRUP");
-	if(C.isBlank(strCallGroup)) strCallGroup 			= C.FindParameterFromCookie(response, cookie, "CALL_GRUP");
+	String strViewMode 									= C.getParamValue(mParams, "VIEW_MODE", "VIEW");
+	strViewMode = strViewMode.toUpperCase();
 	
-	String strViewMode 									= request.getParameter("VIEW_MODE");
-	if(C.isBlank(strViewMode)) strViewMode 		= C.FindParameterFromCookie(response, cookie, "VIEW_MODE","VIEW");
-	else strViewMode = strViewMode.toUpperCase();
+	String strPage 										= C.getParamValue(mParams, "PAGE", "");
+
+	String strLang 										= C.getParamValue(mParams, "LANG", "KO");
+	strLang = strLang.toLowerCase();
 	
-	String strPage 											= request.getParameter("PAGE");
-	if(C.isBlank(strPage)) strPage 					= C.FindParameterFromCookie(response, cookie, "PAGE");
+	String strUserID 									= C.getParamValue(mParams, "USER_ID", "");
 	
-	String strLang 											= request.getParameter("LANG");
-	if(C.isBlank(strLang)) strLang 						= C.FindParameterFromCookie(response, cookie, "LANG" ,"ko");
-	else strLang = strLang.toLowerCase();
+	String strCorpNo 									= C.getParamValue(mParams, "CORP_NO", "");
 	
-	String strUserID 										= request.getParameter("USER_ID");
-	if(C.isBlank(strUserID)) strUserID 				= C.FindParameterFromCookie(response, cookie, "USER_ID");
+	String strWorkGroup 								= C.getParamValue(mParams, "WORK_GROUP", "");
 	
-	String strCorpNo 										= request.getParameter("CORP_NO");
-	if(C.isBlank(strCorpNo)) strCorpNo 				= C.FindParameterFromCookie(response, cookie, "CORP_NO");
-	
-	String strWorkGroup 									= request.getParameter("WORK_GROUP");
-	if(C.isBlank(strWorkGroup)) strWorkGroup 		= C.FindParameterFromCookie(response, cookie, "WORK_GROUP");
-	
-	String strMenu		 									= request.getParameter("MENU");
-	if(C.isBlank(strMenu)) strMenu 					= C.FindParameterFromCookie(response, cookie, "MENU", "1");
+	String strMenu		 								= C.getParamValue(mParams, "MENU", "1");
 		
 	String strUseMobile									= g_profile.getString("WAS_INFO", "MOBILE_USE", "F").toUpperCase();
 	//String strMobileMode									= g_profile.getString("WAS_INFO", "MOBILE_MODE", "VIEW").toUpperCase();
-	String localWAS_Port_HTTP								= g_profile.getString("LOCAL_WAS","HTTP", "");
-	String localWAS_Port_HTTPS								= g_profile.getString("LOCAL_WAS","HTTPS", "");
+	String localWAS_Port_HTTP							= g_profile.getString("LOCAL_WAS","HTTP", "");
+	String localWAS_Port_HTTPS							= g_profile.getString("LOCAL_WAS","HTTPS", "");
 
 	String command 										= request.getParameter("COMMAND");
 	String isInterface 									= request.getParameter("INTERFACE");
@@ -81,6 +69,7 @@
 	{
 		String strResUserID 	= objUserInfo.get("USER_ID").getAsString();
 		String strResCorpNo 	= objUserInfo.get("CORP_NO").getAsString();
+		int auth				= objUserInfo.get("AUTH").getAsInt();
 
 		if(!strUserID.equalsIgnoreCase(strResUserID) || !strCorpNo.equalsIgnoreCase(strResCorpNo))
 		{
@@ -92,6 +81,9 @@
 		strResUserNM = objUserInfo.get("USER_NM").getAsString();
 		strResCorpNM = objUserInfo.get("CORP_NM").getAsString();
 
+		if(auth > 0) {
+			strViewMode = "EDIT";
+		}
 
 		session.setAttribute("CORP_NO", 	objUserInfo.get("CORP_NO").getAsString());
 		session.setAttribute("CORP_NM", 	strResCorpNM);

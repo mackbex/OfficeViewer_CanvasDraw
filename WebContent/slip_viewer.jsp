@@ -11,25 +11,26 @@
 		//Generate system id
 		try
 		{
-			String strServerKey 		= g_profile.getString(request.getParameter("SVR_MODE"),"KEY", "");
-			pageContext.setAttribute("SERVER_KEY", strServerKey);
+			if(request.getParameterMap().size() > 0) {
+				String strServerKey = g_profile.getString(request.getParameter("SVR_MODE"), "KEY", "");
+				pageContext.setAttribute("SERVER_KEY", strServerKey);
 
-			//Attach parameters to pageContext
-			Map<String, String[]> mParams = request.getParameterMap();
-			pageContext.setAttribute("mParams", mParams);
+				//Attach parameters to pageContext
+				Map<String, String[]> mParams = request.getParameterMap();
+				pageContext.setAttribute("mParams", mParams);
 
-			String key = request.getParameter("KEY");
-			//Detect whether multikey.
-			boolean isMultiKey = false;
-			if(!C.isBlank(key)) {
-				if(key.indexOf(',') > -1) isMultiKey = true;
+				String key = request.getParameter("KEY");
+				//Detect whether multikey.
+				boolean isMultiKey = false;
+				if (!C.isBlank(key)) {
+					if (key.indexOf(',') > -1) isMultiKey = true;
+				}
+
+				pageContext.setAttribute("KEY", key);
+				pageContext.setAttribute("MULTI_KEY", isMultiKey);
+				pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO", "FOLD", "T"));
+				pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
 			}
-
-			pageContext.setAttribute("KEY",key);
-			pageContext.setAttribute("MULTI_KEY", isMultiKey);
-			pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO","FOLD", "T"));
-			pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO","MAXIMIZED", "F"));
-
 		}
 		catch(Exception e) {
 

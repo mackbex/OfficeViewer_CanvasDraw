@@ -365,40 +365,7 @@ public class Common {
 		return false;
 	}
 	
-	public String FindParameterFromCookie(HttpServletResponse response, CookieUtil cookie, String strParam)
-	{
-		String strRes = "";
-		try
-		{
-	    	if(cookie.exists(strParam))
-	    	{
-	    		strRes = cookie.getValue(strParam);
-	    		response.addCookie(cookie.deleteCookie(strParam));
-	    	}
-		}
-		catch (Exception e) {
-			LogManager.getLogger(Common.class).error("Loading Cookie : ", e);
-		}
-    	return strRes;
-	}
-	
 
-	public String FindParameterFromCookie(HttpServletResponse response, CookieUtil cookie, String strParam, String strDefVal)
-	{
-		String strRes = strDefVal;
-		try
-		{
-	    	if(cookie.exists(strParam))
-	    	{
-	    		strRes = cookie.getValue(strParam);
-	    		response.addCookie(cookie.deleteCookie(strParam));
-	    	}
-		}
-		catch (Exception e) {
-			LogManager.getLogger(Common.class).error("Loading Cookie : ", e);
-		}
-    	return strRes;
-	}
 	/**
 	 * Check user permission.
 	 * @param GM
