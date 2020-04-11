@@ -433,7 +433,6 @@ public class Common {
 		str = str.replaceAll("<", "〈");
 		str = str.replaceAll("'", "''");
 		str = str.replaceAll("!", "！");
-		str = str.replaceAll("%", "％");
 		str = str.replaceAll("&gt", "〉");
 		str = str.replaceAll("&lt", "〈");
 		str = str.replaceAll("&amp", "［");

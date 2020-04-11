@@ -51,7 +51,6 @@ public class RequestWrapper extends HttpServletRequestWrapper
         value = value.replaceAll("\\n", "&ltbr&gt");
         value = value.replaceAll("'", "''");
         value = value.replaceAll("!", "！");
-        value = value.replaceAll("%", "％");
         value = value.replaceAll("&amp", "［");
         value = value.replaceAll("&ampquot", "］");
         value = value.replaceAll("&", "＆");

@@ -571,9 +571,16 @@ $.Actor = {
 				if(res == null || resCnt <= 0) {
 					deferred.resolve(false);
 				}
-
-				parent.objSlipItem = res;
-				deferred.resolve(true);
+				else {
+					if("F" === res.RESULT) {
+						parent.objSlipItem = null;
+						deferred.resolve(false);
+					}
+					else {
+						parent.objSlipItem = res;
+						deferred.resolve(true);
+					}
+				}
 
 			},function(reason){
 				deferred.reject(reason);
@@ -798,7 +805,7 @@ $.Actor = {
 
 						$(".slip_wrapper").find('.progress_slip_scroll').show();
 						//$.Actor.getSlipList($.Actor.params,   $.Actor.slipRange);
-						$.Actor.displayThumb($.Actor);
+						$.Actor.displayThumb(parent);
 					}
 				});
 			}
@@ -862,9 +869,29 @@ $.Actor = {
 					setTimeout(function() {
 						$("#area_slip").getNiceScroll().resize();
 					},400);
-					if(parent === $.Viewer) {
-						$.Viewer.selectSlipFromThumb($.Viewer.params.CLICKED_SLIP_IRN);
 
+					if(parent === $.Viewer) {
+
+						var clickedIdx = 0;
+						var clickedIrn = parent.params.CLICKED_SLIP_IRN;
+
+						if(!$.Common.isBlank(clickedIrn)) {
+
+							clickedIdx = Object.keys(parent.objSlipItem).indexOf(clickedIrn);
+							var visibleCnt = $(".slip_item").size();
+							if(clickedIdx >= visibleCnt) {
+								$.Actor.displayThumb(parent);
+							}
+							else {
+								var elTarget = $("#slip_masonry").find("[idx="+$.Viewer.params.CLICKED_SLIP_IRN+"]");
+								if(elTarget.length) {
+									$.Viewer.selectSlipFromThumb($.Viewer.params.CLICKED_SLIP_IRN);
+								}
+							}
+						}
+						else {
+							$.Viewer.selectSlipFromThumb();
+						}
 					}
 
 				}, 100);

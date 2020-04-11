@@ -13,29 +13,35 @@
 //	String strSysID			=	null;
 //	String strCurTime			=	new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
 //	strSysID						=	session.getId()+strCurTime;
-
-		//Attach parameters to pageContext
 		Map<String, String[]> mParams = request.getParameterMap();
-		pageContext.setAttribute("mParams", mParams);
+		try {
+			if (request.getParameterMap().size() > 0) {
+				//Attach parameters to pageContext
+				Map<String, String[]> mParams = request.getParameterMap();
+				pageContext.setAttribute("mParams", mParams);
 
 
-		String strServerKey 						= g_profile.getString(request.getParameter("SVR_MODE"),"KEY", "");
-		pageContext.setAttribute("SERVER_KEY", strServerKey);
+				String strServerKey = g_profile.getString(request.getParameter("SVR_MODE"), "KEY", "");
+				pageContext.setAttribute("SERVER_KEY", strServerKey);
 
-		String key = request.getParameter("KEY");
-		key = URLDecoder.decode(key, "utf-8");
+				String key = request.getParameter("KEY");
+				key = URLDecoder.decode(key, "utf-8");
 
-		//Detect whether multikey.
-		boolean isMultiKey = false;
-		if(!C.isBlank(key)) {
-			if(key.indexOf(',') > -1) isMultiKey = true;
+				//Detect whether multikey.
+				boolean isMultiKey = false;
+				if (!C.isBlank(key)) {
+					if (key.indexOf(',') > -1) isMultiKey = true;
+				}
+
+				pageContext.setAttribute("KEY", key);
+				pageContext.setAttribute("MULTI_KEY", isMultiKey);
+				pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO", "FOLD", "T"));
+				pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
+			}
 		}
-
-		pageContext.setAttribute("KEY",key);
-		pageContext.setAttribute("MULTI_KEY", isMultiKey);
-		pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO","FOLD", "T"));
-		pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO","MAXIMIZED", "F"));
-
+		catch(Exception e) {
+			logger.error("");
+		}
 	%>
 	<script>
 

@@ -33,7 +33,7 @@
 			}
 		}
 		catch(Exception e) {
-
+			logger.error("");
 		}
 
 /* 	String strScheme = request.getScheme().toUpperCase() + "_URL";

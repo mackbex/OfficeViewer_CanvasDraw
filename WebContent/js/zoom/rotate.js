@@ -14,8 +14,31 @@
       if (supportedCSSOrigin[0] == "T") supportedCSSOrigin[0] = "t";
     }
 
-    // Bad eval to preven google closure to remove it from code o_O
-    eval('IE = "v"=="\v"');
+  IE = false;
+  var browserVal = {
+    TrueVersion: 0,
+    ActingVersion: 0
+  };
+
+  var trident = navigator.userAgent.match(/Trident\/(\d+)/);
+  if (trident) {
+    IE = true;
+    browserVal.TrueVersion = parseInt(trident[1], 10) + 4;
+  }
+
+  var msie = navigator.userAgent.match(/MSIE (\d+)/);
+  if (msie) {
+    IE = true;
+    //Find the IE version number from the user agent string
+    browserVal.ActingVersion = parseInt(msie[1]);
+  } else {
+    //Must be IE 11 in "edge" mode
+    browserVal.ActingVersion = browserVal.TrueVersion;
+  }
+
+  if(browserVal.ActingVersion >= 11) {
+    IE = false;
+  }
 
     jQuery.fn.extend({
         rotate:function(parameters)
