@@ -441,7 +441,7 @@ public class Common {
 		str = str.replaceAll("'", "’");
 //		str = str.replaceAll("-", "­");
 		str = str.replaceAll("\\$", "＄");
-		str = str.replaceAll("#", "＃");
+//		str = str.replaceAll("#", "＃");
 
 		return str;
 	}

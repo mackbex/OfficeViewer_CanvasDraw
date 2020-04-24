@@ -17,7 +17,7 @@
 		try {
 			if (request.getParameterMap().size() > 0) {
 				//Attach parameters to pageContext
-				Map<String, String[]> mParams = request.getParameterMap();
+//				Map<String, String[]> mParams = request.getParameterMap();
 				pageContext.setAttribute("mParams", mParams);
 
 
