@@ -704,6 +704,7 @@ table {
  .actor_body {
     min-height: 600px;
     position: relative;
+	 overflow: hidden;
  }
  
 .area-progress {
@@ -1036,6 +1037,7 @@ table {
 	height:30px;
 	box-sizing: border-box;
 	position:relative;
+	margin: 0 2px;
 	box-shadow: 0px 7px 6px -5px #DFE1E5;
     border-bottom: 1px solid #dfe1e5;
 }
@@ -1059,13 +1061,16 @@ table {
 	height: 20px;
 	margin:5px 0;
 }
+.slip_item .area_title_btn .btn_magnifier:hover {
+	opacity: 0.7;
+}
 .slip_item .area_title_btn > div > img {
 	position:absolute;
 	left:0;
 	right:0;
 	top:0;
 	bottom:0;
-	width:16px;
+	width:14px;
 	max-height:100%;
 	margin:auto;
 }
@@ -1142,7 +1147,7 @@ table {
     left: 2px;
     top: 0;
     bottom: 0;
-    right: 40px;
+    right: 60px;
     position: absolute;
 	white-space: nowrap;
     overflow: hidden;
@@ -1297,8 +1302,8 @@ table {
 	box-sizing: border-box;
 	    line-height: 30px;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    /*overflow: auto;*/
+    /*text-overflow: ellipsis;*/
     font-family:'Dotum', Gulim, Helvetica, sans-serif, 'NanumGothic',
 		'Nanum Gothic', 'Malgun Gothic', AppleSDGothicNeo-Regular,
 		HelveticaNeue, sans-serif;

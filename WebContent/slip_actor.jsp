@@ -37,6 +37,7 @@
 				pageContext.setAttribute("MULTI_KEY", isMultiKey);
 				pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO", "FOLD", "T"));
 				pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
+				pageContext.setAttribute("USE_MAGNIFIER", g_profile.getString("WAS_INFO", "USE_MAGNIFIER", "F"));
 			}
 		}
 		catch(Exception e) {
@@ -67,6 +68,7 @@
 				PAGE					:"ACTOR",
 				FOLD					:  "<c:out value="${FOLD}" />",
 				MAXIMIZED				:  "<c:out value="${MAXIMIZED}" />",
+				USE_MAGNIFIER			:  "<c:out value="${USE_MAGNIFIER}" />"
 
 			}
 
@@ -214,5 +216,6 @@
 <script src="<c:url value='js/menu/context-menu.js' />"></script>
 <script src="<c:url value='js/operation.js' />"></script>
 <script src="<c:url value='js/jquery.nicescroll.min.js' />"></script>
+<script src="<c:url value='/js/zoom/jquery.elevatezoom.js' />"></script>
 </body>
 </html>
