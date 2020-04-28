@@ -890,11 +890,11 @@ $.Actor = {
 
 						var clickedIdx = 0;
 						var clickedIrn = parent.params.CLICKED_SLIP_IRN;
+						var visibleCnt = $(".slip_item").size();
 
 						if(!$.Common.isBlank(clickedIrn)) {
 
 							clickedIdx = Object.keys(parent.objSlipItem).indexOf(clickedIrn);
-							var visibleCnt = $(".slip_item").size();
 							if(clickedIdx >= visibleCnt) {
 								$.Actor.displayThumb(parent);
 							}
@@ -902,11 +902,14 @@ $.Actor = {
 								var elTarget = $("#slip_masonry").find("[idx="+$.Viewer.params.CLICKED_SLIP_IRN+"]");
 								if(elTarget.length) {
 									$.Viewer.selectSlipFromThumb($.Viewer.params.CLICKED_SLIP_IRN);
+									parent.params.CLICKED_SLIP_IRN = null;
 								}
 							}
 						}
 						else {
-							$.Viewer.selectSlipFromThumb();
+							if(visibleCnt < parent.slipRange) {
+								$.Viewer.selectSlipFromThumb();
+							}
 						}
 					}
 					// else {
