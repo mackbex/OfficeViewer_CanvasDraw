@@ -8,42 +8,62 @@
 	<title>Slip Actor</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='css/style.css' />" >
 	<link rel="stylesheet" type="text/css" href="<c:url value='css/menu/context-menu.css' />" >
-	<%
-		//Generate system id
-//	String strSysID			=	null;
-//	String strCurTime			=	new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
-//	strSysID						=	session.getId()+strCurTime;
-		Map<String, String[]> mParams = request.getParameterMap();
-		try {
-			if (request.getParameterMap().size() > 0) {
-				//Attach parameters to pageContext
-//				Map<String, String[]> mParams = request.getParameterMap();
-				pageContext.setAttribute("mParams", mParams);
+<%
+		//Attach parameters to pageContext
+	Map<String, String[]> mParams = request.getParameterMap();
+	try {
+		if (request.getParameterMap().size() > 0) {
+			pageContext.setAttribute("mParams", mParams);
 
 
-				String strServerKey = g_profile.getString(request.getParameter("SVR_MODE"), "KEY", "");
-				pageContext.setAttribute("SERVER_KEY", strServerKey);
+			String strServerKey = g_profile.getString(request.getParameter("SVR_MODE"), "KEY", "");
+			pageContext.setAttribute("SERVER_KEY", strServerKey);
 
-				String key = request.getParameter("KEY");
-				key = URLDecoder.decode(key, "utf-8");
+			String key = request.getParameter("KEY");
+			key = URLDecoder.decode(key, "utf-8");
 
-				//Detect whether multikey.
-				boolean isMultiKey = false;
-				if (!C.isBlank(key)) {
-					if (key.indexOf(',') > -1) isMultiKey = true;
+			//Detect whether multikey.
+			boolean isMultiKey = false;
+			if (!C.isBlank(key)) {
+				if (key.indexOf(',') > -1) isMultiKey = true;
+			}
+
+			pageContext.setAttribute("MULTI_KEY", isMultiKey);
+
+			StringBuffer keyValue = new StringBuffer();
+			StringBuffer keyTitle = new StringBuffer();
+
+			String[] arKeyList = key.split(",");
+
+			for (int i = 0; i < arKeyList.length; i++) {
+				String[] arKeyVal = arKeyList[i].split(";");
+
+				keyValue.append(arKeyVal[0]);
+				try {
+					keyTitle.append(URLDecoder.decode(arKeyVal[1], "utf-8"));
+				} catch (Exception e) {
+					keyTitle.append("");
 				}
 
-				pageContext.setAttribute("KEY", key);
-				pageContext.setAttribute("MULTI_KEY", isMultiKey);
-				pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO", "FOLD", "T"));
-				pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
-				pageContext.setAttribute("USE_MAGNIFIER", g_profile.getString("WAS_INFO", "USE_MAGNIFIER", "F"));
+				if (i < arKeyList.length - 1) {
+					keyValue.append(",");
+					keyTitle.append(",");
+				}
 			}
+
+			pageContext.setAttribute("KEY", keyValue.toString());
+			pageContext.setAttribute("KEY_TITLE", keyTitle.toString());
+			pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO", "FOLD", "T"));
+			pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
+			pageContext.setAttribute("USE_MAGNIFIER", g_profile.getString("WAS_INFO", "USE_MAGNIFIER", "F"));
 		}
-		catch(Exception e) {
-			logger.error("");
-		}
-	%>
+	}
+	catch(Exception e) {
+		logger.error("");
+	}
+%>
+
+
 	<script>
 
 		$(function(){
@@ -64,6 +84,7 @@
 				MENU					: "<c:url value ="${mParams['MENU'][0]}" />",
 				XPI_PORT_HTTP			: "<c:url value ="${mParams['XPI_PORT_HTTP'][0]}" />",
 				XPI_PORT_HTTPS			: "<c:url value ="${mParams['XPI_PORT_HTTPS'][0]}" />",
+				WORK_GROUP				: "<c:url value ="${mParams['WORK_GROUP'][0]}" />",
 				MULTI_KEY				: <c:out value="${MULTI_KEY}" />,
 				PAGE					:"ACTOR",
 				FOLD					:  "<c:out value="${FOLD}" />",
@@ -83,6 +104,7 @@
 <c:set var="ViewMode" value="${mParams['VIEW_MODE'][0]}" />
 <c:set var="KeyType" value="${mParams['KEY_TYPE'][0]}" />
 <c:set var="Key" value="${KEY}" />
+<c:set var="KeyTitle" value="${KEY_TITLE}" />
 <c:set var="isMultiKey" value="${MULTI_KEY}" />
 
 
@@ -128,28 +150,54 @@
 					<div class="area_title">
 							<span class="evidence" data-i18n="E-EVIDENCE">
 								</span>
+						<span id="slipCnt"></span>
 					</div>
 					<div class="area_key">
-						<div class="key_title">
-							-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :
-						</div>
+
 						<c:choose>
 							<c:when test="${isMultiKey eq true }">
+								<div class="key_title">
+									-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :
+								</div>
 								<div class="area_key_select">
 									<select class="key_select" onchange="javascript:$.Actor.change_GroupKey(this);">
 										<option value="">ALL</option>
-										<c:forEach items="${fn:split(Key, ',') }" var="curKey">
-											<option value="<c:out value="${curKey}"></c:out>">${curKey}</option>
+										<c:set var="keyVal" value="${fn:split(Key, ',')}" />
+										<c:set var="keyTitle" value="${fn:split(KeyTitle, ',')}" />
+										<c:set var="keySize" value="${fn:length(keyVal)}" />
+
+										<c:forEach var="i" begin="0" end="${keySize - 1}">
+											<option value="<c:out value="${keyVal[i]}"></c:out>">${keyTitle[i]}</option>
 										</c:forEach>
 									</select>
 								</div>
 							</c:when>
 							<c:otherwise>
-								<div class="key" id="key" title="${Key}" >
-									<c:out value="${Key}"></c:out>
-								</div>
+								<%--										<div class="key_title">--%>
+								<%--											-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :--%>
+								<%--										</div>--%>
+								<%--										<div class="key" id="key" title="${KeyTitle}" >--%>
+								<%--											<c:out value="${KeyTitle}"></c:out>--%>
+								<%--										</div>--%>
 							</c:otherwise>
 						</c:choose>
+						<%--							<c:choose>--%>
+						<%--								<c:when test="${isMultiKey eq true }">--%>
+						<%--								<div class="area_key_select">--%>
+						<%--									<select class="key_select" onchange="javascript:$.Actor.change_GroupKey(this);">--%>
+						<%--										<option value="">ALL</option>--%>
+						<%--										<c:forEach items="${fn:split(Key, ',') }" var="curKey">--%>
+						<%--										<option value="<c:out value="${curKey}"></c:out>">${curKey}</option>--%>
+						<%--										</c:forEach>--%>
+						<%--									</select>--%>
+						<%--									</div>--%>
+						<%--								</c:when>--%>
+						<%--								<c:otherwise>--%>
+						<%--									<div class="key" id="key" title="${Key}" >--%>
+						<%--										<c:out value="${Key}"></c:out>--%>
+						<%--									</div>--%>
+						<%--								</c:otherwise>--%>
+						<%--							</c:choose>--%>
 
 					</div>
 				</div>
@@ -162,9 +210,9 @@
 					</div>
 				</div>
 			</div>
-			<div id="slip_progress" class="slip_progress"></div>
 			<div id="area_slip" class="area_slip">
 				<div>
+					<div id="slip_progress" class="slip_progress"></div>
 					<div id="slip_masonry" class="slip_masonry"></div>
 				</div>
 			</div>
@@ -184,6 +232,7 @@
 					</div>
 					<div class="area_title">
 						<span class="evidence" data-i18n="ATTACH"></span>
+						<span id="attachCnt"></span>
 					</div>
 				</div>
 				<div class="attach_title_right">
@@ -218,4 +267,3 @@
 <script src="<c:url value='js/jquery.nicescroll.min.js' />"></script>
 <script src="<c:url value='/js/zoom/jquery.elevatezoom.js' />"></script>
 </body>
-</html>

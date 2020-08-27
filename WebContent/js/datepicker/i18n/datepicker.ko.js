@@ -6,7 +6,7 @@
     monthsShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
     today: 'Today', // Today -> 오늘
     clear: 'Clear', // Clear -> 지우기
-    dateFormat: 'yyyy-mm-dd',
+    dateFormat: 'yyyy-mm',
     timeFormat: 'hh:ii aa',
     firstDay: 0
 }; })(jQuery);

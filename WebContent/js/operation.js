@@ -59,9 +59,11 @@ $.Operation  = {
 			case "REMOVE_MENU_ATTACH" : 
 				$.Operation.removeMenuItem(target, objData, elTarget);
 				break;
-				
 			case "ADD_SLIP" : 
 				$.Operation.addSlip(target, objData);
+				break;
+			case "ADD_SCAN" :
+				$.Operation.addScanner(target, objData);
 				break;
 			case "ADD_AFTER" : 
 				$.Operation.addAfter(target, objData);
@@ -129,6 +131,10 @@ $.Operation  = {
 			case "DISPLAY_COCARD" :
 				deferred = $.Operation.displaySlip(target, objData);
 				break;
+			case "OPEN_RELATED_POPUP" :
+				$.Operation.Open_Related(target, objData);
+				break;
+
 			}
 
 			return deferred.promise();
@@ -174,7 +180,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -191,6 +197,119 @@ $.Operation  = {
 			$.OfficeXPI.CallLocalWAS(sbParam.toString(), target.pageSubmit);
 			
 		},
+		addScanner : function(target, objData) {
+
+			if(!$.Operation.detectCS(target, objData, true)) {
+				return;
+			}
+
+			var sbParam 	= new StringBuffer();
+
+			sbParam.append("/RUN");
+			sbParam.append("/CMD'PTI'");
+			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
+			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
+			sbParam.append(" /CALL'WAS'");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
+			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
+			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
+			sbParam.append(" /USER'"+objData.USER_ID+"'");
+			sbParam.append(" /AUTORUN'SCAN'");
+			sbParam.append(" /KEYTYPE'"+objData.KEY_TYPE+"'");
+			sbParam.append(" /KEY'"+target.currentKey+"'");
+			sbParam.append(" /SLIP_TYPE''");
+			//sbParam.append(" /AFTER'"+objData.SDOC_AFTER+"'");
+			sbParam.append(" /MODE'"+objData.VIEW_MODE+"'");
+
+			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
+			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
+
+			$.OfficeXPI.CallLocalWAS(sbParam.toString(), target.pageSubmit);
+
+		},
+		Open_Related : function(target, objData) {
+
+			// if(!$.Operation.detectCS(target, objData, true)) {
+			// 	return;
+			// }
+
+			var popupTitle = "Related";
+			var sbURL = new StringBuffer();
+			sbURL.append(g_RootURL);
+			sbURL.append("related.jsp");
+			sbURL.append("?KEY="+target.params.KEY);
+			sbURL.append("&KEY_TYPE="+target.params.KEY_TYPE);
+			sbURL.append("&LANG="+target.params.LANG);
+			sbURL.append("&VIEW_MODE="+target.params.VIEW_MODE);
+			sbURL.append("&SVR_MODE="+target.params.SVR_MODE);
+			sbURL.append("&XPI_PORT_HTTPS="+target.params.XPI_PORT_HTTPS);
+			sbURL.append("&XPI_PORT_HTTP="+target.params.XPI_PORT_HTTP);
+
+			// objParams["KEY"] 			= target.params.KEY;
+			// objParams["KEY_TYPE"] 		= target.params.KEY_TYPE;
+			// objParams["LANG"] 				= target.params.LANG;
+			// objParams["VIEW_MODE"] 		= target.params.VIEW_MODE;
+			// objParams["SVR_MODE"]		= target.params.SVR_MODE;
+			// objParams["XPI_PORT"]		= target.params.XPI_PORT;
+
+			var nWidth 	= 900;
+			var nHeight 	= 785;
+			var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
+
+			var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
+
+
+			//
+			// var popupTitle = "Payment";
+			// var sbURL = new StringBuffer();
+			// sbURL.append(g_RootURL+"payment.jsp");
+			//
+			// var nWidth 	= 900;
+			// var nHeight 	= 700;
+			// var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
+			//
+			// var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
+			//
+			// //Post submit to popup
+			// var objParams = {};
+			// objParams["KEY"] 			= target.params.KEY;
+			// objParams["KEY_TYPE"] 		= target.params.KEY_TYPE;
+			// objParams["LANG"] 				= target.params.LANG;
+			// objParams["VIEW_MODE"] 		= target.params.VIEW_MODE;
+			// objParams["SVR_MODE"]		= target.params.SVR_MODE;
+			// objParams["XPI_PORT"]		= target.params.XPI_PORT;
+			//
+			//
+			// $.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
+		},
+		Add_Payment : function(target, objData) {
+
+			var sbParam 	= new StringBuffer();
+
+			sbParam.append("/RUN");
+			sbParam.append("/CMD'PTI'");
+			sbParam.append(" /PROJ'"+target.params.SERVER_KEY+"'");
+			sbParam.append(" /SVR'"+target.params.SVR_MODE+"'");
+			sbParam.append(" /CALL'WAS'");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
+			sbParam.append(" /LANG'"+target.params.LANG.toUpperCase()+"'");
+			sbParam.append(" /CORP'"+target.params.CORP_NO+"'");
+			sbParam.append(" /USER'"+target.params.USER_ID+"'");
+			sbParam.append(" /AUTORUN'WEB(APPR)'");
+			sbParam.append(" /KEYTYPE'JDOC_NO'");
+			sbParam.append(" /VIEW_URL'"+objData.VIEW_URL.replace("?","？")+"'");
+			sbParam.append(" /PRINT_URL'"+objData.PRINT_URL.replace("?","？")+"'");
+			sbParam.append(" /TITLE'"+encodeURIComponent(encodeURIComponent(objData.TITLE))+"'");
+			sbParam.append(" /KEY'"+target.params.KEY+"'");
+			sbParam.append(" /SLIP_TYPE''");
+			//sbParam.append(" /AFTER'"+objData.SDOC_AFTER+"'");
+			sbParam.append(" /MODE'"+target.params.VIEW_MODE+"'");
+
+			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
+			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
+
+			$.OfficeXPI.CallLocalWAS(sbParam.toString(), target.pageSubmit);
+		} ,
 		//Rotate Slip 
 		Rotate_Slip : function(target,objData, degrees) {
 				
@@ -248,7 +367,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -279,7 +398,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+target.params.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+target.params.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+target.params.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+target.params.CORP_NO+"'");
 			sbParam.append(" /USER'"+target.params.USER_ID+"'");
@@ -321,7 +440,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -352,7 +471,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -378,7 +497,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -408,7 +527,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+target.params.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+target.params.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+target.params.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+target.params.CORP_NO+"'");
 			sbParam.append(" /USER'"+target.params.USER_ID+"'");
@@ -436,7 +555,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -467,7 +586,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -499,7 +618,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -531,7 +650,7 @@ $.Operation  = {
 			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
 			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
 			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK''");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
 			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
 			sbParam.append(" /USER'"+objData.USER_ID+"'");
@@ -564,7 +683,7 @@ $.Operation  = {
 				sbParam.append(" /PROJ'"+target.params.SERVER_KEY+"'");
 				sbParam.append(" /SVR'"+target.params.SVR_MODE+"'");
 				sbParam.append(" /CALL'WAS'");
-				sbParam.append(" /WORK''");
+				sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 				sbParam.append(" /LANG'"+target.params.LANG.toUpperCase()+"'");
 				sbParam.append(" /CORP'"+target.params.CORP_NO+"'");
 				sbParam.append(" /USER'"+target.params.USER_ID+"'");
@@ -597,7 +716,7 @@ $.Operation  = {
 				sbParam.append(" /PROJ'"+target.params.SERVER_KEY+"'");
 				sbParam.append(" /SVR'"+target.params.SVR_MODE+"'");
 				sbParam.append(" /CALL'WAS'");
-				sbParam.append(" /WORK''");
+				sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
 				sbParam.append(" /LANG'"+target.params.LANG.toUpperCase()+"'");
 				sbParam.append(" /CORP'"+target.params.CORP_NO+"'");
 				sbParam.append(" /USER'"+target.params.USER_ID+"'");
@@ -615,7 +734,8 @@ $.Operation  = {
 			var isURL = objData.SDOC_URL;
 			if("1" == isURL) {
 				var sbURL = new StringBuffer();
-				sbURL.append(objData.ORG_FILE);
+				sbURL.append(objData.ORG_FILE.replaceAll("＆","&"));
+
 
 				var nWidth 	= 1250;
 				var nHeight 	= 700;
@@ -710,50 +830,57 @@ $.Operation  = {
 			$.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
 			
 		},
-		//Open comment
-		openComment : function(target) {
-	
-			var popupTitle = "Comment";
-			var sbURL = new StringBuffer();
-			sbURL.append(g_RootURL+"slip_comment.jsp?");
-			
-			var nWidth 	= 520;
-			var nHeight 	= 600;
-			var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
+	//Open comment
+	openComment : function(target) {
 
-			var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
-			
-			//Post submit to popup
-			var objParams = {};
-			objParams["KEY"] 					= target.currentKey;
-			objParams["LANG"] 				= target.params.LANG;
-			objParams["USER_ID"] 				= target.params.USER_ID;
-			objParams["CORP_NO"] 			= target.params.CORP_NO;
-			objParams["PAGE"]				= target.params.PAGE;
-			$.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);		
-		},
-		//Open history
-		openHistory : function(target) {
-			
-			var popupTitle = "History";
-			var sbURL = new StringBuffer();
-			sbURL.append(g_RootURL+"slip_history.jsp?");
-		
-			var nWidth 	= 800;
-			var nHeight 	= 500;
-			var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
+		var popupTitle = "Comment";
+		var sbURL = new StringBuffer();
+		sbURL.append(g_RootURL);
+		sbURL.append("slip_comment.jsp");
+		sbURL.append("?KEY="+encodeURIComponent(target.currentKey));
+		sbURL.append("&PAGE="+target.params.PAGE);
+		sbURL.append("&LANG="+target.params.LANG);
 
-			var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
-		
-			//Post submit to popup
-			var objParams = {};
-			objParams["KEY"] 					= target.currentKey;
-			objParams["LANG"] 				= target.params.LANG;
-			objParams["USER_ID"] 				= target.params.USER_ID;
-			objParams["CORP_NO"] 			= target.params.CORP_NO;
-			
-			$.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
-		},
+		var nWidth 	= 520;
+		var nHeight 	= 600;
+		var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
+
+		var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
+
+		// //Post submit to popup
+		// var objParams = {};
+		// objParams["KEY"] 					= target.currentKey;
+		// objParams["LANG"] 				= target.params.LANG;
+		// objParams["USER_ID"] 				= target.params.USER_ID;
+		// objParams["CORP_NO"] 			= target.params.CORP_NO;
+		// objParams["PAGE"]				= target.params.PAGE;
+		// $.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
+	},
+	//Open history
+	openHistory : function(target) {
+
+		var popupTitle = "History";
+		var sbURL = new StringBuffer();
+		sbURL.append(g_RootURL+"slip_history.jsp?");
+		sbURL.append("KEY="+target.currentKey);
+		sbURL.append("&LANG="+target.params.LANG);
+
+
+		var nWidth 	= 800;
+		var nHeight 	= 500;
+		var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
+
+		var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
+
+		//Post submit to popup
+		// var objParams = {};
+		// objParams["KEY"] 					= target.currentKey;
+		// objParams["LANG"] 				= target.params.LANG;
+		// objParams["USER_ID"] 				= target.params.USER_ID;
+		// objParams["CORP_NO"] 			= target.params.CORP_NO;
+		//
+		// $.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
+	},
 		
 		// Remove slip / addfile by I/F Key
 		removeAll : function(target) {
@@ -1034,7 +1161,7 @@ $.Operation  = {
 								delete target.objSlipItem[this];
 							});
 
-							target.removeSlipElement(elCheckedSlip);
+							target.removeSlipElement($(elCheckedSlip).closest("#slip_item"));
 						}
 					});
 				}
@@ -1064,7 +1191,7 @@ $.Operation  = {
 									});
 								});
 
-								target.removeSlipElement(elCheckedSlip);
+								target.removeSlipElement($(elCheckedSlip).closest("#slip_item"));
 						}
 						else {
 							$.Common.simpleAlert(null,target.localeMsg[objResSlip.MSG]);

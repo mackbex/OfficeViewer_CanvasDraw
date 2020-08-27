@@ -33,11 +33,17 @@ public class Queries {
 	public final static String REMOVE_SLIP = "EXEC ProcImg_Slip_Del ?, ?, ?, ?";
 	public final static String ROTATE_SLIP = "EXEC ProcImg_Slip_Rotate ?, ?, ?";
 	public final static String REMOVE_ATTACH = "EXEC ProcImg_AddFile_Del ?, ?, ?, ?";
-	
+	public final static String REMOVE_AFTER = "EXEC ProcImg_Remove_After ?, ?, ?";
+	public final static String REMOVE_AFTER_ALL = "EXEC ProcImg_Remove_AfterAll ?, ?, ?";
+
+
 	public final static String GET_ADDFILE_NAME = " Select FILENAME as FILE_NAME From " 
 																	+ " wd_IMG_ORGFILE_X Where DOC_IRN = ? ";
 	public final static String GET_ORIGINAL_INFO = " Select DOC_IRN, ORG_FILE From " 
 			+ " IMG_ORGFILE_T Where ORG_IRN = ? And ORG_FLAG !='9' ";
+
+	public final static String GET_SDOC_NO = " Select SDOC_NO From "
+			+ " IMG_SLIPDOC_T Where JDOC_NO = ? and SDOC_STEP !='9' and ROWNUM < 1 ";
 	
     public final static String GET_API_SLIP_CNT = " EXEC ProcImg_GetCnt ?, ?, ? ";
     public final static String GET_API_SLIP_LIST = " EXEC ProcImg_GetList ?, ?, ?, ? ";
@@ -45,13 +51,19 @@ public class Queries {
     public final static String GET_ORDER_CONVERT_LIST = " EXEC ProcImg_Order_ConvertList ?, ?, ?, ?, ? ";
     public final static String GET_ORDERITEM_CONVERT_LIST = " EXEC ProcImg_OrderItem_ConvertList ? ";
     public final static String GET_REPORT_CONVERT_LIST = " EXEC ProcImg_Report_ConvertList ?, ?, ?, ?, ?, ? ";
-    public final static String GET_CARD_CONVERT_LIST = " EXEC ProcImg_Card_ConvertList ?, ?, ?, ?, ? ";
+	public final static String GET_CARD_CONVERT_LIST = " EXEC ProcImg_Card_ConvertList ?, ?, ?, ?, ? ";
+	public final static String GET_CASH_CONVERT_LIST = " EXEC ProcImg_Cash_ConvertList ?, ?, ?, ?, ? ";
     public final static String GET_TAX_CONVERT_LIST = " EXEC ProcImg_Tax_ConvertList ?, ?, ?, ?, ?, ? ";
     public final static String GET_TAXITEM_CONVERT_LIST = " EXEC ProcImg_TaxItem_ConvertList ? ";
     public final static String COPY_SLIP_JDOC_NO = " EXEC ProcImg_Copy ?, ?, ?, ? ";
     public final static String GET_SLIP_INFO = " EXEC ProcImg_SlipDOC ?, ?, ? ";
-       
-  
+	public final static String ADD_BOOKMARK_FOR_CARD = " Insert Into IMG_BOOKMARK_T (MARK_IRN, DEVICE, SDOC_NO, SLIP_IRN, MARK_TYPE,  MARK_RECT," +
+			"MARK_LineWidth, MARK_LineColor, MARK_BackColor, MARK_Alpha, MARK_Comment, MARK_TextColor, MARK_FontName, MARK_FontSize" +
+			"MARK_BackGround, MARK_Italic, MARK_Bold, ENABLE, CORP_NO, REG_USER, REG_TIME, SDOC_SYSTEM ) Values (" +
+			" ?, 'PC', ?, ?, '2', '379,2050,1405,2591', '1', '0,0,0' , '255,255,0', '50', ? , '0,128,0', '굴림' ,'35', " +
+			" '1', '0', '0', '1', ?, ?, CURRENT_TIMESTAMP, '1' " +
+			") ";
+
     public final static String REMOVE_BY_KIND = " EXEC ProcImg_JdocNo_DelKind ?, ?, ?, ? ";
     public final static String CHANGE_STEP = " EXEC ProcImg_Step ?, ? ";
 	public final static String MAPPING_CARD = " EXEC ProcImg_Card_Mapping ?, ?, ?, ? ";
@@ -66,11 +78,25 @@ public class Queries {
      		+ "SDOC_STEP, SDOC_FLAG, SDOC_URL, SDOC_AFTER, SDOC_PTI, SDOC_COPY, SDOC_SECU, SDOC_SYSTEM, SDOC_NAME, SDOC_DEVICE,"
      		+ " SLIP_CNT, REG_TIME, UPDATE_TIME, JDOC_NO, JDOC_INDEX, SDOC_FOLLOW) "
      		+ "Values ("
-     		+ " getDate(), 'SLIPDOC', ?, ?, ?, ?, ?, ?, '2', '1', '0', '0', '10' ,'0', '2', '1', ?, 'PC(SVR)', ?, getDate(), getDate(), ?, '10', '0' "
+     		+ " CURRENT_TIMESTAMP, 'SLIPDOC', ?, ?, ?, ?, ?, ?, '2', '1', '0', '0', '10' ,'0', '2', '1', ?, 'PC(SVR)', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, '10', ? "
      		+ ")  ";
      public final static String INSERT_SLIP = " Insert Into IMG_SLIP_T ( SLIP_IRN, CABINET, FOLDER, DOC_IRN, SDOC_NO, SLIP_NO, REG_TIME, FILE_SIZE, SLIP_TITLE, SLIP_STEP,"
      		+ " SLIP_FLAG, SLIP_RECT, SLIP_ROTATE )"
-    		+ " Values ( ?, getDate(), 'SLIP', ?, ?, ?, getDate(), ?, ?, ?, ?, ?, ? )";
+    		+ " Values ( ?, CURRENT_TIMESTAMP, 'SLIP', ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ? )";
+
+	public final static String INSERT_ADDFILE = " Insert Into IMG_SLIPDOC_T  ( CABINET, FOLDER, SDOC_NO, CORP_NO, PART_NO, REG_USER, SDOC_MONTH, SDOC_KIND, "
+			+ "SDOC_STEP, SDOC_FLAG, SDOC_URL, SDOC_AFTER, SDOC_PTI, SDOC_COPY, SDOC_SECU, SDOC_SYSTEM, SDOC_NAME, SDOC_DEVICE,"
+			+ " SLIP_CNT, REG_TIME, UPDATE_TIME, JDOC_NO, JDOC_INDEX, SDOC_FOLLOW, JDOC_TOP) "
+			+ "Values ("
+			+ " CURRENT_TIMESTAMP, 'ADDFILE', ?, ?, ?, ?, ?, ?, '2', '1', '1', '0', '10' ,'0', '2', '1', ?, 'PC(SVR)', ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?, '10', ? , ? "
+			+ ")  ";
+	public final static String INSERT_ORGFILE = " Insert Into IMG_ORGFILE_T  ( ORG_IRN, CABINET, FOLDER, SDOC_NO, DOC_IRN, ORG_FILE, ORG_URL, FILE_SIZE, "
+			+ "REG_TIME, ORG_FLAG, FILE_HASH) "
+			+ "Values ("
+			+ " ?, CURRENT_TIMESTAMP,  ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ? "
+			+ ")  ";
+
+
      public final static String VERIFY_SLIP_CNT = " Select Count(DOC_IRN) As CNT From WD_IMG_SLIP_X Where DOC_IRN In (?) ";
      public final static String VERIFY_THUMB_CNT = " Select Count(DOC_IRN) As CNT From WD_IMG_SLIP_M Where DOC_IRN In (?) "; 
    /*UnUsed*/  public final static String GET_JDOCNO_INDEX = " Select MAX(JDOC_INDEX) as JDOC_INDEX From IMG_SLIPDOC_T Where JDOC_NO = ?";

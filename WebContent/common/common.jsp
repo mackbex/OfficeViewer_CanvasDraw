@@ -100,29 +100,20 @@
 
 var g_ActorCommand 		= "${pageContext.request.contextPath}/ActorCommand.do";
 var g_CommentCommand	= "${pageContext.request.contextPath}/CommentCommand.do";
+var g_RelatedCommand	= "${pageContext.request.contextPath}/RelatedCommand.do";
 var g_HistoryCommand		= "${pageContext.request.contextPath}/HistoryCommand.do";
+var g_CoCardCommand		= "${pageContext.request.contextPath}/CoCardCommand.do";
 var g_RootURL					= "${pageContext.request.contextPath}/";
 var g_XPI_URL					= "${pageContext.request.contextPath}/js/localWAS/OfficeXPI.js";
 var g_DOWN_URL				= g_RootURL+"<%=downURL%>";
 
 $(function(){
-
-
-
 	if($.Common.GetBrowserVersion().ActingVersion < 9)
 	{
-		//Prevent right click.
-		document.attachEvent("contextmenu", function(e){
-			e.preventDefault();
-		});
 		$.getScript('<c:url value="/js/normalize/selectivizr.js" />', function(){});
 		//document.write('<script src=><\/script>');
 	}
 	else {
-		//Prevent right click.
-		document.addEventListener("contextmenu", function(e){
-			e.preventDefault();
-		}, false);
 		$.getScript('<c:url value="/js/bookmark/canvas.js" />', function(){});
 	}
 });

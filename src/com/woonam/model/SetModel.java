@@ -1,5 +1,6 @@
 package com.woonam.model;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.woonam.connect.AgentConnect;
 import com.woonam.constants.Queries;
 import com.woonam.util.Common;
@@ -215,7 +217,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
 	}
 	
-	public boolean Insert_SlipDocFromTemplate(String sdocNo, String corpNo, String partNo, String userID, String sdocKind, String sdocName, int slipCnt, String jdocNo) {
+	public boolean Insert_SlipDocFromTemplate(String sdocNo, String corpNo, String partNo, String userID, String sdocKind, String sdocName, int slipCnt, String jdocNo, boolean isFollow) {
 		boolean res = false;
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		if (m_AC == null)	return false;
@@ -233,7 +235,8 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
         	pStmt.setString(6, sdocName); //SDOC_NAME
         	pStmt.setString(7, slipCnt+""); //SLIP_CNT
         	pStmt.setString(8, jdocNo); //JDOC_NO
-    	
+			pStmt.setString(9, isFollow ? "1" : "0");
+
     		String resQuery 	= m_AC.SetData(pStmt.getQuery(), strFuncName);
     		String resFlag		= resQuery.substring(0,1);
 			int nResCnt			=  m_C.getResCnt(resQuery);
@@ -247,6 +250,124 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		}
     	
     	return res;
+	}
+
+	public boolean addDocURL(Map mapParams) {
+		String strFuncName = (new Object() {}).getClass().getEnclosingMethod().getName();
+		boolean bRes = false;
+		if (this.m_AC == null)
+			return bRes;
+		try {
+			String[] docInfo 	= this.m_C.getParamValue(mapParams, "DOC_INFO");
+			String jdocNo 		= this.m_C.getParamValue(mapParams, "JDOC_NO", "");
+			String corpNo		= m_C.getParamValue(session, "CORP_NO", null);
+			String partNo		= m_C.getParamValue(session, "PART_NO", null);
+			String userID		= m_C.getParamValue(session, "USER_ID", null);
+
+			StringBuffer sbQuery = new StringBuffer();
+
+			for(int i = 0; i < docInfo.length; i ++) {
+				JsonObject objDocInfo = (new JsonParser()).parse(docInfo[i]).getAsJsonObject();
+
+				String sdocNo = m_C.getIRN("S");
+
+				PreparedStatement pStmt = new PreparedStatement(Queries.INSERT_ADDFILE);
+				pStmt.setString(0, sdocNo); // SDOC_NO
+				pStmt.setString(1, corpNo); //CORP_NO
+				pStmt.setString(2, partNo); //PART_NO
+				pStmt.setString(3, userID+""); //REG_USER
+				pStmt.setString(4, m_C.getToday("yyyyMM")); //SDOC_MONTH
+				pStmt.setString(5, m_Profile.getString("INTERFACE", "RELATED_DOC_SDOCKIND", "")); //SDOC_KIND
+				pStmt.setString(6, URLDecoder.decode(objDocInfo.get("TITLE").getAsString(),m_Profile.getString("AGENT_INFO", "CHARSET", ""))); //SDOC_NAME
+				pStmt.setString(7, "1"); //SLIP_CNT
+				pStmt.setString(8, jdocNo); //JDOC_NO
+				pStmt.setString(9, "0");
+				pStmt.setString(10, objDocInfo.get("URL").getAsString());
+
+				sbQuery.append(pStmt.getQuery());
+				sbQuery.append(";=");
+
+				PreparedStatement orgStmt = new PreparedStatement(Queries.INSERT_ORGFILE);
+				orgStmt.setString(0, m_C.getIRN("")); // ORG_IRN
+				orgStmt.setString(1, "ORG"); // FOLDER
+				orgStmt.setString(2, sdocNo); // SDOC_NO
+				orgStmt.setString(3, m_C.getIRN("")); // DOC_IRN
+				orgStmt.setString(4, objDocInfo.get("URL").getAsString()); // ORG_FILE
+				orgStmt.setString(5, "1"); // ORG_URL
+				orgStmt.setString(6, "0"); // FILE_SIZE
+				orgStmt.setString(7, "10"); // ORG_FLAG
+				orgStmt.setString(8, ""); // FILE_HASH
+
+
+				sbQuery.append(orgStmt.getQuery());
+				if(i < docInfo.length -1) {
+					sbQuery.append(";=");
+				}
+			}
+
+			String res = this.m_AC.SetData(sbQuery.toString(), strFuncName);
+			String resFlag = res.substring(0, 1);
+			int nResCnt = this.m_C.getResCnt(res);
+			if (nResCnt > 0)
+				bRes = true;
+		} catch (Exception e) {
+			this.logger.error(strFuncName, e);
+			bRes = false;
+		}
+		return bRes;
+
+	}
+
+	public boolean removeAfter(Map mapParams) {
+		String strFuncName = (new Object() {}).getClass().getEnclosingMethod().getName();
+		boolean bRes = false;
+		if (this.m_AC == null)
+			return bRes;
+		try {
+			String key = this.m_C.getParamValue(mapParams, "VALUE", "");
+			String corpNo = this.m_C.getParamValue(mapParams, "CORP_NO", "");
+			String userID = this.m_C.getParamValue(mapParams, "USER_ID", "");
+			PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_AFTER);
+			pStmt.setString(0, key);
+			pStmt.setString(1, corpNo);
+			pStmt.setString(2, userID);
+			String res = this.m_AC.SetProcedure(pStmt.getQuery(), strFuncName);
+			String resFlag = res.substring(0, 1);
+			int nResCnt = this.m_C.getResCnt(res);
+			if (nResCnt > 0)
+				bRes = true;
+		} catch (Exception e) {
+			this.logger.error(strFuncName, e);
+			bRes = false;
+		}
+		return bRes;
+	}
+
+	public boolean removeAfterAll(Map mapParams) {
+		String strFuncName = (new Object() {
+
+		}).getClass().getEnclosingMethod().getName();
+		boolean bRes = false;
+		if (this.m_AC == null)
+			return bRes;
+		try {
+			String key = this.m_C.getParamValue(mapParams, "VALUE", "");
+			String corpNo = this.m_C.getParamValue(mapParams, "CORP_NO", "");
+			String userID = this.m_C.getParamValue(mapParams, "USER_ID", "");
+			PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_AFTER_ALL);
+			pStmt.setString(0, key);
+			pStmt.setString(1, corpNo);
+			pStmt.setString(2, userID);
+			String res = this.m_AC.SetProcedure(pStmt.getQuery(), strFuncName);
+			String resFlag = res.substring(0, 1);
+			int nResCnt = this.m_C.getResCnt(res);
+			if (nResCnt > 0)
+				bRes = true;
+		} catch (Exception e) {
+			this.logger.error(strFuncName, e);
+			bRes = false;
+		}
+		return bRes;
 	}
 	
 	public boolean Insert_SlipFromTemplate(JsonObject obj_data, String sdocNo, int slipNo)
@@ -280,7 +401,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
         	pStmt.setString(8, "0,0,"+width+","+height); //SLIP_RECT
         	pStmt.setString(9, "0"); //SLIP_ROTATE
     	
-    		String resQuery 	= m_AC.SetProcedure(pStmt.getQuery(), strFuncName);
+    		String resQuery 	= m_AC.SetData(pStmt.getQuery(), strFuncName);
     		String resFlag		= resQuery.substring(0,1);
 			int nResCnt			=  m_C.getResCnt(resQuery);
 			if(nResCnt > 0) res = true;
@@ -789,6 +910,36 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	
     	return nResCnt;
 	}
-	
+
+	public int addBookmark(JsonObject userInfo, String sdocNo)
+	{
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		int nResCnt	 = -1;
+		if (m_AC == null)	return nResCnt;
+
+		try
+		{
+			PreparedStatement pStmt = new PreparedStatement(Queries.ADD_BOOKMARK_FOR_CARD);
+
+
+			pStmt.setString(0, m_C.getIRN(""));
+			pStmt.setString(1, sdocNo);
+			pStmt.setString(2, m_C.getIRN(""));
+			pStmt.setString(3, userInfo.get("USER_NM").getAsString());
+			pStmt.setString(4, userInfo.get("CORP_NO").getAsString());
+			pStmt.setString(5, userInfo.get("USER_ID").getAsString());
+
+			String res 			= m_AC.SetProcedure(pStmt.getQuery(), strFuncName);
+			String resFlag		= res.substring(0,1);
+			nResCnt			=  m_C.getResCnt(res);
+
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+		}
+
+		return nResCnt;
+	}
 	
 }

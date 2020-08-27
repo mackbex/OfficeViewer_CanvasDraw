@@ -85,7 +85,6 @@ $.OfficeXPI = {
 				    type : "POST",
 				    url : $.OfficeXPI.wasURL, 
 				    dataType : "json",
-					timeout : 3000,
 				    success : function(res) {
 //				    	$.when($.OfficeXPI.Execute("", $.OfficeXPI.xpiCallback))
 //						.then(function(){

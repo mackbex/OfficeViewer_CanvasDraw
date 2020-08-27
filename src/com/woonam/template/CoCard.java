@@ -44,7 +44,7 @@ public class CoCard extends TemplateImpl{
 
 		TemplateTool tool = new TemplateTool(m_C.Get_RootPathForJava() + File.separator + m_TemplatePath + File.separator + "00.jpg");
 		if(tool != null) {
-			tool.setFontStyle("굴림", tool.NORMAL, 18);
+			tool.setFontStyle("NanumGothic", tool.NORMAL, 18);
 			tool.setFontColor(new Color(0,0,0));
 
 			File file = new File(bgPath);
@@ -64,7 +64,7 @@ public class CoCard extends TemplateImpl{
 	private JsonObject Draw(TemplateTool tool)
 	{
 		JsonObject obj_res = new JsonObject();
-		tool.setFontStyle("굴림", tool.NORMAL, 31);
+		tool.setFontStyle("NanumGothic", tool.NORMAL, 31);
 
 		int nFirstVerticalLineX 		= 225;
 		int nSecondVerticalLineX 		= 798;
@@ -72,11 +72,7 @@ public class CoCard extends TemplateImpl{
 
 		try
 		{
-
-//			if(this.m_imageData.GetString("DIVD_SPPRC_AMT") != "0") {
-//				isDivided = true;
-
-			//카드종류
+//카드종류
 			String strCardType = obj_cardInfo.get("CComp").getAsString();
 			tool.DrawText(strCardType, nFirstVerticalLineX, 453);
 
@@ -179,7 +175,7 @@ public class CoCard extends TemplateImpl{
 		obj_res.addProperty("TOTAL_SIZE", m_nFileTotalSize / 1024);
 		obj_res.add("IMG_INFO", m_arImageInfo);
 		obj_res.addProperty("CONVERT_KEY", obj_cardInfo.get("ConvertKey").getAsString());
-		obj_res.addProperty("SDOC_NAME", "법인카드("+obj_cardInfo.get("ApprNo").getAsString()+")");
+		obj_res.addProperty("SDOC_NAME", "법인카드");
 		return obj_res;
 	}
 

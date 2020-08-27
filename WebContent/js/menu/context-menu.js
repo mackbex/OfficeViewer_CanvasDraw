@@ -90,7 +90,7 @@ $.ContextMenu = {
 	drawSubMenu : function(elParent, item) {
 
 	},
-	showMenu : function(elTarget, menu) {
+	showMenu : function(objParent, item, elTarget, menu) {
 
 		var padding = 2;
 		var left = elTarget.offset().left + elTarget.width() + padding;
@@ -141,18 +141,27 @@ $.ContextMenu = {
 			top:top,
 		});
 
-		var slipItem = $(elTarget).parents(".slip_item");
 
-		var isFollow = slipItem.attr("follow");
+		var isFollow = item.SDOC_FOLLOW;
 
-		if("1" != isFollow) {
-			menu.children().each(function() {
-				var command = $(this).attr("command");
-				if("MODIFY_AFTER" == command) {
+		menu.children().each(function() {
+			var command = $(this).attr("command");
+
+			if ("MODIFY_AFTER" === command) {
+				if("1" !== isFollow) {
 					$(this).hide();
 				}
-			});
-		}
+				else {
+					if(objParent.params.USER_ID !== item.REG_USER) {
+						if(objParent.params.AUTH <= 0) {
+							$(this).hide();
+						}
+					}
+				}
+			}
+
+		});
+
 
 		menu.fadeIn(300, function(){ $(this).show(); });
 
@@ -184,6 +193,8 @@ $.ContextMenu = {
 			});
 		}
 
+		var workGroup = objParent.params.WORK_GROUP;
+
 		$.each(menu, function(){
 
 			var title 			= this.TITLE;
@@ -192,6 +203,22 @@ $.ContextMenu = {
 			var subMenu 		= this.SUBMENU;
 			var id 				= this.MENU_ID;
 			var cs_operation 	= this.CS_OPERATION;
+
+			if("HR" === workGroup) {
+				if(id === "ADD_URL_LINK" || id === "ADD_XML" || id === "ADD_AFTER") {
+					return true;
+				}
+			}
+
+			var auth = objParent.params.AUTH;
+			if($.Common.isBlank(auth)) auth = 0;
+
+			if(parseInt(auth) <= 0) {
+				if(id === "ADD_AFTER") {
+					return true;
+				}
+			}
+
 
 			if("SEPARATOR" == id.toUpperCase())
 			{
@@ -269,7 +296,7 @@ $.ContextMenu = {
 
 				});
 
-				$.ContextMenu.showMenu(elTrigger, elContextArea);
+				$.ContextMenu.showMenu(objParent, objItemValue, elTrigger, elContextArea);
 			}
 		});
 

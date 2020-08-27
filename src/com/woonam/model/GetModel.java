@@ -110,6 +110,35 @@ public class GetModel {
     	
     	return obj_Res;
 	}
+
+	public String getSDocNo(String key) {
+
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		String res = null;
+
+		if (m_AC == null)	return null;
+
+
+		try
+		{
+			PreparedStatement pStmt = new PreparedStatement(Queries.GET_SDOC_NO);
+			pStmt.setString(0, key);
+
+			m_AC.GetData(pStmt.getQuery(), strFuncName);
+
+			while(m_AC.next())
+			{
+				res = m_AC.GetString("SDOC_NO");
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+			return null;
+		}
+
+		return res;
+	}
 	
 	public String getAttachFileName(Map<String, Object> mapParams) {
 		
@@ -363,6 +392,8 @@ public class GetModel {
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(arValue)));
 			pStmt.setString(1, "SDOC_NO");
 			pStmt.setString(2, lang);
+			pStmt.setNull(3);
+			pStmt.setNull(4);
 			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
 				
 			while(m_AC.next())
@@ -501,6 +532,51 @@ public class GetModel {
     	
     	return obj_res;
 	}
+
+	public JsonObject Get_cashConverList(Map<String, Object> mapParams)
+	{
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		JsonObject obj_res = new JsonObject();
+		//JsonObject objRes = new JsonObject();
+
+		if (m_AC == null)	return null;
+
+		String[] strApprNo	= m_C.getParamValue(mapParams, "APPR_NO");
+		String strPTIstat	= m_C.getParamValue(mapParams, "PTI_STATUS", null);
+		String strDate		= m_C.getParamValue(mapParams, "USED_DATE", null);
+		String strCnt		= m_C.getParamValue(mapParams, "ROW_CNT", "1");
+		String strRes		= m_C.getParamValue(mapParams, "RESULT", "T");
+
+		try
+		{
+			PreparedStatement pStmt = new PreparedStatement(Queries.GET_CASH_CONVERT_LIST);
+			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(strApprNo)));
+			pStmt.setString(1, strPTIstat);
+			pStmt.setString(2, strDate);
+			pStmt.setString(3, strCnt);
+			pStmt.setString(4, strRes);
+			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
+
+			while(m_AC.next())
+			{
+				JsonObject obj_Item = new JsonObject();
+
+				//String strResPTIStat			=	m_AC.GetString("PTI_STATUS");
+				//objRes.addProperty("PTI_STATUS", strResPTIStat);
+				obj_res = m_AC.Get_itemObj(obj_Item, m_AC.Get_CurIndex());
+//				if("00".equalsIgnoreCase(obj_Item.get("PTI_STATUS").toString()) || "01".equalsIgnoreCase(obj_Item.get("PTI_STATUS").toString())) {
+//					obj_Item.addProperty("PTI_STATUS", "10");
+//				}
+
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+		}
+
+		return obj_res;
+	}
 	
 	public JsonArray Get_reportConverList(Map<String, Object> mapParams) throws Exception
 	{
@@ -605,7 +681,7 @@ public class GetModel {
 		
 		if (m_AC == null)	return null;
 		
-		String[] strApprNo	= m_C.getParamValue(mapParams, "APPR_NO");
+		String[] strApprNo	= m_C.getParamValue(mapParams, "ISSUE_ID");
 		String strPTIstat		= m_C.getParamValue(mapParams, "PTI_STATUS", null);
 		String strDate			= m_C.getParamValue(mapParams, "USED_DATE", null);
 		String type				= m_C.getParamValue(mapParams, "TAX_TYPE", null);
@@ -903,7 +979,6 @@ public class GetModel {
 			{
 				JsonObject obj_Item = new JsonObject();
 				obj_Item = m_AC.Get_itemObj(obj_Item, m_AC.Get_CurIndex());
-
 				objRes.add(obj_Item.get("SDOC_NO").getAsString(), obj_Item);
 			}
 	   	}

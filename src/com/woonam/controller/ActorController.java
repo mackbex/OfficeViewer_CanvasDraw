@@ -328,8 +328,12 @@ public class ActorController extends HttpServlet{
 						}
 					}
 				}
-				
-				
+
+				String corpNo		= m_C.getParamValue(session, "CORP_NO", null);
+				String userID		= m_C.getParamValue(session, "USER_ID", null);
+				mapParams.put("USER_ID", userID);
+				mapParams.put("CORP_NO", corpNo);
+
 				if(m_SM.removeAll(mapParams))
 				{
 					out.print(m_C.writeResultMsg("T", ""));

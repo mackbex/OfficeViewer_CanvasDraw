@@ -67,7 +67,7 @@ public class SocketConnect extends Socket
 			} 
 			catch (Exception e) 
 			{
-				logger.error("request Exception", e);
+				logger.error("request closing Exception", e);
 			}
 		}
 		return inmsg;

@@ -1,9 +1,6 @@
 package com.woonam.chiper;
 
 
-import com.woonam.util.Common;
-import com.woonam.util.Profile;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -136,19 +133,15 @@ public class ARIAChiper {
 		  public ARIAChiper(String strConfFile) throws InvalidKeyException 
 		  {
 		      setKeySize(256);
-		      Profile profile	=	new Profile(strConfFile);
-		      this.m_strSecretKey	=	profile.getString("ARIA", "KEY", "#WOONAMSOFT1998#%WOONAMSOFT1998%");//"";
+		   //   Profile	profile	=	new Profile(strConfFile);
+		      this.m_strSecretKey	=	"#WOONAMSOFT1998#%WOONAMSOFT1998%";//profile.GetString("ARIA", "KEY", "");
 		  }
 		  
 		  public ARIAChiper() throws InvalidKeyException 
 		  {
 		      setKeySize(256);
-		      Common C = new Common();
-
-		      Profile	profile	=	new Profile(C.Get_RootPathForJava()+"/conf/conf.ini");
-			  this.m_strSecretKey	=	profile.getString("ARIA", "KEY", "#WOONAMSOFT1998#%WOONAMSOFT1998%");//"";
-
-//		      this.m_strSecretKey	=	"#WOONAMSOFT1998#%WOONAMSOFT1998%";//profile.GetString("ARIA", "KEY", "");
+		   //   Profile	profile	=	new Profile(strConfFile);
+		      this.m_strSecretKey	=	"#WOONAMSOFT1998#%WOONAMSOFT1998%";//profile.GetString("ARIA", "KEY", "");
 		  }
 		  
 		  /**

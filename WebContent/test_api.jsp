@@ -7,7 +7,7 @@
 <html>
 <script>
 $(function(){
-	var url = "http://woonamsoft01.iptime.org:14480/OfficeViewer/services/API/Run?COMMAND=GET_COUNT&KEY=test1";
+	var url = "http://127.0.0.1:8080/OfficeViewer_war_exploded/services/API/Run?COMMAND=UPLOAD_AFTER&KEY=test01010&USER_ID=woonam&CORP_NO=1000";
 	$.ajax({
 		url : url,
         type:'post',

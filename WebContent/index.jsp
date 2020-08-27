@@ -34,7 +34,7 @@
 	
 	String strWorkGroup 								= C.getParamValue(mParams, "WORK_GROUP", "");
 	
-	String strMenu		 								= C.getParamValue(mParams, "MENU", "1");
+	String strMenu		 								= C.getParamValue(mParams, "MENU", "0");
 		
 	String strUseMobile									= g_profile.getString("WAS_INFO", "MOBILE_USE", "F").toUpperCase();
 	//String strMobileMode									= g_profile.getString("WAS_INFO", "MOBILE_MODE", "VIEW").toUpperCase();
@@ -94,6 +94,7 @@
 		session.setAttribute("USER_LANG",	strLang.toLowerCase());
 		session.setAttribute("VIEW_MODE",	strViewMode);
 		session.setAttribute("AUTH",		objUserInfo.get("AUTH").getAsString());
+		session.setAttribute("TOKEN",		"AAECAzVGNDQ3RDBDNUY0NTA5QUNDTj0RudoRyL8RwaQvT1U9UjIwMTkyNTQvTz1LUkMPkTMecmsMGccHPPmIlomoh/X1pA==");
 	
 	}
 	catch(Exception e)
@@ -115,7 +116,7 @@ $(function(){
 	g_ViewMode = "<%=strViewMode %>";
 	
 	var objParams = {};
-	objParams["KEY"] 					= "<%=strKey %>";
+	objParams["KEY"] 					=encodeURIComponent("<%=strKey %>");
 	objParams["KEY_TYPE"] 		= "<%=strKeyType %>";
 	objParams["SVR_MODE"] 		= "<%=strServerMode %>";
 	objParams["CALL_GROUP"] 		= "<%=strCallGroup %>";

@@ -117,7 +117,9 @@ public class UploadSlip {
 				jRes.addProperty("msg", "NO_USER_INFO");
 				return jRes;
 			}
-			
+
+			boolean isFollow = (objData.get("IS_FOLLOW") != null && objData.get("IS_FOLLOW").getAsBoolean());
+
 			String partNo = obj_userInfo.get("PART_NO").getAsString();
 			
 			if(m_SM.Insert_SlipDocFromTemplate(sdocNo,
@@ -127,15 +129,18 @@ public class UploadSlip {
 					sdocKind,
 					objData.get("SDOC_NAME").getAsString(),
 					uploaded_slip_cnt,
-					objData.get("CONVERT_KEY").getAsString()
+					objData.get("CONVERT_KEY").getAsString(),
+					isFollow
 				)) {
-				
-				m_SM.Copy_Replace(objData.get("CONVERT_KEY").getAsString(), sdocNo, corpNo, userId);
-				
+				boolean isCopyReplace = (objData.get("COPY_REPLACE") == null || objData.get("COPY_REPLACE").getAsBoolean());
+				if (isCopyReplace) {
+					m_SM.Copy_Replace(objData.get("CONVERT_KEY").getAsString(), sdocNo, corpNo, userId);
+				}
 				m_SM.Add_History(sdocNo, "S10", corpNo, userId);
 				
 				jRes.addProperty("result", "T");
 				jRes.addProperty("msg", "");
+				jRes.addProperty("SDOC_NO", sdocNo);
 			}
 			
 			return jRes;

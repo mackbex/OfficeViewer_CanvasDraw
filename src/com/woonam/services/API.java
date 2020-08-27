@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.woonam.template.*;
 import org.apache.commons.io.FileUtils;
 
 import com.google.gson.Gson;
@@ -16,13 +17,6 @@ import com.google.gson.JsonParser;
 import com.woonam.connect.AgentConnect;
 import com.woonam.model.GetModel;
 import com.woonam.model.SetModel;
-import com.woonam.template.CoCard;
-import com.woonam.template.Order;
-import com.woonam.template.Order_Eng;
-import com.woonam.template.Report;
-import com.woonam.template.Tax;
-import com.woonam.template.TemplateImpl;
-import com.woonam.template.UploadSlip;
 import com.woonam.util.Common;
 import com.woonam.util.Profile;
 import org.apache.logging.log4j.LogManager;
@@ -45,14 +39,17 @@ public class API {
 		COPY_SLIP,
 		GET_COUNT,
 		GET_LIST,
+		GET_IMAGE_URL,
 		UPLOAD_CARD,
 		SET_CARD_KEY,
 		UPLOAD_TAX,
-		UPLOAD_ORDER,
-		UPLOAD_TEMPLATE,
+		UPLOAD_CASH,
 		DELETE_BY_KIND,
 		MAPPING_CARD_MULTI,
-		UNMAPPING_CARD
+		UNMAPPING_CARD,
+		UPLOAD_AFTER,
+		REMOVE_AFTER,
+		REMOVE_AFTER_ALL
 	}
 	
 	API() {
@@ -304,6 +301,41 @@ public class API {
 				
 				return obj_res;
 			}
+			case GET_IMAGE_URL : {
+				String[] verifyList = {"KEY", "USER_ID", "CORP_NO"};
+
+				//Parameter validation.
+				if(!VerifyParams(verifyList, params)) {
+					return ResultMsg("F","ERR_INVALIED_PARAM");
+				}
+
+				JsonObject objRes = m_GM.getSlipList(params);
+				Iterator<String> keys = objRes.keySet().iterator();
+
+				JsonArray arUrl = new JsonArray();
+
+				while(keys.hasNext()) {
+					String key = keys.next();
+					JsonObject item = objRes.get(key).getAsJsonObject();
+					String docIrn 	= item.get("DOC_IRN").getAsString();
+					String docNo 	= item.get("DOC_NO").getAsString();
+
+					StringBuffer sbUrl = new StringBuffer();
+					sbUrl.append("DownloadImage.do?");
+					sbUrl.append("DocIRN=");
+					sbUrl.append(docIrn);
+					sbUrl.append("&Idx=");
+					sbUrl.append(docNo);
+					sbUrl.append("&UserID=");
+					sbUrl.append(m_C.getParamValue(params, "USER_ID", ""));
+					sbUrl.append("&CorpNo=");
+					sbUrl.append(m_C.getParamValue(params, "CORP_NO", ""));
+
+					arUrl.add(sbUrl.toString());
+				}
+
+				return ResultMsg("T",arUrl.toString());
+			}
 			case GET_LIST : {
 				String[] verifyList = {"KEY"};
 				
@@ -328,13 +360,143 @@ public class API {
 				
 				return ResultMsg("T",obj_cnt.toString());
 			}
+			case REMOVE_AFTER: {
+				String[] verifyList = new String[] { "USER_ID", "KEY", "CORP_NO" };
+				if (!VerifyParams(verifyList, params))
+					return ResultMsg("F", "ERR_INVALIED_PARAM");
+				HashMap<String, Object> mapVals = new HashMap<>();
+				mapVals.put("VALUE", params.get("KEY"));
+				mapVals.put("USER_ID", params.get("USER_ID"));
+				mapVals.put("CORP_NO", params.get("CORP_NO"));
+				boolean bRes = this.m_SM.removeAfter(mapVals);
+				JsonObject objRes = null;
+				if (bRes) {
+					objRes = ResultMsg("T", "");
+				} else {
+					objRes = ResultMsg("F", "");
+				}
+				return objRes;
+			}
+			case REMOVE_AFTER_ALL: {
+				String[] verifyList = new String[] { "USER_ID", "KEY", "CORP_NO" };
+				if (!VerifyParams(verifyList, params))
+					return ResultMsg("F", "ERR_INVALIED_PARAM");
+				HashMap<String, Object> mapVals = new HashMap<>();
+				mapVals.put("VALUE", params.get("KEY"));
+				mapVals.put("USER_ID", params.get("USER_ID"));
+				mapVals.put("CORP_NO", params.get("CORP_NO"));
+				boolean bRes = this.m_SM.removeAfterAll(mapVals);
+				JsonObject objRes = null;
+				if (bRes) {
+					objRes = ResultMsg("T", "");
+				} else {
+					objRes = ResultMsg("F", "");
+				}
+				return objRes;
+			}
+			case UPLOAD_AFTER : {
+				String[] verifyList = new String[] { "KEY", "USER_ID", "CORP_NO" };
+
+				if (!VerifyParams(verifyList, params)) return ResultMsg("F", "ERR_INVALIED_PARAM");
+
+				String afterImgPath = this.m_C.Get_RootPathForJava() + File.separator + profile.getString("TEMPLATE", "AFTER_BG", "") + File.separator + "00_org.jpg";
+
+				JsonObject objImgInfo = new JsonObject();
+				objImgInfo.addProperty("PATH", afterImgPath);
+				objImgInfo.addProperty("DOC_IRN", this.m_C.getIRN(""));
+				objImgInfo.addProperty("WIDTH", 2480);
+				objImgInfo.addProperty("HEIGHT", 3508);
+				objImgInfo.addProperty("SIZE", 318);
+				objImgInfo.addProperty("NAME", "AFTER");
+
+				JsonArray arObjImgInfo = new JsonArray();
+				arObjImgInfo.add(objImgInfo);
+
+				JsonObject objSlipInfo = new JsonObject();
+				objSlipInfo.addProperty("SDOC_KIND", "9000");
+				objSlipInfo.addProperty("CONVERT_KEY", this.m_C.getParamValue(params, "KEY", ""));
+				objSlipInfo.addProperty("SDOC_NAME", "후첨");
+				objSlipInfo.addProperty("COPY_REPLACE", false);
+				objSlipInfo.addProperty("IS_FOLLOW", true);
+
+				objSlipInfo.add("IMG_INFO", arObjImgInfo);
+				UploadSlip upload = new UploadSlip(profile);
+				JsonObject res = upload.run(objSlipInfo, params, sbWorkPath.toString());
+				JsonObject objRes = new JsonObject();
+				objRes.addProperty("RESULT", res.get("result").getAsString());
+				objRes.addProperty("MSG", res.get("msg").getAsString());
+				return objRes;
+			}
+
 			case UPLOAD_TAX : {
-				String[] verifyList = {"APPR_NO", "TAX_TYPE", "KEY", "USER_ID", "CORP_NO"};
+				String[] verifyList = {"ISSUE_ID", "KEY", "USER_ID", "CORP_NO"};
 				
 				if(!VerifyParams(verifyList, params)) {
 					return ResultMsg("F","ERR_INVALIED_PARAM");
 				}
-				
+//				JsonObject obj_taxInfo = new JsonObject();
+//				obj_taxInfo.addProperty("ConvertKey","2017100550000002f1225920");
+//				obj_taxInfo.addProperty("ItemJoinKey","2017100550000002f1225920");
+//				obj_taxInfo.addProperty("Approve","2017100550000002f1225920");
+//				obj_taxInfo.addProperty("Cabinet","20171005");
+//				obj_taxInfo.addProperty("TypeCode","0101");
+//				obj_taxInfo.addProperty("TaxType","01");
+//				obj_taxInfo.addProperty("PurPose","02");
+//				obj_taxInfo.addProperty("ModCode","");
+//				obj_taxInfo.addProperty("ModText","");
+//				obj_taxInfo.addProperty("Note","");
+//				obj_taxInfo.addProperty("TypeCode3","0101");
+//				obj_taxInfo.addProperty("FromLicense","1028142945");
+//				obj_taxInfo.addProperty("FromTaxCode","0");
+//				obj_taxInfo.addProperty("FromTitle","주식회사 케이티");
+//				obj_taxInfo.addProperty("FromCEO","황창규");
+//				obj_taxInfo.addProperty("FromAddr","경기도 성남시 분당구 불정로 90");
+//				obj_taxInfo.addProperty("FromBiz","통신업,부동산업");
+//				obj_taxInfo.addProperty("FromEvent","전신전화,부가통신,임대");
+//				obj_taxInfo.addProperty("FromDept","");
+//				obj_taxInfo.addProperty("FromDeptName","");
+//				obj_taxInfo.addProperty("FromDeptTel","");
+//				obj_taxInfo.addProperty("FromEmail","");
+//				obj_taxInfo.addProperty("ToTypeCode","01");
+//				obj_taxInfo.addProperty("ToLicense","2038200639");
+//				obj_taxInfo.addProperty("ToTaxCode","0");
+//				obj_taxInfo.addProperty("ToTitle","대한적십자사");
+//				obj_taxInfo.addProperty("ToCEO","김성주");
+//				obj_taxInfo.addProperty("ToAddr","서울 중구 남산동3가 32번지");
+//				obj_taxInfo.addProperty("ToBiz","서비스(운수관)");
+//				obj_taxInfo.addProperty("ToEvent","673903");
+//				obj_taxInfo.addProperty("ToDept_1","");
+//				obj_taxInfo.addProperty("ToDeptName_1","");
+//				obj_taxInfo.addProperty("ToDeptTel_1","");
+//				obj_taxInfo.addProperty("ToEmail_1","");
+//				obj_taxInfo.addProperty("ToDept_1","");
+//				obj_taxInfo.addProperty("ToDept_2","");
+//				obj_taxInfo.addProperty("ToDeptName_2","");
+//				obj_taxInfo.addProperty("ToDeptTel_2","");
+//				obj_taxInfo.addProperty("ToEmail_2","");
+//				obj_taxInfo.addProperty("TrLicense","");
+//				obj_taxInfo.addProperty("TrTaxCode","");
+//				obj_taxInfo.addProperty("TrCEO","");
+//				obj_taxInfo.addProperty("TrTitle","");
+//				obj_taxInfo.addProperty("TrAddr","");
+//				obj_taxInfo.addProperty("TrBiz","");
+//				obj_taxInfo.addProperty("TrEvent","");
+//				obj_taxInfo.addProperty("PaidType","");
+//				obj_taxInfo.addProperty("PaidAmount","");
+//				obj_taxInfo.addProperty("Provision","15000");
+//				obj_taxInfo.addProperty("Tax","1500");
+//				obj_taxInfo.addProperty("Total","16500");
+//				obj_taxInfo.addProperty("Cash","");
+//				obj_taxInfo.addProperty("CashCheck","");
+//				obj_taxInfo.addProperty("PostCheck","");
+//				obj_taxInfo.addProperty("Credit","");
+//				obj_taxInfo.addProperty("CorpNo","1000");
+//				obj_taxInfo.addProperty("PartNo","000000");
+//				obj_taxInfo.addProperty("RegUser","System");
+//				obj_taxInfo.addProperty("SDocKind","1101");
+//				obj_taxInfo.addProperty("PTI_STATUS","00");
+
+
 				JsonObject obj_taxInfo = m_GM.Get_taxConverList(params);
 				
 				if(obj_taxInfo == null || obj_taxInfo.size() <= 0) {
@@ -354,13 +516,30 @@ public class API {
 					String itemKey = obj_taxInfo.get("ItemJoinKey").getAsString();
 					HashMap mapParamVals = new HashMap<String, String[]>();
 					String[] tempKey = {itemKey};
-					mapParamVals.put("APPR_NO", params.get("APPR_NO"));
+					mapParamVals.put("ISSUE_ID", params.get("ISSUE_ID"));
 					mapParamVals.put("TAX_TYPE", params.get("TAX_TYPE"));
 					mapParamVals.put("KEY", params.get("KEY"));
 					mapParamVals.put("USER_ID", params.get("USER_ID"));
 					mapParamVals.put("CORP_NO", params.get("CORP_NO"));
 					mapParamVals.put("ITEM_KEY", tempKey);
-					
+
+//					JsonArray ar_taxItemList = new JsonArray();
+//					for(int i = 0; i < 8; i++) {
+//						JsonObject item = new JsonObject();
+//						item.addProperty("IndexNo",(i+1)+"");
+//						item.addProperty("dt","20171005");
+//						item.addProperty("Name","LTE egg+ 11 (01223603255)");
+//						item.addProperty("Info","");
+//						item.addProperty("MEINS","");
+//						item.addProperty("Cnt","0");
+//						item.addProperty("Money","0");
+//						item.addProperty("Invoice","15000");
+//						item.addProperty("Tax","1500");
+//						item.addProperty("Memo","");
+//						item.addProperty("ISSUE_ID","2017100550000002f1225920");
+//						ar_taxItemList.add(item);
+//					}
+
 					JsonArray ar_taxItemList = m_GM.Get_taxItemConverList(mapParamVals);
 					
 					Tax taxForm = new Tax(profile);
@@ -409,7 +588,7 @@ public class API {
 					
 				case "10":
 					HashMap mapVals = new HashMap<String, String[]>();
-					mapVals.put("FROM", params.get("APPR_NO"));
+					mapVals.put("FROM", params.get("ISSUE_ID"));
 					mapVals.put("TO", params.get("KEY"));
 					mapVals.put("USER_ID", params.get("USER_ID"));
 					mapVals.put("CORP_NO", params.get("CORP_NO"));
@@ -431,256 +610,50 @@ public class API {
 				
 				return obj_res;
 			}
-			case UPLOAD_ORDER : {
-				String[] verifyList = {"APPR_NO", "KEY", "USER_ID", "CORP_NO"};
-				
-				if(!VerifyParams(verifyList, params)) {
-					return ResultMsg("F","ERR_INVALIED_PARAM");
-				}
-				
-				JsonObject obj_orderInfo = m_GM.Get_orderConverList(params);
-				
-				if(obj_orderInfo == null || obj_orderInfo.size() <= 0) {
-					return ResultMsg("F", "NO_ORDER_LIST");
-				}
-				
-				JsonObject obj_res = null; 
-				String resStat = "";
-				
-				int res_total = 0;
-//				for(int i=0; i<arObj_Res.size(); i++) {
-//					JsonObject resItem = arObj_Res.get(i).getAsJsonObject();
-				resStat = obj_orderInfo.get("PTI_STATUS").getAsString();
-//				resStat = "00";
-				switch (resStat) {
-					case "00":
-						String itemKey = obj_orderInfo.get("ItemJoinKey").getAsString();
-						HashMap mapParamVals = new HashMap<String, String[]>();
-						String[] tempKey = {itemKey};
-						mapParamVals.put("APPR_NO", params.get("APPR_NO"));
-						mapParamVals.put("KEY", params.get("KEY"));
-						mapParamVals.put("USER_ID", params.get("USER_ID"));
-						mapParamVals.put("CORP_NO", params.get("CORP_NO"));
-						mapParamVals.put("ITEM_KEY", tempKey);
-						
-						JsonArray ar_orderItemList = m_GM.Get_orderItemConverList(mapParamVals);
-						
-						String vdCD = obj_orderInfo.get("VD_CD").getAsString();
-						TemplateImpl orderForm =  null;
-						
-						String workBg = null;
-						
-						if("2".equals(vdCD.charAt(0)+"")) {
-							workBg =  "ORDER_ENG_BG";
-							orderForm = new Order_Eng(profile);
-						}
-						else {
-							workBg =  "ORDER_BG";
-							orderForm = new Order(profile);
-						}
-						
-						// Set work path
-						sbWorkPath.append(m_C.Get_RootPathForJava() + profile.getString("WAS_INFO", "TEMP_DIR",  "temp"));
-						sbWorkPath.append(m_C.getIRN(""));
-						sbWorkPath.append(m_C.getParamValue(params, "USER_ID", "system"));
-						sbWorkPath.append(m_C.getToday("yyyyMMddHHmmssSSS"));
-						
-						obj_orderInfo.add("ITEM_LIST", ar_orderItemList);
-						
-						JsonObject obj_resImage 	= orderForm.run(obj_orderInfo, profile.getString("TEMPLATE", workBg, ""), sbWorkPath.toString());
-						if(obj_resImage == null || obj_resImage.size() <= 0) {
-							return ResultMsg("F", "FAILED_CREATE_ORDER");
-						}
-						String convertKey = obj_resImage.get("CONVERT_KEY").getAsString();
-						obj_resImage.addProperty("SDOC_NAME", "발주서");
-						UploadSlip upload = new UploadSlip(profile);
-						JsonObject res = upload.run(obj_resImage, params, sbWorkPath.toString());
-						
-						if("T".equalsIgnoreCase(res.get("result").getAsString())) {
-							if(m_SM.Update_orderStatus(convertKey, "10")) {
-					
-								String[] from = {convertKey};
-								
-								HashMap mapVals = new HashMap<String, String[]>();
-								mapVals.put("FROM", from);
-								mapVals.put("TO", params.get("KEY"));
-								mapVals.put("USER_ID", params.get("USER_ID"));
-								mapVals.put("CORP_NO", params.get("CORP_NO"));
-								
-								int resCnt = m_SM.Copy_SlipDoc(mapVals);
-								res_total += resCnt;
-							}
-						} else {
-							return res;
-						}
-						
-						break;
-						
-					case "01":
-						obj_res = ResultMsg("T", "CONVERTING_IMAGE");
-						return obj_res;
-//						break;
-						
-					case "10":
-						HashMap mapVals = new HashMap<String, String[]>();
-						mapVals.put("FROM", params.get("APPR_NO"));
-						mapVals.put("TO", params.get("KEY"));
-						mapVals.put("USER_ID", params.get("USER_ID"));
-						mapVals.put("CORP_NO", params.get("CORP_NO"));
-						int resCnt = m_SM.Copy_SlipDoc(mapVals);
-						res_total += resCnt;
-						break;
-					case "20":
-//						resMsg = ResultMsg("F", "Covert Error");
-						obj_res = ResultMsg("F","ERR_IMAGE_CONVERT");
-						return obj_res;
-//						break;
-				}
-				
-				if(res_total > 0) {
-					obj_res = ResultMsg("T", res_total+"");
-				}
-				else {
-					obj_res = ResultMsg("F", res_total+"");
-				}
-				
-				return obj_res;
-					
-//					HashMap mapVals = new HashMap<String, String[]>();
-//					String[] temp = {"temp_order"};
-//					mapVals.put("FROM", temp);
-//					mapVals.put("TO", params.get("KEY"));
-//					mapVals.put("USER_ID", params.get("USER_ID"));
-//					mapVals.put("CORP_NO", params.get("CORP_NO"));
-//				
-//					int resCnt = m_SM.Copy_SlipDoc(mapVals);
-//					res_total += resCnt;
-			}
-			case UPLOAD_TEMPLATE : {
-				String[] verifyList = {"TYPE", "APPR_NO", "KEY", "USER_ID", "CORP_NO"};
-				
-				if(!VerifyParams(verifyList, params)) {
-					return ResultMsg("F","ERR_INVALIED_PARAM");
-				}
-				
-				String strApprNo	= m_C.getParamValue(params, "APPR_NO","");
-				String apprNo[] = { URLDecoder.decode(strApprNo, profile.getString("AGENT_INFO", "CHARSET", ""))};
-				params.put("APPR_NO", apprNo);
-				
-				JsonArray ar_reportInfo = m_GM.Get_reportConverList(params);
-				
-				if(ar_reportInfo == null || ar_reportInfo.size() <= 0) {
-					return ResultMsg("F", "NO_REPORT_LIST");
-				}
-				
-				JsonObject obj_res = null; 
-				String resStat = "";
-				
-				int res_total = 0;
-				int res_succ = 0;
-				int res_fail = 0;
-				res_total = ar_reportInfo.size();
-				for(int i=0; i<ar_reportInfo.size(); i++) {
-					JsonObject resItem = ar_reportInfo.get(i).getAsJsonObject();
-					resStat = resItem.get("PTI_STATUS").getAsString();
-	//				resStat = "00";
-					
-					String convertKey = resItem.get("ConvertKey").getAsString();
-					
-					switch (resStat) {
-						case "00":
-							Report report = new Report(profile);
-							sbWorkPath.setLength(0);
-							sbWorkPath.append(m_C.Get_RootPathForJava() + profile.getString("WAS_INFO", "TEMP_DIR",  "temp"));
-							sbWorkPath.append(m_C.getIRN(""));
-							sbWorkPath.append(m_C.getParamValue(params, "USER_ID", "system"));
-							sbWorkPath.append(m_C.getToday("yyyyMMddHHmmssSSS"));
-							
-							JsonObject obj_resImage = report.run(resItem,  sbWorkPath.toString());
-							UploadSlip upload = new UploadSlip(profile);
-							JsonObject res = upload.run(obj_resImage, params, sbWorkPath.toString());
-							
-							
-							
-							if("T".equalsIgnoreCase(res.get("result").getAsString())) {
-								if(m_SM.Update_reportStatus(convertKey, "10")) {
-						
-									String[] from = {convertKey};
-									
-									HashMap mapVals = new HashMap<String, String[]>();
-									mapVals.put("FROM", from);
-									mapVals.put("TO", params.get("KEY"));
-									mapVals.put("USER_ID", params.get("USER_ID"));
-									mapVals.put("CORP_NO", params.get("CORP_NO"));
-									
-									int resCnt = m_SM.Copy_SlipDoc(mapVals);
-								//	res_total += resCnt;
-									res_succ += 1;
-								}
-								else {
-									res_fail += 1;
-								}
-							} else {
-								res_fail += 1;
-							//	return res;
-							}
-							
-							break;
-						case "01":
-						//	obj_res = ResultMsg("T", "CONVERTING_IMAGE");
-							break;
-						case "10":
-							
-							//String convertKey = resItem.get("CONVERT_KEY").getAsString();
-							
-							String[] from = {convertKey};
-							
-							HashMap mapVals = new HashMap<String, String[]>();
-							mapVals.put("FROM", from);
-							//HashMap mapVals = new HashMap<String, String[]>();
-							//.put("FROM", params.get("APPR_NO"));
-							mapVals.put("TO", params.get("KEY"));
-							mapVals.put("USER_ID", params.get("USER_ID"));
-							mapVals.put("CORP_NO", params.get("CORP_NO"));
-					
-							int resCnt = m_SM.Copy_SlipDoc(mapVals);
-							//res_total += resCnt;
-							res_succ += 1;
-							break;
-						case "20":
-							obj_res = ResultMsg("F", "Covert Error");
-	
-							res_fail += 1;
-							//return obj_res;
-					}
-					
-					StringBuffer sbMsg = new StringBuffer();
-					sbMsg.append("TOTAL=");
-					sbMsg.append(res_total);
-					sbMsg.append(";");
-					sbMsg.append("SUCCESS=");
-					sbMsg.append(res_succ);
-					sbMsg.append(";");
-					sbMsg.append("FAILED=");
-					sbMsg.append(res_fail);
-					
-					
-					if(res_total > 0) {
-						obj_res = ResultMsg("T", sbMsg.toString());
-					}
-					else {
-						obj_res = ResultMsg("F", sbMsg.toString());
-					}
-				}
-				return obj_res;
-			}
+
 			case UPLOAD_CARD : {
 				String[] verifyList = {"APPR_NO", "KEY", "USER_ID", "CORP_NO"};
 				
 				if(!VerifyParams(verifyList, params)) {
 					return ResultMsg("F","ERR_INVALIED_PARAM");
 				}
-				
+
+//				JsonObject obj_cardInfo = new JsonObject();
+//				obj_cardInfo.addProperty("ConvertKey","198585");
+//				obj_cardInfo.addProperty("CardNo","4009070206296788");
+//				obj_cardInfo.addProperty("ApprType","승인");
+//				obj_cardInfo.addProperty("CComp","삼성자체법인카드 (대한적십자사)");
+//				obj_cardInfo.addProperty("VDATE","");
+//				obj_cardInfo.addProperty("ApprDate","2019-09-25");
+//				obj_cardInfo.addProperty("ApprTime","11:48:10");
+//				obj_cardInfo.addProperty("UsedDate","2019-09-25");
+//				obj_cardInfo.addProperty("UsedTime","11:48:10");
+//				obj_cardInfo.addProperty("ApprInfo","");
+//				obj_cardInfo.addProperty("CancelInfo","");
+//				obj_cardInfo.addProperty("Period","");
+//				obj_cardInfo.addProperty("GeoraeCard","");
+//				obj_cardInfo.addProperty("ApprNo","55439225");
+//				obj_cardInfo.addProperty("MccNM","방사선과");
+//				obj_cardInfo.addProperty("MerchNM","의료법인녹십자의료재단");
+//				obj_cardInfo.addProperty("MerchNo","70209285");
+//				obj_cardInfo.addProperty("MerchMst","");
+//				obj_cardInfo.addProperty("MerchTel","");
+//				obj_cardInfo.addProperty("MerchBizNo","2138203521");
+//				obj_cardInfo.addProperty("MerchAddr1","경기 용인시 기흥구 보정동");
+//				obj_cardInfo.addProperty("MerchAddr2","314");
+//				obj_cardInfo.addProperty("Total","98360");
+//				obj_cardInfo.addProperty("Amount","98360");
+//				obj_cardInfo.addProperty("Tax","0");
+//				obj_cardInfo.addProperty("Tips","0");
+//				obj_cardInfo.addProperty("Text","");
+//				obj_cardInfo.addProperty("PayType_1","");
+//				obj_cardInfo.addProperty("PayType_2","");
+//				obj_cardInfo.addProperty("Currency_CD","KRW");
+//				obj_cardInfo.addProperty("ForAMT","0");
+//				obj_cardInfo.addProperty("SDocKind","1210");
+//				obj_cardInfo.addProperty("PTI_STATUS","00");
+
+
 				JsonObject obj_cardInfo = m_GM.Get_cardConverList(params);
 				
 				if(obj_cardInfo == null || obj_cardInfo.size() <= 0) {
@@ -699,6 +672,7 @@ public class API {
 					
 					// Set work path
 					sbWorkPath.append(m_C.Get_RootPathForJava() + profile.getString("WAS_INFO", "TEMP_DIR",  "temp"));
+					sbWorkPath.append(File.separator);
 					sbWorkPath.append(m_C.getIRN(""));
 					sbWorkPath.append(m_C.getParamValue(params, "USER_ID", "system"));
 					sbWorkPath.append(m_C.getToday("yyyyMMddHHmmssSSS"));
@@ -707,7 +681,7 @@ public class API {
 					
 					String convertKey = obj_resImage.get("CONVERT_KEY").getAsString();
 					UploadSlip upload = new UploadSlip(profile);
-					obj_resImage.addProperty("SDOC_KIND", obj_resImage.get("SDocKind").getAsString());
+					obj_resImage.addProperty("SDOC_KIND", obj_cardInfo.get("SDocKind").getAsString());
 					JsonObject res = upload.run(obj_resImage, params, sbWorkPath.toString());
 					
 					if("T".equalsIgnoreCase(res.get("result").getAsString())) {
@@ -743,6 +717,7 @@ public class API {
 					mapVals.put("CORP_NO", params.get("CORP_NO"));
 					
 					int resCnt = m_SM.Copy_SlipDoc(mapVals);
+
 					res_total += resCnt;
 					break;
 					
@@ -756,11 +731,127 @@ public class API {
 //				JsonObject obj_res = null;
 				if(res_total > 0) {
 					obj_res = ResultMsg("T", res_total+"");
+					JsonObject objUserInfo = m_GM.getUserInfo(
+							m_C.getParamValue(params, "USER_ID", ""),
+							m_C.getParamValue(params, "CORP_NO", ""),
+							"ko");
+
+					String key = m_C.getParamValue(params, "KEY", "");
+					m_SM.addBookmark(objUserInfo, m_GM.getSDocNo(key));
 				}
 				else {
 					obj_res = ResultMsg("F", res_total+"");
 				}
 				
+				return obj_res;
+			}
+			case UPLOAD_CASH: {
+				String[] verifyList = {"APPR_NO", "KEY", "USER_ID", "CORP_NO"};
+
+				if(!VerifyParams(verifyList, params)) {
+					return ResultMsg("F","ERR_INVALIED_PARAM");
+				}
+
+
+//				JsonObject obj_cashInfo = new JsonObject();
+//				obj_cashInfo.addProperty("ConvertKey","101949479");
+//				obj_cashInfo.addProperty("APPR_NO","101949479");
+//				obj_cashInfo.addProperty("BIZ_NO","1058202954");
+//				obj_cashInfo.addProperty("APPR_DATE","20191206");
+//				obj_cashInfo.addProperty("APPR_TIME","090507");
+//				obj_cashInfo.addProperty("APPR_ST","승인거래");
+//				obj_cashInfo.addProperty("APPR_TYPE","1");
+//				obj_cashInfo.addProperty("TOTAL","50000");
+//				obj_cashInfo.addProperty("TIPS","0");
+//				obj_cashInfo.addProperty("AMOUNT","0");
+//				obj_cashInfo.addProperty("TAX","4545");
+//				obj_cashInfo.addProperty("MERCH_NAME","（주）에스에스유통선산주유소 상지점");
+//				obj_cashInfo.addProperty("MERCH_BIZ_NO","5138512256");
+//				obj_cashInfo.addProperty("SDocKind","1310");
+//				obj_cashInfo.addProperty("PTI_STATUS","00");
+
+
+				JsonObject obj_cashInfo = m_GM.Get_cashConverList(params);
+
+				if(obj_cashInfo == null || obj_cashInfo.size() <= 0) {
+					return ResultMsg("F", "NO_CASH_LIST");
+				}
+
+				JsonObject obj_res = null;
+				String resStat = "";
+
+				int res_total = 0;
+				resStat = obj_cashInfo.get("PTI_STATUS").getAsString();
+//				resStat = "00";
+				switch (resStat) {
+					case "00":
+						CashReceipt cashForm 				= new CashReceipt(profile);
+
+						// Set work path
+						sbWorkPath.append(m_C.Get_RootPathForJava() + profile.getString("WAS_INFO", "TEMP_DIR",  "temp"));
+						sbWorkPath.append(File.separator);
+						sbWorkPath.append(m_C.getIRN(""));
+						sbWorkPath.append(m_C.getParamValue(params, "USER_ID", "system"));
+						sbWorkPath.append(m_C.getToday("yyyyMMddHHmmssSSS"));
+
+						JsonObject obj_resImage 	= cashForm.run(obj_cashInfo, profile.getString("TEMPLATE", "CASH_BG", ""), sbWorkPath.toString());
+
+						String convertKey = obj_resImage.get("CONVERT_KEY").getAsString();
+						UploadSlip upload = new UploadSlip(profile);
+						obj_resImage.addProperty("SDOC_KIND", obj_cashInfo.get("SDocKind").getAsString());
+						JsonObject res = upload.run(obj_resImage, params, sbWorkPath.toString());
+
+						if("T".equalsIgnoreCase(res.get("result").getAsString())) {
+							if(m_SM.Update_cardStatus(convertKey, "10")) {
+
+								String[] from = {convertKey};
+
+								HashMap mapVals = new HashMap<String, String[]>();
+								mapVals.put("FROM", from);
+								mapVals.put("TO", params.get("KEY"));
+								mapVals.put("USER_ID", params.get("USER_ID"));
+								mapVals.put("CORP_NO", params.get("CORP_NO"));
+
+								int resCnt = m_SM.Copy_SlipDoc(mapVals);
+								res_total += resCnt;
+							}
+						} else {
+							return res;
+						}
+
+						break;
+					case "01":
+						obj_res = ResultMsg("T", "CONVERTING_IMAGE");
+						return obj_res;
+//					break;
+
+					case "10":
+						//Already exists.
+						HashMap mapVals = new HashMap<String, String[]>();
+						mapVals.put("FROM", params.get("APPR_NO"));
+						mapVals.put("TO", params.get("KEY"));
+						mapVals.put("USER_ID", params.get("USER_ID"));
+						mapVals.put("CORP_NO", params.get("CORP_NO"));
+
+						int resCnt = m_SM.Copy_SlipDoc(mapVals);
+						res_total += resCnt;
+						break;
+
+					case "20":
+//					resMsg = ResultMsg("F", "Covert Error");
+						obj_res = ResultMsg("F","ERR_IMAGE_CONVERT");
+						return obj_res;
+//					break;
+				}
+
+//				JsonObject obj_res = null;
+				if(res_total > 0) {
+					obj_res = ResultMsg("T", res_total+"");
+				}
+				else {
+					obj_res = ResultMsg("F", res_total+"");
+				}
+
 				return obj_res;
 			}
 			}

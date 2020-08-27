@@ -7,7 +7,7 @@ $.CoCard = {
 		//	$.Common.ShowProgress("#cocard_progress","Waiting..","000000","0.7");
 
 			this.params 			= params;
-			
+
 			//Set globalization.
 			$.CoCard.localeMsg = $.Common.Localize($.Lang, "data-i18n", params.LANG,"CoCard");
 
@@ -16,13 +16,21 @@ $.CoCard = {
 
 			//Set datepicker
 			var date = new Date();
-			var firstDay = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
+			var fromDate = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
 
-			$('#date').datepicker({
+
+			$('#fromDate').datepicker({
 				language:"ko",
 				autoClose:true,
-				range: true
-			}).data('datepicker').selectDate([firstDay,new Date()]);
+			}).data('datepicker').selectDate([fromDate]);
+
+			$('#toDate').datepicker({
+				language:"ko",
+				autoClose:true,
+			}).data('datepicker').selectDate([new Date()]);
+
+
+			$.CoCard.initInputDateProc();
 
 			//Allow only digits.
 			$('#ipt_apprNo').bind('input paste', function(){
@@ -33,8 +41,62 @@ $.CoCard = {
 			$.CoCard.viewer = $.CoCard.setImageViewer();
 			if(!$.Common.isBlank($.CoCard.params.APPR_NO)) {
 				$("#ipt_apprNo").val($.CoCard.params.APPR_NO);
-				$.CoCard.Search(true);
+				$.CoCard.Search();
 			}
+		},
+		initInputDateProc : function(){
+
+			$("#fromDate, #toDate").inputFilter(function(value) {
+				return /^[0-9/\-]*$/.test(value);    // Allow digits only, using a RegExp
+			});
+
+			$("#fromDate, #toDate").on("click", function(){
+				$(this).select()
+			});
+
+			$("#fromDate, #toDate").on("keypress", function(){
+				var val = $(this).val();
+				if(val.length === 4 || val.length === 7) {
+					$(this).val(val+"/");
+				}
+			});
+
+			$("#fromDate").on("keyup", function(e){
+
+				if (e.keyCode === 13) {
+					var val = $(this).val();
+					var date = new Date(val);
+					if(val.length !== 10 || isNaN(date.getTime())) {
+						$.Common.simpleToast($.CoCard.localeMsg.INPUT_VALID_DATE);
+					}
+					else {
+
+						var fromDate = $.Common.stringToDate($(this).val(), "/");
+
+						$('#fromDate').data('datepicker').selectDate(fromDate);
+
+						$("#toDate").select();
+					}
+				}
+			});
+
+			$("#toDate").on("keyup", function(e){
+
+				if (e.keyCode === 13) {
+					var val = $(this).val();
+					var date = new Date(val);
+					if(val.length !== 10 || isNaN(date.getTime())) {
+						$.Common.simpleToast($.CoCard.localeMsg.INPUT_VALID_DATE);
+					}
+					else {
+
+						var toDate = $.Common.stringToDate($(this).val(), "/");
+						$('#toDate').data('datepicker').selectDate(toDate);
+						$.CoCard.Search();
+					}
+				}
+			});
+
 		},
 		Remove : function() {
 
@@ -103,7 +165,7 @@ $.CoCard = {
 			$.CoCard.resetViewer();
 
 			$.CoCard.changeCheckStatus(false);
-			var params = $.CoCard.getSearchParams(isDefaultSearch);
+			var params = $.CoCard.getSearchParams();
 			if(params !== null) {
 //
 				$("#result_list").jsGrid("option", "data", []);
@@ -121,13 +183,35 @@ $.CoCard = {
 				});
 			}
 		},
-		getSearchParams : function(isDefaultSearch){
+		getSearchParams : function(){
 
 			var params = {};
 
-			var dateRange = $('#date').data('datepicker').selectedDates;
+			var fromDate = $('#fromDate').val();
+			var date = new Date(fromDate);
+			if(!$.Common.isBlank(fromDate) && !isNaN(date.getTime())) {
+				var tempDate = fromDate.replace(/\//g, '');
+				params['FROM_DATE'] = tempDate.substring(0,4) + "-" + tempDate.substring(4,6) + "-" + tempDate.substring(6,8)
+			}
+			else {
+				$.Common.simpleAlert(null,this.localeMsg.INPUT_VALID_DATE);
+				return null;
+			}
 
-			if(!isDefaultSearch) {
+
+			var toDate = $('#toDate').val();
+			date = new Date(toDate);
+			if(!$.Common.isBlank(toDate) && !isNaN(date.getTime())) {
+				var tempDate = toDate.replace(/\//g, '');
+				params['TO_DATE'] = tempDate.substring(0,4) + "-" + tempDate.substring(4,6) + "-" + tempDate.substring(6,8)
+			}
+			else {
+				$.Common.simpleAlert(null,this.localeMsg.INPUT_VALID_DATE);
+				return null;
+			}
+
+
+			/*if(!isDefaultSearch) {
 				if(dateRange.length !== 2) {
 					$.Common.simpleAlert(null,this.localeMsg.INPUT_DATE);
 					return null;
@@ -136,7 +220,7 @@ $.CoCard = {
 					params['FROM_DATE']     = $.Common.getDateWithFormat(dateRange[0], "-");
 					params['TO_DATE']       = $.Common.getDateWithFormat(dateRange[1], "-");
 				}
-			}
+			}*/
 
 			var userId = $("#ipt_userid").val();
 			if(!$.Common.isBlank(userId)) {
@@ -295,7 +379,7 @@ $.CoCard = {
 						});
 						bookmark.appendTo(elTarget);
 
-						$.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
+						$.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, obj[key]["SLIP_ROTATE"]);
 					}
 				}
 			});
@@ -333,7 +417,7 @@ $.CoCard = {
 		setUIColor : function()
 		{
 			var objColor =  $.extend($.Color.PC.CoCard, $.Color.Common);
-			
+
 			if(objColor != null)
 			{
 				$(".area_cocard_title").css({"background":"#"+objColor.NAVIGATION, "color" : "#" + objColor.NAVIGATION_FONT});

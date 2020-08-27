@@ -10,6 +10,17 @@ StringBuffer.prototype.toString = function()
 {
     return this.buffer.join("");
 };
+jQuery.reduce = function(arr, func, initial){
+	initial =  typeof initial === 'undefined' ? 0 : initial;
+	$.each(arr,function(i,v){
+		initial = func(initial,v,i);
+	});
+	return initial;
+};
+jQuery.fn.reduce = function(func,initial){
+	return jQuery.reduce(this,func,initial);
+};
+
 String.prototype.insert = function(index, string) {
 	if (index > 0)
 	{
@@ -137,6 +148,7 @@ Array.prototype.move = function (old_index, new_index) {
 
 $.Common = {
 		progressInterval : null,
+		simpleToastRunning : false,
 		postSubmit : function(path, params, method, target) {
 			    method = method || "post";
 
@@ -174,6 +186,9 @@ $.Common = {
 			}
 
 		},
+		isEmptyObject : function( el ){
+			return !$.trim(el.html())
+		},
 		getDateWithFormat : function(date, format) {
 			var year 	= "" + date.getFullYear();
 			var month 	= "" + (date.getMonth()+1);
@@ -209,14 +224,14 @@ $.Common = {
 //			}
 			
 			// //show/hide comment button
-			// if(!$.Common.isBlank(objMember.currentKey)  && objMember.currentKey.indexOf(",") <= -1 && "JDOC_NO" == objMember.params.KEY_TYPE)
-			// {
-			// 	if($("#btn_open_comment") != null) $("#btn_open_comment").show();
-			// }
-			// else
-			// {
-			// 	if($("#btn_open_comment") != null) $("#btn_open_comment").hide();
-			// }
+			if(!$.Common.isBlank(objMember.currentKey)  && objMember.currentKey.indexOf(",") <= -1 && "JDOC_NO" == objMember.params.KEY_TYPE)
+			{
+				if($("#btn_open_comment") != null) $("#btn_open_comment").show();
+			}
+			else
+			{
+				if($("#btn_open_comment") != null) $("#btn_open_comment").hide();
+			}
 			
 			//show/hide history button
 			if(!$.Common.isBlank(objMember.currentKey)  && objMember.currentKey.indexOf(",") <= -1 && "JDOC_NO" == objMember.params.KEY_TYPE)
@@ -613,6 +628,9 @@ $.Common = {
 
 		simpleToast : function(msg, duration) {
 
+			if($.Common.simpleToastRunning) return;
+
+			$.Common.simpleToastRunning = true;
 			$(".wrapper_simple_toast").remove();
 
 			if(duration === null) {
@@ -628,6 +646,7 @@ $.Common = {
 
 				$(this).delay(2000).fadeOut(duration, function(){
 					$(".wrapper_simple_toast").remove();
+					$.Common.simpleToastRunning = false;
 				});
 			});
 
@@ -786,7 +805,7 @@ $.Common = {
 				    }
 				    else if(tag.is('span, div, li'))
 				    {
-				    	tag.text(localMsg[val]);
+				    	tag.html(localMsg[val]);
 				    }
 				    else if(tag.is('textarea'))
 			    	{
@@ -842,7 +861,7 @@ $.Common = {
 			{
 				$(strTagID).css("display","block");
 				$(strTagID).waitMe({
-					effect : 'bounce', 
+					effect : 'bounce',
 					text : strMsg, 
 					bg : 'rgba(255,255,255,'+nOpacity+')', 
 					color : '#'+strColor,

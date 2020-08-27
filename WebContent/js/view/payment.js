@@ -31,17 +31,6 @@ $.Payment = {
             }
         });
 
-        $("#date").inputFilter(function(value) {
-            return /^[0-9/\-]*$/.test(value);    // Allow digits only, using a RegExp
-        });
-        //Detect date value change
-
-        //Add enter key for datapicker
-        $("#date").on("keyup", function(e){
-            if (e.keyCode === 13) {
-                 $.Payment.Search();
-            }
-        });
 
         $.Payment.setFormList();
 
@@ -50,6 +39,59 @@ $.Payment = {
         $.Payment.setUIColor();
         $.Payment.initializePayment();
     },
+    initInputDateProc : function() {
+        $("#fromDate, #toDate").inputFilter(function(value) {
+            return /^[0-9/\-]*$/.test(value);    // Allow digits only, using a RegExp
+        });
+
+        $("#fromDate, #toDate").on("click", function(){
+            $(this).select()
+        });
+
+        $("#fromDate, #toDate").on("keypress", function(){
+            var val = $(this).val();
+            if(val.length === 4 || val.length === 7) {
+                $(this).val(val+"/");
+            }
+        });
+
+        $("#fromDate").on("keyup", function(e){
+
+            if (e.keyCode === 13) {
+                var val = $(this).val();
+                var date = new Date(val);
+                if(val.length !== 10 || isNaN(date.getTime())) {
+                    $.Common.simpleToast($.Payment.localeMsg.INPUT_VALID_DATE);
+                }
+                else {
+
+                    var fromDate = $.Common.stringToDate($(this).val(), "/");
+
+                    $('#fromDate').data('datepicker').selectDate(fromDate);
+
+                    $("#toDate").select();
+                }
+            }
+        });
+
+        $("#toDate").on("keyup", function(e){
+
+            if (e.keyCode === 13) {
+                var val = $(this).val();
+                var date = new Date(val);
+                if(val.length !== 10 || isNaN(date.getTime())) {
+                    $.Common.simpleToast($.Payment.localeMsg.INPUT_VALID_DATE);
+                }
+                else {
+
+                    var toDate = $.Common.stringToDate($(this).val(), "/");
+                    $('#toDate').data('datepicker').selectDate(toDate);
+                    $.Payment.Search();
+                }
+            }
+        });
+
+    },
     setInputDate : function(){
         var res = true;
         var inputDate = $("#date").val();
@@ -57,8 +99,8 @@ $.Payment = {
 
             inputDate = inputDate.split("-");
 
-            var startDate = inputDate[0];
-            var endDate = inputDate[1];
+            var startDate = inputDate[0].trim();
+            var endDate = inputDate[1].trim();
 
             var startDivider = "";
             var endDivider = "";
@@ -140,19 +182,26 @@ $.Payment = {
         $(window).on("unload", function() {
             if(window.opener != null)
             {
-         //       window.opener.$.Actor.getCommentCnt();
+               window.opener.$.Actor.reset();
             }
         });
 
+        //Set datepicker
         var date = new Date();
-        var firstDay = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
+        var fromDate = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate());
 
-        $('#date').datepicker({
+
+        $('#fromDate').datepicker({
             language:"ko",
             autoClose:true,
-            range: true
-        }).data('datepicker').selectDate([firstDay,new Date()]);
+        }).data('datepicker').selectDate([fromDate]);
 
+        $('#toDate').datepicker({
+            language:"ko",
+            autoClose:true,
+        }).data('datepicker').selectDate([new Date()]);
+
+        $.Payment.initInputDateProc()
         $.Payment.drawGridView();
         $.Payment.localizeGrid();
 
@@ -165,7 +214,13 @@ $.Payment = {
             //Load XPI Script
             $.getScript(g_XPI_URL, function() {
 
-                var localWAS_URL = location.protocol + "//127.0.0.1:" +  $.Payment.params.XPI_PORT;
+                var localWAS_URL =  null;
+                if(location.protocol.indexOf("https") > -1) {
+                    localWAS_URL = "https://127.0.0.1:" +  $.Payment.params.XPI_PORT_HTTPS;
+                }
+                else {
+                    localWAS_URL = "http://127.0.0.1:" +  $.Payment.params.XPI_PORT_HTTP;
+                }
 
                 var XPIParams = {
                     LOCAL_WAS_URL		: localWAS_URL,
@@ -190,9 +245,9 @@ $.Payment = {
     },
     Search : function() {
 
-        if(!$.Payment.setInputDate()) {
-            return;
-        }
+        // if(!$.Payment.setInputDate()) {
+        //     return;
+        // }
 
         // $.Payment.Push_SearchResultItem();
         var params = $.Payment.Get_SearchParams();
@@ -291,6 +346,8 @@ $.Payment = {
 
         var params = {};
 
+        params['TYPE'] = "PRIVATE";
+
         var title = $("#ipt_doc_title").val();
         params['DOC_TITLE'] = encodeURIComponent(title);
 
@@ -301,21 +358,47 @@ $.Payment = {
         if(!$.Common.isBlank(drafter)) {
             params['EMP_CODE'] = drafter;
         }
+        else {
+            params['TYPE'] = "DEPT";
+            params['EMP_CODE'] = $.Payment.params.USER_ID;
+            params['DEPT_CODE'] = $.Payment.params.PART_NO;
+        }
 
-        var dateRange = $('#date').data('datepicker').selectedDates;
-
-        if(dateRange.length !== 2) {
-            $.Common.simpleAlert(null,this.localeMsg.INPUT_DATE);
-            return null;
+        var fromDate = $('#fromDate').val();
+        var date = new Date(fromDate);
+        if(!$.Common.isBlank(fromDate) && !isNaN(date.getTime())) {
+            params['SEARCH_STR_DATE'] = fromDate;
         }
         else {
-            var startDate    = $.Common.getDateWithFormat(dateRange[0], "/");
-            var endDate      = $.Common.getDateWithFormat(dateRange[1], "/");
-
-            params['SEARCH_STR_DATE'] = startDate.substring(2, startDate.length);
-            params['SEARCH_END_DATE'] = endDate.substring(2, startDate.length);
-
+            $.Common.simpleAlert(null,this.localeMsg.INPUT_VALID_DATE);
+            return null;
         }
+
+
+        var toDate = $('#toDate').val();
+        date = new Date(toDate);
+        if(!$.Common.isBlank(toDate) && !isNaN(date.getTime())) {
+            params['SEARCH_END_DATE'] = toDate;
+        }
+        else {
+            $.Common.simpleAlert(null,this.localeMsg.INPUT_VALID_DATE);
+            return null;
+        }
+
+        // var dateRange = $('#date').data('datepicker').selectedDates;
+        //
+        // if(dateRange.length !== 2) {
+        //     $.Common.simpleAlert(null,this.localeMsg.INPUT_DATE);
+        //     return null;
+        // }
+        // else {
+        //     var startDate    = $.Common.getDateWithFormat(dateRange[0], "/");
+        //     var endDate      = $.Common.getDateWithFormat(dateRange[1], "/");
+        //
+        //     params['SEARCH_STR_DATE'] = startDate.substring(2, startDate.length);
+        //     params['SEARCH_END_DATE'] = endDate.substring(2, startDate.length);
+        //
+        // }
 
        // params['COUNT'] = "-1";
 

@@ -153,7 +153,7 @@ public class Tax extends TemplateImpl{
 			obj_res.addProperty("TOTAL_SIZE", m_nFileTotalSize / 1024);
 			obj_res.add("IMG_INFO", m_arImageInfo);
 			obj_res.addProperty("CONVERT_KEY", obj_taxInfo.get("ConvertKey").getAsString());
-			obj_res.addProperty("SDOC_NAME", "?????("+obj_taxInfo.get("Approve").getAsString()+")");
+			obj_res.addProperty("SDOC_NAME", "세금계산서");
 //			obj_res.addProperty("SDOC_KIND", "1121");
 			return obj_res;
 		}
@@ -169,16 +169,16 @@ public class Tax extends TemplateImpl{
 			int curHeight = tool.getBackgroundHeight() - lineHeight;
 			tool.insertImage(imgBottom, 0, curHeight , imgBottom.getWidth(), lineHeight);
 
-			tool.setFontStyle("??", tool.BOLD, 45);
+			tool.setFontStyle("NanumGothic", tool.BOLD, 45);
 			//PurPose => 01 : ??, 02 : ??
 			String strResText = obj_taxInfo.get("PurPose").getAsString();
 			if("01".equalsIgnoreCase(strResText))
 			{
-				strResText = "??";
+				strResText = "영수";
 			}
 			else
 			{
-				strResText = "??";
+				strResText = "청구";
 			}
 			tool.DrawText(strResText, 2761, curHeight - 15, 2949, curHeight + imgBottom.getHeight() - 10, tool.CENTER);
 
@@ -301,19 +301,19 @@ public class Tax extends TemplateImpl{
 
 			//????
 			String strApprNo = obj_taxInfo.get("Approve").getAsString();
-			tool.setFontStyle("??", tool.NORMAL, 50);
+			tool.setFontStyle("NanumGothic", tool.NORMAL, 50);
 			tool.DrawText(strApprNo, 2085, 26, 3260, 166, tool.CENTER);
 
 			//if("03".indexOf(typeCode) == -1 && "05".indexOf(typeCode) == -1)
 			if(taxFormType == 0)
 			{
 				//fixed value topline.
-				tool.setFontStyle("??", tool.BOLD, 60);
+				tool.setFontStyle("NanumGothic", tool.BOLD, 60);
 
 				//Title
 				tool.DrawText(strTypeNM, 36, 26, 1643, 166, tool.CENTER);
 
-				tool.setFontStyle("??", tool.NORMAL, 45);
+				tool.setFontStyle("NanumGothic", tool.NORMAL, 45);
 
 				//??? ???????
 				String strSplrNo = obj_taxInfo.get("FromLicense").getAsString();
@@ -387,12 +387,12 @@ public class Tax extends TemplateImpl{
 			else
 			{	// ???
 				//fixed value topline.
-				tool.setFontStyle("??", tool.BOLD, 60);
+				tool.setFontStyle("NanumGothic", tool.BOLD, 60);
 
 				//Title
 				tool.DrawText(strTypeNM, 36, 26, 1643, 166, tool.CENTER);
 
-				tool.setFontStyle("??", tool.NORMAL, 45);
+				tool.setFontStyle("NanumGothic", tool.NORMAL, 45);
 
 				//??? ???????
 				String strSplrNo = obj_taxInfo.get("FromLicense").getAsString();
@@ -498,40 +498,40 @@ public class Tax extends TemplateImpl{
 
 			switch(firstType) {
 				case "01" :
-					strfirstTitle = "?????";
+					strfirstTitle = "세금계산서";
 					break;
 				case "02" :
-					strfirstTitle = "?????(??)";
+					strfirstTitle = "세금계산서(수정)";
 					break;
 				case "03" :
-					strfirstTitle = "???";
+					strfirstTitle = "계산서";
 					break;
 				case "04" :
-					strfirstTitle = "???(??)";
+					strfirstTitle = "계산서(수정)";
 					break;
 				default :
-					strfirstTitle = "?????";
+					strfirstTitle = "세금계산서";
 					break;
 			}
 
 			switch(endType) {
 				case "01" :
-					strendTitle = "?? ";
+					strendTitle = "전자 ";
 					break;
 				case "02" :
-					strendTitle = "??? ";
+					strendTitle = "영세율 ";
 					break;
 				case "03" :
-					strendTitle = "??? ";
+					strendTitle = "위수탁 ";
 					break;
 				case "04" :
-					strendTitle = "?? ";
+					strendTitle = "수입 ";
 					break;
 				case "05" :
-					strendTitle = "??? ??? ";
+					strendTitle = "영세율 위수탁 ";
 					break;
 				default :
-					strendTitle = "?? ";
+					strendTitle = "전자 ";
 					break;
 			}
 			strTypeNM = strendTitle + strfirstTitle;
@@ -539,23 +539,23 @@ public class Tax extends TemplateImpl{
 		} else if(typeCode.length() == 2) {
 			switch(typeCode) {
 				case "01" :
-					strTypeNM = "?? ?????";
+					strTypeNM = "전자 세금계산서";
 					break;
 				case "02" :
-					strTypeNM = "?? ?????(??)";
+					strTypeNM = "전자 세금계산서(수정)";
 					break;
 				case "03" :
-					strTypeNM = "???";
+					strTypeNM = "계산서";
 					break;
 				case "04" :
-					strTypeNM = "???(??)";
+					strTypeNM = "계산서(수정)";
 					break;
 				default :
-					strTypeNM = "?? ?????";
+					strTypeNM = "전자 세금계산서";
 					break;
 			}
 		} else {
-			strTypeNM = "?? ?????";
+			strTypeNM = "전자 세금계산서";
 		}
 
 		return strTypeNM;
@@ -593,7 +593,7 @@ public class Tax extends TemplateImpl{
 		objJsonItem.addProperty("INDEX", m_nCurPage);
 		objJsonItem.addProperty("DOC_IRN", docIRN);
 		objJsonItem.addProperty("PATH", sbImgPath.toString());
-		objJsonItem.addProperty("NAME", "?????");
+		objJsonItem.addProperty("NAME", "세금계산서");
 
 		m_arImageInfo.add(objJsonItem);
 	}

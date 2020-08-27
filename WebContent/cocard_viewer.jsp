@@ -132,9 +132,11 @@ $(function(){
 									<span class="title" data-i18n="CABINET"></span>
 								</div>
 								<div class="item_content">
-									<input type='text' id="date" class="date_picker"
-										   data-multiple-dates-separator=" ~ "
-										   data-position="bottom left" readonly/>
+									<input type='text' id="fromDate" class="date_picker"
+										   data-position="bottom left" maxlength="10"/>
+									~
+									<input type='text' id="toDate" class="date_picker"
+										   data-position="bottom left" maxlength="10"/>
 								</div>
 							</div>
 						</div>

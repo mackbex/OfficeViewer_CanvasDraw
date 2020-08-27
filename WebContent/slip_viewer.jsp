@@ -58,6 +58,7 @@
 				MENU					:  "<c:out value="${mParams['MENU'][0]}" />",
 				XPI_PORT_HTTP			: "<c:url value ="${mParams['XPI_PORT_HTTP'][0]}" />",
 				XPI_PORT_HTTPS			: "<c:url value ="${mParams['XPI_PORT_HTTPS'][0]}" />",
+				WORK_GROUP				: "<c:url value ="${mParams['WORK_GROUP'][0]}" />",
 				MULTI_KEY				:  <c:out value="${MULTI_KEY}" />,
 				PAGE					:	"VIEWER",
 				FOLD					:  "<c:out value="${FOLD}" />",

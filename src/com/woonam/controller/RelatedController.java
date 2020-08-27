@@ -16,15 +16,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/CoCardCommand.do"})
-public class CoCardController extends HttpServlet{
+@WebServlet(urlPatterns = {"/RelatedCommand.do"})
+public class RelatedController extends HttpServlet{
 
 	private static final long serialVersionUID = 1L;
 	private Common m_C 					= null;
@@ -36,16 +37,13 @@ public class CoCardController extends HttpServlet{
 	private Logger logger = null;
 
 	enum ENUM_COMMAND {
-
-		GET_COCARD_LIST,
-		UPDATE_COCARD_APPR,
-		REMOVE_SELECTED_SLIP,
-		GET_SLIP_LIST
-
+		ADD_DOC,
+		GET_ORG_LIST,
+		GET_DOC_LIST
 	}
 
-	public CoCardController() {
-		this.logger					= LogManager.getLogger(CoCardController.class);
+	public RelatedController() {
+		this.logger					= LogManager.getLogger(RelatedController.class);
 		this.m_C 					= new Common();
 	}
 	
@@ -109,51 +107,142 @@ public class CoCardController extends HttpServlet{
 			
 			switch(EC)
 			{
-			case GET_COCARD_LIST : {
-//				String[] arrParam = {"FROM_DATE", "TO_DATE"};
-//				if(m_C.IsNullParam(arrParam, mapParams))
-//				{
-//					logger.error("Parameter of "+strCommand+" is NULL.");
-//					out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
-//					return;
-//				}
-
-				JsonObject objRes = m_GM.getCocardList(mapParams);
-				if(objRes == null)
-				{
-					out.print(m_C.writeResultMsg("F", "Failed to run. Command : " + EC.name()));
-				}
-				else
-				{
-					out.print(objRes.toString());
-				}
-				break;
-			}
-			case UPDATE_COCARD_APPR : {
-				String[] arrParam = {"APPR_CARD", "SDOC_NO"};
+			case GET_ORG_LIST : {
+				String[] arrParam = {"URL"};
 				if(m_C.IsNullParam(arrParam, mapParams))
 				{
 					logger.error("Parameter of "+strCommand+" is NULL.");
 					out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
 					return;
 				}
-
-				String apprNo		= m_C.getParamValue(mapParams, "APPR_CARD", "");
-
-				if(m_C.isBlank(apprNo) && apprNo.length() != 8) {
-					out.print(m_C.writeResultMsg("F", "INPUT_8_DIGITED_APPR_NO"));
+				if(!m_C.chk_UserPermission(m_GM, session))
+				{
+					logger.error("Permission denied.");
+					out.print(m_C.writeResultMsg("F", "PERMISSION_DENIED"));
+					return;
 				}
 
-				if(m_SM.updateCoCardAppr(mapParams)) {
-					out.print(m_C.writeResultMsg("T", ""));
+//				URL url;
+				InputStream is = null;
+				BufferedReader br;
+				String line;
+				StringBuffer sbRes = new StringBuffer();
+				String urlVal = m_C.getParamValue(mapParams,"URL","");
+				urlVal = urlVal.replaceAll("＆","&");
+				String strCharSet = profile.getString("INTERFACE", "CHARSET", "utf-8");
+
+				try {
+					urlVal += "?tmp=" + m_C.getToday("yyyyMMddHHmmssSSS");
+					logger.debug(urlVal);
+//
+					HttpURLConnection con = (HttpURLConnection) (new URL(urlVal).openConnection());
+					con.setInstanceFollowRedirects(false);
+					con.setRequestProperty("Cookie",
+							"LtpaToken="+session.getAttribute("TOKEN")+"; " +
+							"domain="+ profile.getString("INTERFACE","MAIN_URL","") + "; " +
+							"path=/");
+
+					con.connect();
+
+					logger.debug("ResponseCode: " + con.getResponseCode());
+
+					is = con.getInputStream();  // throws an IOException
+					br = new BufferedReader(new InputStreamReader(is, strCharSet));
+//
+					while ((line = br.readLine()) != null) {
+						sbRes.append(line);
+					}
+					logger.debug(sbRes.toString());
+				}  catch (Exception ioe) {
+					logger.error(ioe);
+					sbRes = null;
+				} finally {
+					try {
+						if (is != null) is.close();
+					} catch (IOException ioe) {
+						// nothing to see here
+						sbRes = null;
+					}
+				}
+
+				if(m_C.isBlank(sbRes.toString())) {
+					out.print(m_C.writeResultMsg("F", ""));
 				}
 				else {
-					out.print(m_C.writeResultMsg("F", "FAILED_UPDATE_COCARD_APPR"));
+					out.print(m_C.writeResultMsg("T", sbRes.toString()));
 				}
 				break;
+
 			}
-			case GET_SLIP_LIST : {
-				String[] arrParam = {"KEY"};
+			case GET_DOC_LIST : {
+				String[] arrParam = {"URL"};
+				if(m_C.IsNullParam(arrParam, mapParams))
+				{
+					logger.error("Parameter of "+strCommand+" is NULL.");
+					out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
+					return;
+				}
+				if(!m_C.chk_UserPermission(m_GM, session))
+				{
+					logger.error("Permission denied.");
+					out.print(m_C.writeResultMsg("F", "PERMISSION_DENIED"));
+					return;
+				}
+
+//				URL url;
+				InputStream is = null;
+				BufferedReader br;
+				String line;
+				StringBuffer sbRes = new StringBuffer();
+				String urlVal = m_C.getParamValue(mapParams,"URL","");
+				urlVal = urlVal.replaceAll("＆","&");
+				String strCharSet = profile.getString("INTERFACE", "CHARSET", "utf-8");
+
+				try {
+//					urlVal += "?tmp=" + m_C.getToday("yyyyMMddHHmmssSSS");
+					logger.debug(urlVal);
+//
+					HttpURLConnection con = (HttpURLConnection) (new URL(urlVal).openConnection());
+					con.setInstanceFollowRedirects(false);
+					con.setRequestProperty("Cookie",
+							"LtpaToken="+session.getAttribute("TOKEN")+"; " +
+									"domain="+ profile.getString("INTERFACE","MAIN_URL","") + "; " +
+									"path=/");
+
+					con.connect();
+
+					logger.debug("ResponseCode: " + con.getResponseCode());
+
+					is = con.getInputStream();  // throws an IOException
+					br = new BufferedReader(new InputStreamReader(is, strCharSet));
+//
+					while ((line = br.readLine()) != null) {
+						sbRes.append(line);
+					}
+					logger.debug(sbRes.toString());
+				}  catch (Exception ioe) {
+					logger.error(ioe);
+					sbRes = null;
+				} finally {
+					try {
+						if (is != null) is.close();
+					} catch (IOException ioe) {
+						// nothing to see here
+						sbRes = null;
+					}
+				}
+
+				if(m_C.isBlank(sbRes.toString())) {
+					out.print(m_C.writeResultMsg("F", ""));
+				}
+				else {
+					out.print(m_C.writeResultMsg("T", sbRes.toString()));
+				}
+				break;
+
+			}
+			case ADD_DOC : {
+				String[] arrParam = {"DOC_INFO","JDOC_NO"};
 				if(m_C.IsNullParam(arrParam, mapParams))
 				{
 					logger.error("Parameter of "+strCommand+" is NULL.");
@@ -168,74 +257,18 @@ public class CoCardController extends HttpServlet{
 					return;
 				}
 
-				JsonObject objRes = m_GM.getCoCardSlipList(mapParams);
-				if(objRes == null)
+				Boolean bRes = m_SM.addDocURL(mapParams);
+				if(bRes)
 				{
-					out.print(m_C.writeResultMsg("F", "Failed to run. Command : " + EC.name()));
+					out.print(m_C.writeResultMsg("T", ""));
 				}
 				else
 				{
-					String useBookMark = profile.getString("WAS_INFO", "USE_BOOKMARK", "F");
-
-					if("T".equalsIgnoreCase(useBookMark)) {
-						Iterator<String> keys = objRes.keySet().iterator();
-						while(keys.hasNext()) {
-							JsonObject item = objRes.get(keys.next()).getAsJsonObject();
-							String sdocNo 	= item.get("SDOC_NO").getAsString();
-							String slipIrn 	= item.get("SLIP_IRN").getAsString();
-							item.add("BOOKMARKS",m_GM.Get_BookmarkList(sdocNo, slipIrn));
-						}
-					}
-					out.print(objRes.toString());
+					out.print(m_C.writeResultMsg("F", "FAILED_UPLOAD_ADDFILE"));
 				}
 				break;
 			}
-			case REMOVE_SELECTED_SLIP : {
 
-				String[] arrParam = {"VIEW_MODE", "FIELD","VALUE"};
-				if(m_C.IsNullParam(arrParam, mapParams))
-				{
-					logger.error("Parameter of "+strCommand+" is NULL.");
-					out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
-					return;
-				}
-
-				if(!m_C.chk_UserPermission(m_GM, session))
-				{
-					logger.error("Permission denied.");
-					out.print(m_C.writeResultMsg("F", "PERMISSION_DENIED"));
-					return;
-				}
-
-				String viewMode = m_C.getParamValue(mapParams, "VIEW_MODE", "");
-				JsonArray ar_item = m_GM.Get_SlipInfo(mapParams);
-				for(int i = 0; i < ar_item.size(); i++) {
-					JsonObject obj_item = ar_item.get(i).getAsJsonObject();
-					if("1".equalsIgnoreCase(obj_item.get("SDOC_SYSTEM").getAsString())) {
-						out.print(m_C.writeResultMsg("F", "SYSTEM_SLIP_CANNOT_BE_REMOVED"));
-						return;
-					}
-
-					if("AFTER".equalsIgnoreCase(viewMode)) {
-						if("0".equalsIgnoreCase(obj_item.get("SDOC_AFTER").getAsString())) {
-							out.print(m_C.writeResultMsg("F", "CANNOT_REMOVE_IN_AFTER_MODE"));
-							return;
-						}
-					}
-				}
-
-				int nResCnt = m_SM.removeSlip(mapParams);
-				if(nResCnt > -1)
-				{
-					out.print(m_C.writeResultMsg("T", nResCnt+""));
-				}
-				else
-				{
-					out.print(m_C.writeResultMsg("F", "Failed to run. Command : " + EC.name()));
-				}
-
-				break;
-			}
 			default :
 			{
 				out.print(m_C.writeResultMsg("F", "COMMAND_IS_NULL"));
@@ -250,10 +283,10 @@ public class CoCardController extends HttpServlet{
 		
 		return;
 	}
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 }

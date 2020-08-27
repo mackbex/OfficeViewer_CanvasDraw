@@ -1,0 +1,1363 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<viewentries timestamp="20200825T030151,20Z" toplevelentries="84">
+<viewentry position="1" unid="C342316A143C3BA549258261004BF470" noteid="A42" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700010000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>기획조정실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700010000^DeptName=기획조정실^DeptAlias=기획조정실^DeptUniqueCode=E515KXL^DeptReceiveLevel=101000000001!101700010000|101700010000^Company=본사;기획조정실!기획조정실^DeptFullCode=101000000001!101700010000^DeptFullName=본사!기획조정실^FullDeptName=본사 기획조정실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="2" unid="67062CEE78D2F39E492582BE002CEA30" noteid="AA6" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700030000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>재무관리실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700030000^DeptName=재무관리실^DeptAlias=재무관리실^DeptUniqueCode=84D5KXS^DeptReceiveLevel=101000000001!101700030000|101700030000^Company=본사;재무관리실!재무관리실^DeptFullCode=101000000001!101700030000^DeptFullName=본사!재무관리실^FullDeptName=본사 재무관리실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="3" unid="32B407F728D8AAEA492582BE0000AC90" noteid="A9A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700050000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>대외협력실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700050000^DeptName=대외협력실^DeptAlias=대외협력실^DeptUniqueCode=D595KXW^DeptReceiveLevel=101000000001!101700050000|101700050000^Company=본사;대외협력실!대외협력실^DeptFullCode=101000000001!101700050000^DeptFullName=본사!대외협력실^FullDeptName=본사 대외협력실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="4" unid="7BE4871407F8D3444925837600042BA3" noteid="B3A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700110000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>국제남북국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700110000^DeptName=국제남북국^DeptAlias=국제남북국^DeptUniqueCode=F735KY9^DeptReceiveLevel=101000000001!101700110000|101700110000^Company=본사;국제남북국!국제남북국^DeptFullCode=101000000001!101700110000^DeptFullName=본사!국제남북국^FullDeptName=본사 국제남북국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="5" unid="D8F5799FD8A779BE492583760005CC7A" noteid="B3E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700110000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>국제남북국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700110000^DeptName=국제남북국^DeptAlias=국제남북국^DeptUniqueCode=F735KY9^DeptReceiveLevel=101000000001!101700110000|101700110000^Company=본사;국제남북국!국제남북국^DeptFullCode=101000000001!101700110000^DeptFullName=본사!국제남북국^FullDeptName=본사 국제남북국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="6" unid="3F06DFE5E473F5C349258261004BEBD3" noteid="A3A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700090000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>재난안전국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700090000^DeptName=재난안전국^DeptAlias=재난안전국^DeptUniqueCode=0035KY5^DeptReceiveLevel=101000000001!101700090000|101700090000^Company=본사;재난안전국!재난안전국^DeptFullCode=101000000001!101700090000^DeptFullName=본사!재난안전국^FullDeptName=본사 재난안전국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="7" unid="CA2AE92D4218742F492583760003D357" noteid="B32" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070010</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>구호봉사국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070010^DeptName=구호봉사국^DeptAlias=구호봉사국^DeptUniqueCode=A93C400^DeptReceiveLevel=101000000001!101710070010|101710070010^Company=본사;구호봉사국!구호봉사국^DeptFullCode=101000000001!101710070010^DeptFullName=본사!구호봉사국^FullDeptName=본사 구호봉사국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="8" unid="A3A6E9A4387C4396492583760003D358" noteid="B36" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070014</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>청소년·교육국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070014^DeptName=청소년·교육국^DeptAlias=청소년·교육국^DeptUniqueCode=88EBA76^DeptReceiveLevel=101000000001!101710070014|101710070014^Company=본사;청소년·교육국!청소년·교육국^DeptFullCode=101000000001!101710070014^DeptFullName=본사!청소년·교육국^FullDeptName=본사 청소년·교육국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="9" unid="C19E13002F3D99A4492583760003C350" noteid="B2E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070021</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>병원사업단</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070021^DeptName=병원사업단^DeptAlias=병원사업단^DeptUniqueCode=E16A2B9^DeptReceiveLevel=101000000001!101710070021|101710070021^Company=본사;병원사업단!병원사업단^DeptFullCode=101000000001!101710070021^DeptFullName=본사!병원사업단^FullDeptName=본사 병원사업단^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="10" unid="602328026CD6D46E49258261004BEBD4" noteid="A3E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700130000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>봉사·청소년(RCY)국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700130000^DeptName=봉사·청소년(RCY)국^DeptAlias=봉사·청소년(RCY)국^DeptUniqueCode=EEC5KYC^DeptReceiveLevel=101000000001!101700130000|101700130000^Company=본사;봉사·청소년(RCY)국!봉사·청소년(RCY)국^DeptFullCode=101000000001!101700130000^DeptFullName=본사!봉사·청소년(RCY)국^FullDeptName=본사 봉사·청소년(RCY)국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="11" unid="CCF4BF032EB953074925821300361782" noteid="A0A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700150000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>병원사업국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700150000^DeptName=병원사업국^DeptAlias=병원사업국^DeptUniqueCode=9005KYG^DeptReceiveLevel=101000000001!101700150000|101700150000^Company=본사;병원사업국!병원사업국^DeptFullCode=101000000001!101700150000^DeptFullName=본사!병원사업국^FullDeptName=본사 병원사업국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="12" unid="E8D4BB73E5CC1A0649258261004BEBD2" noteid="A36" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101105010000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>미래전략실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101105010000^DeptName=미래전략실^DeptAlias=미래전략실^DeptUniqueCode=AC77KXA^DeptReceiveLevel=101000000001!101105010000|101105010000^Company=본사;미래전략실!미래전략실^DeptFullCode=101000000001!101105010000^DeptFullName=본사!미래전략실^FullDeptName=본사 미래전략실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="13" unid="FAB60E0FEBC2551649258377000C469D" noteid="B56" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700070000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>ICT지원실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700070000^DeptName=ICT지원실^DeptAlias=ICT지원실^DeptUniqueCode=B335KY3^DeptReceiveLevel=101000000001!101700070000|101700070000^Company=본사;ICT지원실!ICT지원실^DeptFullCode=101000000001!101700070000^DeptFullName=본사!ICT지원실^FullDeptName=본사 ICT지원실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="14" unid="D4112650B5BD9723492582DC000CE396" noteid="AB2" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700150998</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>영주병원개원추진단</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700150998^DeptName=영주병원개원추진단^DeptAlias=영주병원개원추진단^DeptUniqueCode=F72757D^DeptReceiveLevel=101000000001!101700150998|101700150998^Company=본사;영주병원개원추진단!영주병원개원추진단^DeptFullCode=101000000001!101700150998^DeptFullName=본사!영주병원개원추진단^FullDeptName=본사 영주병원개원추진단^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="15" unid="49727023156A1A2D492583760003B64E" noteid="B2A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101030021000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>인도법연구소</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101030021000^DeptName=인도법연구소^DeptAlias=인도법연구소^DeptUniqueCode=9DCUMAW^DeptReceiveLevel=101000000001!101030021000|101030021000^Company=본사;인도법연구소!인도법연구소^DeptFullCode=101000000001!101030021000^DeptFullName=본사!인도법연구소^FullDeptName=본사 인도법연구소^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="16" unid="8BBC29ECF2F478AB492583760003B64D" noteid="B26" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101015000000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>이산가족면회소운영추진단</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101015000000^DeptName=이산가족면회소운영추진단^DeptAlias=이산가족면회소운영추진단^DeptUniqueCode=69554HV^DeptReceiveLevel=101000000001!101015000000|101015000000^Company=본사;이산가족면회소운영추진단!이산가족면회소운영추진단^DeptFullCode=101000000001!101015000000^DeptFullName=본사!이산가족면회소운영추진단^FullDeptName=본사 이산가족면회소운영추진단^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="17" unid="56D0B6438DAC99C049258261004C095A" noteid="A52" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101105010000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101105011000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>경영합리화팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101105011000^DeptName=경영합리화팀^DeptAlias=경영합리화팀^DeptUniqueCode=5DD7KXB^DeptReceiveLevel=101000000001!101105010000!101105011000|101105011000^Company=본사;미래전략실;경영합리화팀!경영합리화팀^DeptFullCode=101000000001!101105010000!101105011000^DeptFullName=본사!미래전략실!경영합리화팀^FullDeptName=본사 미래전략실 경영합리화팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="18" unid="9D0672614660D0344925837600034B56" noteid="AE6" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700010000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700010001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>전략기획팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700010001^DeptName=전략기획팀^DeptAlias=전략기획팀^DeptUniqueCode=E535KXM^DeptReceiveLevel=101000000001!101700010000!101700010001|101700010001^Company=본사;기획조정실;전략기획팀!전략기획팀^DeptFullCode=101000000001!101700010000!101700010001^DeptFullName=본사!기획조정실!전략기획팀^FullDeptName=본사 기획조정실 전략기획팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="19" unid="C7BEA6C0310E7E614925837600034B57" noteid="AEA" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700010000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700010016</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>업무지원팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700010016^DeptName=업무지원팀^DeptAlias=업무지원팀^DeptUniqueCode=80E5KXQ^DeptReceiveLevel=101000000001!101700010000!101700010016|101700010016^Company=본사;기획조정실;업무지원팀!업무지원팀^DeptFullCode=101000000001!101700010000!101700010016^DeptFullName=본사!기획조정실!업무지원팀^FullDeptName=본사 기획조정실 업무지원팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="20" unid="C8A457F6293DB5F549258261004BF97F" noteid="A46" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700010000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700010032</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>특임점검팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700010032^DeptName=특임점검팀^DeptAlias=특임점검팀^DeptUniqueCode=9408L98^DeptReceiveLevel=101000000001!101700010000!101700010032|101700010032^Company=본사;기획조정실;특임점검팀!특임점검팀^DeptFullCode=101000000001!101700010000!101700010032^DeptFullName=본사!기획조정실!특임점검팀^FullDeptName=본사 기획조정실 특임점검팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="21" unid="5C70DD2500E7A7E349258376000374F2" noteid="AEE" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700030000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700030001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>재무팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700030001^DeptName=재무팀^DeptAlias=재무팀^DeptUniqueCode=2575KXT^DeptReceiveLevel=101000000001!101700030000!101700030001|101700030001^Company=본사;재무관리실;재무팀!재무팀^DeptFullCode=101000000001!101700030000!101700030001^DeptFullName=본사!재무관리실!재무팀^FullDeptName=본사 재무관리실 재무팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="22" unid="FE79C2BC22B4D47E49258376000374F3" noteid="AF2" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700030000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700030006</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>구매팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700030006^DeptName=구매팀^DeptAlias=구매팀^DeptUniqueCode=2C85KXU^DeptReceiveLevel=101000000001!101700030000!101700030006|101700030006^Company=본사;재무관리실;구매팀!구매팀^DeptFullCode=101000000001!101700030000!101700030006^DeptFullName=본사!재무관리실!구매팀^FullDeptName=본사 재무관리실 구매팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="23" unid="052020BCD726512049258376000374F4" noteid="AF6" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700030000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700030023</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>자산관리팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700030023^DeptName=자산관리팀^DeptAlias=자산관리팀^DeptUniqueCode=9C0WKYE^DeptReceiveLevel=101000000001!101700030000!101700030023|101700030023^Company=본사;재무관리실;자산관리팀!자산관리팀^DeptFullCode=101000000001!101700030000!101700030023^DeptFullName=본사!재무관리실!자산관리팀^FullDeptName=본사 재무관리실 자산관리팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="24" unid="5A799F6CDCD2FA29492582BE002CEFF1" noteid="AAE" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700030000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700030017</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>재무정보시스템개발지원팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700030017^DeptName=재무정보시스템개발지원팀^DeptAlias=재무정보시스템개발지원팀^DeptUniqueCode=1C85KYF^DeptReceiveLevel=101000000001!101700030000!101700030017|101700030017^Company=본사;재무관리실;재무정보시스템개발지원팀!재무정보시스템개발지원팀^DeptFullCode=101000000001!101700030000!101700030017^DeptFullName=본사!재무관리실!재무정보시스템개발지원팀^FullDeptName=본사 재무관리실 재무정보시스템개발지원팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="25" unid="B0ABD24E28E793BD492582BE0000B8DF" noteid="A9E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700050000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700050027</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>모금마케팅팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700050027^DeptName=모금마케팅팀^DeptAlias=모금마케팅팀^DeptUniqueCode=6BDWKYF^DeptReceiveLevel=101000000001!101700050000!101700050027|101700050027^Company=본사;대외협력실;모금마케팅팀!모금마케팅팀^DeptFullCode=101000000001!101700050000!101700050027^DeptFullName=본사!대외협력실!모금마케팅팀^FullDeptName=본사 대외협력실 모금마케팅팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="26" unid="B5EB945B0A34387E492582BE0000B8E0" noteid="AA2" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700050000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700050028</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>후원자서비스팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700050028^DeptName=후원자서비스팀^DeptAlias=후원자서비스팀^DeptUniqueCode=186WKYG^DeptReceiveLevel=101000000001!101700050000!101700050028|101700050028^Company=본사;대외협력실;후원자서비스팀!후원자서비스팀^DeptFullCode=101000000001!101700050000!101700050028^DeptFullName=본사!대외협력실!후원자서비스팀^FullDeptName=본사 대외협력실 후원자서비스팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="27" unid="37A09448E89ED9AB492583760003A9BF" noteid="B1E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700050000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700182998</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>나눔마케팅팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700182998^DeptName=나눔마케팅팀^DeptAlias=나눔마케팅팀^DeptUniqueCode=7643278^DeptReceiveLevel=101000000001!101700050000!101700182998|101700182998^Company=본사;대외협력실;나눔마케팅팀!나눔마케팅팀^DeptFullCode=101000000001!101700050000!101700182998^DeptFullName=본사!대외협력실!나눔마케팅팀^FullDeptName=본사 대외협력실 나눔마케팅팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="28" unid="25113E51C91AD548492583760003A9C0" noteid="B22" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700050000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700183998</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>사회공헌협력팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700183998^DeptName=사회공헌협력팀^DeptAlias=사회공헌협력팀^DeptUniqueCode=6ECB46B^DeptReceiveLevel=101000000001!101700050000!101700183998|101700183998^Company=본사;대외협력실;사회공헌협력팀!사회공헌협력팀^DeptFullCode=101000000001!101700050000!101700183998^DeptFullName=본사!대외협력실!사회공헌협력팀^FullDeptName=본사 대외협력실 사회공헌협력팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="29" unid="D3F374C76610FD83492583760003A9B6" noteid="AFA" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700050000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700050016</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>홍보기획팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700050016^DeptName=홍보기획팀^DeptAlias=홍보기획팀^DeptUniqueCode=4895KY2^DeptReceiveLevel=101000000001!101700050000!101700050016|101700050016^Company=본사;대외협력실;홍보기획팀!홍보기획팀^DeptFullCode=101000000001!101700050000!101700050016^DeptFullName=본사!대외협력실!홍보기획팀^FullDeptName=본사 대외협력실 홍보기획팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="30" unid="7D7D663311FA639049258377000C56B8" noteid="B5A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700070000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700070001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>ICT운영지원팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700070001^DeptName=ICT운영지원팀^DeptAlias=ICT운영지원팀^DeptUniqueCode=90D5KY4^DeptReceiveLevel=101000000001!101700070000!101700070001|101700070001^Company=본사;ICT지원실;ICT운영지원팀!ICT운영지원팀^DeptFullCode=101000000001!101700070000!101700070001^DeptFullName=본사!ICT지원실!ICT운영지원팀^FullDeptName=본사 ICT지원실 ICT운영지원팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="31" unid="82C60E4C556822AA49258377000C56B9" noteid="B5E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700070000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700162998</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>병원전산팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700162998^DeptName=병원전산팀^DeptAlias=병원전산팀^DeptUniqueCode=6E64AB7^DeptReceiveLevel=101000000001!101700070000!101700162998|101700162998^Company=본사;ICT지원실;병원전산팀!병원전산팀^DeptFullCode=101000000001!101700070000!101700162998^DeptFullName=본사!ICT지원실!병원전산팀^FullDeptName=본사 ICT지원실 병원전산팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="32" unid="9E3853EC729F739449258261004C14C0" noteid="A56" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700090000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700090001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>재난구호팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700090001^DeptName=재난구호팀^DeptAlias=재난구호팀^DeptUniqueCode=D8E5KY6^DeptReceiveLevel=101000000001!101700090000!101700090001|101700090001^Company=본사;재난안전국;재난구호팀!재난구호팀^DeptFullCode=101000000001!101700090000!101700090001^DeptFullName=본사!재난안전국!재난구호팀^FullDeptName=본사 재난안전국 재난구호팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="33" unid="F9DF0A45AE953C1A49258261004C14C2" noteid="A5E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700090000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700090027</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>적십자아카데미팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700090027^DeptName=적십자아카데미팀^DeptAlias=적십자아카데미팀^DeptUniqueCode=327XKYD^DeptReceiveLevel=101000000001!101700090000!101700090027|101700090027^Company=본사;재난안전국;적십자아카데미팀!적십자아카데미팀^DeptFullCode=101000000001!101700090000!101700090027^DeptFullName=본사!재난안전국!적십자아카데미팀^FullDeptName=본사 재난안전국 적십자아카데미팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="34" unid="EF2F731B8D9BE7A649258261004C14C1" noteid="A5A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700090000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700090013</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>아시아태평양재난복원력센터</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700090013^DeptName=아시아태평양재난복원력센터^DeptAlias=아시아태평양재난복원력센터^DeptUniqueCode=47FWKZJ^DeptReceiveLevel=101000000001!101700090000!101700090013|101700090013^Company=본사;재난안전국;아시아태평양재난복원력센터!아시아태평양재난복원력센터^DeptFullCode=101000000001!101700090000!101700090013^DeptFullName=본사!재난안전국!아시아태평양재난복원력센터^FullDeptName=본사 재난안전국 아시아태평양재난복원력센터^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="35" unid="DA63DF92EBA1F6CB492583760003A9B7" noteid="AFE" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700110000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700110001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>국제협력팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700110001^DeptName=국제협력팀^DeptAlias=국제협력팀^DeptUniqueCode=8DA5KYA^DeptReceiveLevel=101000000001!101700110000!101700110001|101700110001^Company=본사;국제남북국;국제협력팀!국제협력팀^DeptFullCode=101000000001!101700110000!101700110001^DeptFullName=본사!국제남북국!국제협력팀^FullDeptName=본사 국제남북국 국제협력팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="36" unid="5A603A8D8884D6FB492583760003A9B8" noteid="B02" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700110000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700110006</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>남북교류팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700110006^DeptName=남북교류팀^DeptAlias=남북교류팀^DeptUniqueCode=4075KYB^DeptReceiveLevel=101000000001!101700110000!101700110006|101700110006^Company=본사;국제남북국;남북교류팀!남북교류팀^DeptFullCode=101000000001!101700110000!101700110006^DeptFullName=본사!국제남북국!남북교류팀^FullDeptName=본사 국제남북국 남북교류팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="37" unid="ED3B62934438C02E492583760003A9BE" noteid="B1A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700110000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070020</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>아시아태평양재난복원력센터</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070020^DeptName=아시아태평양재난복원력센터^DeptAlias=아시아태평양재난복원력센터^DeptUniqueCode=40DEEE6^DeptReceiveLevel=101000000001!101700110000!101710070020|101710070020^Company=본사;국제남북국;아시아태평양재난복원력센터!아시아태평양재난복원력센터^DeptFullCode=101000000001!101700110000!101710070020^DeptFullName=본사!국제남북국!아시아태평양재난복원력센터^FullDeptName=본사 국제남북국 아시아태평양재난복원력센터^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="38" unid="BCA25425551C6563492583760005CC7B" noteid="B42" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700119009&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700119016</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>CRM센터</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700119016^DeptName=CRM센터^DeptAlias=CRM센터^DeptUniqueCode=AEB9221^DeptReceiveLevel=101000000001!101700119008!101700119009!101700119016|101700119016^Company=본사;재원조성본부;재원조성팀;CRM센터!CRM센터^DeptFullCode=101000000001!101700119008!101700119009!101700119016^DeptFullName=본사!재원조성본부!재원조성팀!CRM센터^FullDeptName=본사 재원조성본부 재원조성팀 CRM센터^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="39" unid="71B36DDBDE8FE19E49258261004C1E09" noteid="A62" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700130000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700130001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>사회봉사팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700130001^DeptName=사회봉사팀^DeptAlias=사회봉사팀^DeptUniqueCode=9D05KYD^DeptReceiveLevel=101000000001!101700130000!101700130001|101700130001^Company=본사;봉사·청소년(RCY)국;사회봉사팀!사회봉사팀^DeptFullCode=101000000001!101700130000!101700130001^DeptFullName=본사!봉사·청소년(RCY)국!사회봉사팀^FullDeptName=본사 봉사·청소년(RCY)국 사회봉사팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="40" unid="48EB4D5813EE52D149258261004C1E0A" noteid="A66" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700130000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700130006</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>RCY팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700130006^DeptName=RCY팀^DeptAlias=RCY팀^DeptUniqueCode=54B5KYE^DeptReceiveLevel=101000000001!101700130000!101700130006|101700130006^Company=본사;봉사·청소년(RCY)국;RCY팀!RCY팀^DeptFullCode=101000000001!101700130000!101700130006^DeptFullName=본사!봉사·청소년(RCY)국!RCY팀^FullDeptName=본사 봉사·청소년(RCY)국 RCY팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="41" unid="5B24BCE578BAE4D049258261004C1E0B" noteid="A6A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700130000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700130011</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>프로그램개발운영팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700130011^DeptName=프로그램개발운영팀^DeptAlias=프로그램개발운영팀^DeptUniqueCode=DEC5KYF^DeptReceiveLevel=101000000001!101700130000!101700130011|101700130011^Company=본사;봉사·청소년(RCY)국;프로그램개발운영팀!프로그램개발운영팀^DeptFullCode=101000000001!101700130000!101700130011^DeptFullName=본사!봉사·청소년(RCY)국!프로그램개발운영팀^FullDeptName=본사 봉사·청소년(RCY)국 프로그램개발운영팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="42" unid="439C849085696EB149258261004C0047" noteid="A4A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700150000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700150001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>병원정책팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700150001^DeptName=병원정책팀^DeptAlias=병원정책팀^DeptUniqueCode=BF95KYH^DeptReceiveLevel=101000000001!101700150000!101700150001|101700150001^Company=본사;병원사업국;병원정책팀!병원정책팀^DeptFullCode=101000000001!101700150000!101700150001^DeptFullName=본사!병원사업국!병원정책팀^FullDeptName=본사 병원사업국 병원정책팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="43" unid="1878C4815CF907D949258261004C0048" noteid="A4E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700150000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700150006</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>병원사업팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700150006^DeptName=병원사업팀^DeptAlias=병원사업팀^DeptUniqueCode=0035KYJ^DeptReceiveLevel=101000000001!101700150000!101700150006|101700150006^Company=본사;병원사업국;병원사업팀!병원사업팀^DeptFullCode=101000000001!101700150000!101700150006^DeptFullName=본사!병원사업국!병원사업팀^FullDeptName=본사 병원사업국 병원사업팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="44" unid="C67793996A24F1214925821300362084" noteid="A0E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700150000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101700150008</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>영주병원개원추진단</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101700150008^DeptName=영주병원개원추진단^DeptAlias=영주병원개원추진단^DeptUniqueCode=45F17D3^DeptReceiveLevel=101000000001!101700150000!101700150008|101700150008^Company=본사;병원사업국;영주병원개원추진단!영주병원개원추진단^DeptFullCode=101000000001!101700150000!101700150008^DeptFullName=본사!병원사업국!영주병원개원추진단^FullDeptName=본사 병원사업국 영주병원개원추진단^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="45" unid="E69105784BE71D0349258377000BA20D" noteid="B52" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101700182998&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070023</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>CRM센터</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070023^DeptName=CRM센터^DeptAlias=CRM센터^DeptUniqueCode=AECBA6C^DeptReceiveLevel=101000000001!101700050000!101700182998!101710070023|101710070023^Company=본사;대외협력실;나눔마케팅팀;CRM센터!CRM센터^DeptFullCode=101000000001!101700050000!101700182998!101710070023^DeptFullName=본사!대외협력실!나눔마케팅팀!CRM센터^FullDeptName=본사 대외협력실 나눔마케팅팀 CRM센터^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="46" unid="FEE09502AB59E0FA492583760003A9B9" noteid="B06" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101710070010&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070011</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>재난구호팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070011^DeptName=재난구호팀^DeptAlias=재난구호팀^DeptUniqueCode=B424FBA^DeptReceiveLevel=101000000001!101710070010!101710070011|101710070011^Company=본사;구호봉사국;재난구호팀!재난구호팀^DeptFullCode=101000000001!101710070010!101710070011^DeptFullName=본사!구호봉사국!재난구호팀^FullDeptName=본사 구호봉사국 재난구호팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="47" unid="120D6F22EFFA5888492583760003A9BA" noteid="B0A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101710070010&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070012</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>사회봉사팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070012^DeptName=사회봉사팀^DeptAlias=사회봉사팀^DeptUniqueCode=51F4628^DeptReceiveLevel=101000000001!101710070010!101710070012|101710070012^Company=본사;구호봉사국;사회봉사팀!사회봉사팀^DeptFullCode=101000000001!101710070010!101710070012^DeptFullName=본사!구호봉사국!사회봉사팀^FullDeptName=본사 구호봉사국 사회봉사팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="48" unid="2EE10597BD23FCD5492583760003A9BB" noteid="B0E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101710070010&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070013</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>프로그램개발운영팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070013^DeptName=프로그램개발운영팀^DeptAlias=프로그램개발운영팀^DeptUniqueCode=76B6A67^DeptReceiveLevel=101000000001!101710070010!101710070013|101710070013^Company=본사;구호봉사국;프로그램개발운영팀!프로그램개발운영팀^DeptFullCode=101000000001!101710070010!101710070013^DeptFullName=본사!구호봉사국!프로그램개발운영팀^FullDeptName=본사 구호봉사국 프로그램개발운영팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="49" unid="A9099ABF42674626492583760003A9BC" noteid="B12" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101710070014&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070015</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>RCY팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070015^DeptName=RCY팀^DeptAlias=RCY팀^DeptUniqueCode=8D7DD60^DeptReceiveLevel=101000000001!101710070014!101710070015|101710070015^Company=본사;청소년·교육국;RCY팀!RCY팀^DeptFullCode=101000000001!101710070014!101710070015^DeptFullName=본사!청소년·교육국!RCY팀^FullDeptName=본사 청소년·교육국 RCY팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="50" unid="F6D83EC992025335492583760003A9BD" noteid="B16" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_101710070014&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101710070016</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>안전교육팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101710070016^DeptName=안전교육팀^DeptAlias=안전교육팀^DeptUniqueCode=23677C5^DeptReceiveLevel=101000000001!101710070014!101710070016|101710070016^Company=본사;청소년·교육국;안전교육팀!안전교육팀^DeptFullCode=101000000001!101710070014!101710070016^DeptFullName=본사!청소년·교육국!안전교육팀^FullDeptName=본사 청소년·교육국 안전교육팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="51" unid="D806455ECEA3EE104925837600060F54" noteid="B4E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_103000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>103010001000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>재난안전교육팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=103010001000^DeptName=재난안전교육팀^DeptAlias=재난안전교육팀^DeptUniqueCode=563KKZB^DeptReceiveLevel=103000000001!103010001000|103010001000^Company=서울지사;재난안전교육팀!재난안전교육팀^DeptFullCode=103000000001!103010001000^DeptFullName=서울지사!재난안전교육팀^FullDeptName=서울지사 재난안전교육팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="52" unid="5C494B9B3204F1DD4925837600060F53" noteid="B4A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_103000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>103010009000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>회원홍보팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=103010009000^DeptName=회원홍보팀^DeptAlias=회원홍보팀^DeptUniqueCode=465UMBJ^DeptReceiveLevel=103000000001!103010009000|103010009000^Company=서울지사;회원홍보팀!회원홍보팀^DeptFullCode=103000000001!103010009000^DeptFullName=서울지사!회원홍보팀^FullDeptName=서울지사 회원홍보팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="53" unid="5F7C5478802E7560492583760006035F" noteid="B46" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_112000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>112010010000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>사회협력팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=112010010000^DeptName=사회협력팀^DeptAlias=사회협력팀^DeptUniqueCode=D39BKVX^DeptReceiveLevel=112000000001!112010010000|112010010000^Company=광주·전남지사;사회협력팀!사회협력팀^DeptFullCode=112000000001!112010010000^DeptFullName=광주·전남지사!사회협력팀^FullDeptName=광주·전남지사 사회협력팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="54" unid="37FD90E0AF1FF14349258216001788EC" noteid="A1A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_301000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301009016030</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>QPS실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301009016030^DeptName=QPS실^DeptAlias=QPS실^DeptUniqueCode=905E2LK^DeptReceiveLevel=301000000001!301009016030|301009016030^Company=서울적십자병원;QPS실!QPS실^DeptFullCode=301000000001!301009016030^DeptFullName=서울적십자병원!QPS실^FullDeptName=서울적십자병원 QPS실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="55" unid="D5257DCC4BD17AF849258216001788ED" noteid="A1E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_301000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301009012100</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>원무팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301009012100^DeptName=원무팀^DeptAlias=원무팀^DeptUniqueCode=204WKZP^DeptReceiveLevel=301000000001!301009012100|301009012100^Company=서울적십자병원;원무팀!원무팀^DeptFullCode=301000000001!301009012100^DeptFullName=서울적십자병원!원무팀^FullDeptName=서울적십자병원 원무팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="56" unid="ACC2983EBB16B76D49258216001788EB" noteid="A16" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_301000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301001000000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>진료부</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301001000000^DeptName=진료부^DeptAlias=진료부^DeptUniqueCode=B06K4HQ^DeptReceiveLevel=301000000001!301001000000|301001000000^Company=서울적십자병원;진료부!진료부^DeptFullCode=301000000001!301001000000^DeptFullName=서울적십자병원!진료부^FullDeptName=서울적십자병원 진료부^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="57" unid="561692154FA967B9492582160017A78E" noteid="A2A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_301001000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301001022000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>의무기록실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301001022000^DeptName=의무기록실^DeptAlias=의무기록실^DeptUniqueCode=1D0K4JF^DeptReceiveLevel=301000000001!301001000000!301001022000|301001022000^Company=서울적십자병원;진료부;의무기록실!의무기록실^DeptFullCode=301000000001!301001000000!301001022000^DeptFullName=서울적십자병원!진료부!의무기록실^FullDeptName=서울적십자병원 진료부 의무기록실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="58" unid="9EDAA5FAD222A9714925821600179605" noteid="A22" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_301009012100&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301009016102</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>심사계</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301009016102^DeptName=심사계^DeptAlias=심사계^DeptUniqueCode=5D7SKXF^DeptReceiveLevel=301000000001!301009012100!301009016102|301009016102^Company=서울적십자병원;원무팀;심사계!심사계^DeptFullCode=301000000001!301009012100!301009016102^DeptFullName=서울적십자병원!원무팀!심사계^FullDeptName=서울적십자병원 원무팀 심사계^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="59" unid="B26D689A17F1BB16492582160017A78F" noteid="A2E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_301009016030&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301009016034</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>QI팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301009016034^DeptName=QI팀^DeptAlias=QI팀^DeptUniqueCode=65EE2LL^DeptReceiveLevel=301000000001!301009016030!301009016034|301009016034^Company=서울적십자병원;QPS실;QI팀!QI팀^DeptFullCode=301000000001!301009016030!301009016034^DeptFullName=서울적십자병원!QPS실!QI팀^FullDeptName=서울적십자병원 QPS실 QI팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="60" unid="5644EAB4A0665B3A492582160017A790" noteid="A32" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_301009016030&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301009016036</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>환자안전관리팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301009016036^DeptName=환자안전관리팀^DeptAlias=환자안전관리팀^DeptUniqueCode=FFAE2LM^DeptReceiveLevel=301000000001!301009016030!301009016036|301009016036^Company=서울적십자병원;QPS실;환자안전관리팀!환자안전관리팀^DeptFullCode=301000000001!301009016030!301009016036^DeptFullName=서울적십자병원!QPS실!환자안전관리팀^FullDeptName=서울적십자병원 QPS실 환자안전관리팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="61" unid="1E9C8B908D772B52492583760002DFF7" noteid="ACA" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601011000000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>기획관리국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601011000000^DeptName=기획관리국^DeptAlias=기획관리국^DeptUniqueCode=6B5QKY9^DeptReceiveLevel=601000000001!601011000000|601011000000^Company=혈액관리본부;기획관리국!기획관리국^DeptFullCode=601000000001!601011000000^DeptFullName=혈액관리본부!기획관리국^FullDeptName=혈액관리본부 기획관리국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="62" unid="042703A5D1B9229C492583760002DFF5" noteid="AC2" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601002000000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>헌혈증진국</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601002000000^DeptName=헌혈증진국^DeptAlias=헌혈증진국^DeptUniqueCode=862JL29^DeptReceiveLevel=601000000001!601002000000|601002000000^Company=혈액관리본부;헌혈증진국!헌혈증진국^DeptFullCode=601000000001!601002000000^DeptFullName=혈액관리본부!헌혈증진국^FullDeptName=혈액관리본부 헌혈증진국^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="63" unid="00BB05361DFA5EDF492583760002DFF6" noteid="AC6" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601000000001&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601010000000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>정보관리실</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601010000000^DeptName=정보관리실^DeptAlias=정보관리실^DeptUniqueCode=3D6QKY6^DeptReceiveLevel=601000000001!601010000000|601010000000^Company=혈액관리본부;정보관리실!정보관리실^DeptFullCode=601000000001!601010000000^DeptFullName=혈액관리본부!정보관리실^FullDeptName=혈액관리본부 정보관리실^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="64" unid="D8321E23054688BB492583760002E876" noteid="ACE" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601002000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601002032010</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>고객지원팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601002032010^DeptName=고객지원팀^DeptAlias=고객지원팀^DeptUniqueCode=BA7HKYG^DeptReceiveLevel=601000000001!601002000000!601002032010|601002032010^Company=혈액관리본부;헌혈증진국;고객지원팀!고객지원팀^DeptFullCode=601000000001!601002000000!601002032010^DeptFullName=혈액관리본부!헌혈증진국!고객지원팀^FullDeptName=혈액관리본부 헌혈증진국 고객지원팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="65" unid="3C964BDA13B09AB8492583760002E877" noteid="AD2" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601002000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601002032027</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>헌혈대외협력팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601002032027^DeptName=헌혈대외협력팀^DeptAlias=헌혈대외협력팀^DeptUniqueCode=9D4WL5T^DeptReceiveLevel=601000000001!601002000000!601002032027|601002032027^Company=혈액관리본부;헌혈증진국;헌혈대외협력팀!헌혈대외협력팀^DeptFullCode=601000000001!601002000000!601002032027^DeptFullName=혈액관리본부!헌혈증진국!헌혈대외협력팀^FullDeptName=혈액관리본부 헌혈증진국 헌혈대외협력팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="66" unid="E1CE64B16675EC5149258584000C36D0" noteid="B62" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601002000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601002032028</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>발간사업팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601002032028^DeptName=발간사업팀^DeptAlias=발간사업팀^DeptUniqueCode=94C9KXX^DeptReceiveLevel=601000000001!601002000000!601002032028|601002032028^Company=혈액관리본부;헌혈증진국;발간사업팀!발간사업팀^DeptFullCode=601000000001!601002000000!601002032028^DeptFullName=혈액관리본부!헌혈증진국!발간사업팀^FullDeptName=혈액관리본부 헌혈증진국 발간사업팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="67" unid="001DC4FB69F4355C492583760003132C" noteid="ADA" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601010000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601010001000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>전산지원팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601010001000^DeptName=전산지원팀^DeptAlias=전산지원팀^DeptUniqueCode=7CDQKY7^DeptReceiveLevel=601000000001!601010000000!601010001000|601010001000^Company=혈액관리본부;정보관리실;전산지원팀!전산지원팀^DeptFullCode=601000000001!601010000000!601010001000^DeptFullName=혈액관리본부!정보관리실!전산지원팀^FullDeptName=혈액관리본부 정보관리실 전산지원팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="68" unid="10DC47E2F3F4CD5F492583760003132D" noteid="ADE" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601010000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601010002000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>혈액전산팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601010002000^DeptName=혈액전산팀^DeptAlias=혈액전산팀^DeptUniqueCode=2AFQKY8^DeptReceiveLevel=601000000001!601010000000!601010002000|601010002000^Company=혈액관리본부;정보관리실;혈액전산팀!혈액전산팀^DeptFullCode=601000000001!601010000000!601010002000^DeptFullName=혈액관리본부!정보관리실!혈액전산팀^FullDeptName=혈액관리본부 정보관리실 혈액전산팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="69" unid="FFC142F19F2F7577492583760003132E" noteid="AE2" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_601011000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601011032000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>수급관리팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601011032000^DeptName=수급관리팀^DeptAlias=수급관리팀^DeptUniqueCode=410HKYK^DeptReceiveLevel=601000000001!601011000000!601011032000|601011032000^Company=혈액관리본부;기획관리국;수급관리팀!수급관리팀^DeptFullCode=601000000001!601011000000!601011032000^DeptFullName=혈액관리본부!기획관리국!수급관리팀^FullDeptName=혈액관리본부 기획관리국 수급관리팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="70" unid="A3B1E914C1EA5F1B492582620013DEAC" noteid="A76" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700020002000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>총무팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700020002000^DeptName=총무팀^DeptAlias=총무팀^DeptUniqueCode=8A1UMF5^DeptReceiveLevel=700010000000!700020002000|700020002000^Company=서울서부혈액원;총무팀!총무팀^DeptFullCode=700010000000!700020002000^DeptFullName=서울서부혈액원!총무팀^FullDeptName=서울서부혈액원 총무팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="71" unid="AD410AF336FE23DD492582620013DEAE" noteid="A7E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700020033000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>헌혈개발팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700020033000^DeptName=헌혈개발팀^DeptAlias=헌혈개발팀^DeptUniqueCode=816HKZ2^DeptReceiveLevel=700010000000!700020033000|700020033000^Company=서울서부혈액원;헌혈개발팀!헌혈개발팀^DeptFullCode=700010000000!700020033000^DeptFullName=서울서부혈액원!헌혈개발팀^FullDeptName=서울서부혈액원 헌혈개발팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="72" unid="00DA4441D06B129F492582620013DEAF" noteid="A82" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700020034000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>헌혈지원팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700020034000^DeptName=헌혈지원팀^DeptAlias=헌혈지원팀^DeptUniqueCode=54EHKZ3^DeptReceiveLevel=700010000000!700020034000|700020034000^Company=서울서부혈액원;헌혈지원팀!헌혈지원팀^DeptFullCode=700010000000!700020034000^DeptFullName=서울서부혈액원!헌혈지원팀^FullDeptName=서울서부혈액원 헌혈지원팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="73" unid="AD14FB89737A30C9492582620013DEAD" noteid="A7A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010000000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700010031000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>제조관리부</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700010031000^DeptName=제조관리부^DeptAlias=제조관리부^DeptUniqueCode=E6CHKYU^DeptReceiveLevel=700010000000!700010031000|700010031000^Company=서울서부혈액원;제조관리부!제조관리부^DeptFullCode=700010000000!700010031000^DeptFullName=서울서부혈액원!제조관리부^FullDeptName=서울서부혈액원 제조관리부^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="74" unid="4A14DD166CF94195492582620013FE5F" noteid="A86" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010031000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700010031010</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>품질관리팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700010031010^DeptName=품질관리팀^DeptAlias=품질관리팀^DeptUniqueCode=307HKYV^DeptReceiveLevel=700010000000!700010031000!700010031010|700010031010^Company=서울서부혈액원;제조관리부;품질관리팀!품질관리팀^DeptFullCode=700010000000!700010031000!700010031010^DeptFullName=서울서부혈액원!제조관리부!품질관리팀^FullDeptName=서울서부혈액원 제조관리부 품질관리팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="75" unid="0BD6C9B3A78A54C7492582620013FE62" noteid="A92" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010031000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700010038020</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>간호1팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700010038020^DeptName=간호1팀^DeptAlias=간호1팀^DeptUniqueCode=1FBHKYY^DeptReceiveLevel=700010000000!700010031000!700010038020|700010038020^Company=서울서부혈액원;제조관리부;간호1팀!간호1팀^DeptFullCode=700010000000!700010031000!700010038020^DeptFullName=서울서부혈액원!제조관리부!간호1팀^FullDeptName=서울서부혈액원 제조관리부 간호1팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="76" unid="93E4C0FF181ADF73492582620013FE63" noteid="A96" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010031000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700010039030</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>간호2팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700010039030^DeptName=간호2팀^DeptAlias=간호2팀^DeptUniqueCode=7DCHKYZ^DeptReceiveLevel=700010000000!700010031000!700010039030|700010039030^Company=서울서부혈액원;제조관리부;간호2팀!간호2팀^DeptFullCode=700010000000!700010031000!700010039030^DeptFullName=서울서부혈액원!제조관리부!간호2팀^FullDeptName=서울서부혈액원 제조관리부 간호2팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="77" unid="B47271D82C3060C6492582620013FE60" noteid="A8A" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010031000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700010036040</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>제제팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700010036040^DeptName=제제팀^DeptAlias=제제팀^DeptUniqueCode=BA3HKYW^DeptReceiveLevel=700010000000!700010031000!700010036040|700010036040^Company=서울서부혈액원;제조관리부;제제팀!제제팀^DeptFullCode=700010000000!700010031000!700010036040^DeptFullName=서울서부혈액원!제조관리부!제제팀^FullDeptName=서울서부혈액원 제조관리부 제제팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="78" unid="4DF40F1D60423942492582620013FE61" noteid="A8E" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_700010031000&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700010037050</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>공급팀</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700010037050^DeptName=공급팀^DeptAlias=공급팀^DeptUniqueCode=E8DHKYX^DeptReceiveLevel=700010000000!700010031000!700010037050|700010037050^Company=서울서부혈액원;제조관리부;공급팀!공급팀^DeptFullCode=700010000000!700010031000!700010037050^DeptFullName=서울서부혈액원!제조관리부!공급팀^FullDeptName=서울서부혈액원 제조관리부 공급팀^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="79" unid="AE4B6178E1238773492582130036097D" noteid="A06" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_ROOT&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>101000000001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>본사</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=101000000001^DeptName=본사^DeptAlias=본사^DeptUniqueCode=D47K4BU^DeptReceiveLevel=101000000001|101000000001^Company=본사!본사^DeptFullCode=101000000001^DeptFullName=본사^FullDeptName=본사^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="80" unid="E216A6DCE6718E88492583760002335D" noteid="AB6" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_ROOT&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>103000000001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>서울지사</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=103000000001^DeptName=서울지사^DeptAlias=서울지사^DeptUniqueCode=21DK4CZ^DeptReceiveLevel=103000000001|103000000001^Company=서울지사!서울지사^DeptFullCode=103000000001^DeptFullName=서울지사^FullDeptName=서울지사^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="81" unid="C96DBAE1214F7499492583760002335E" noteid="ABA" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_ROOT&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>112000000001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>광주·전남지사</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=112000000001^DeptName=광주·전남지사^DeptAlias=광주·전남지사^DeptUniqueCode=969K4G6^DeptReceiveLevel=112000000001|112000000001^Company=광주·전남지사!광주·전남지사^DeptFullCode=112000000001^DeptFullName=광주·전남지사^FullDeptName=광주·전남지사^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="82" unid="BB62ABF901A0A1AC4925821600177892" noteid="A12" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_ROOT&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>301000000001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>서울적십자병원</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=301000000001^DeptName=서울적십자병원^DeptAlias=서울적십자병원^DeptUniqueCode=FEDK4HP^DeptReceiveLevel=301000000001|301000000001^Company=서울적십자병원!서울적십자병원^DeptFullCode=301000000001^DeptFullName=서울적십자병원^FullDeptName=서울적십자병원^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="83" unid="876ABF9F3F1C4290492583760002335F" noteid="ABE" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_ROOT&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>601000000001</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>혈액관리본부</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=601000000001^DeptName=혈액관리본부^DeptAlias=혈액관리본부^DeptUniqueCode=F8CN4GR^DeptReceiveLevel=601000000001|601000000001^Company=혈액관리본부!혈액관리본부^DeptFullCode=601000000001^DeptFullName=혈액관리본부^FullDeptName=혈액관리본부^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="84" unid="321B933DBBB0A03F492582620013CA83" noteid="A72" siblings="84">
+<entrydata columnnumber="0" name="$16">
+<text>&lt;P id=&quot;NODE_ROOT&quot;&gt;</text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text>700010000000</text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text>{`</text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text>서울서부혈액원</text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text>{`</text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text>is_node=1^kind=2^DeptCode=700010000000^DeptName=서울서부혈액원^DeptAlias=서울서부혈액원^DeptUniqueCode=8AFVKZG^DeptReceiveLevel=700010000000|700010000000^Company=서울서부혈액원!서울서부혈액원^DeptFullCode=700010000000^DeptFullName=서울서부혈액원^FullDeptName=서울서부혈액원^</text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text>&lt;/P&gt;</text></entrydata>
+</viewentry>
+<viewentry position="85" noteid="C0000000" siblings="84" categorytotal="true">
+<entrydata columnnumber="0" name="$16">
+<text></text></entrydata>
+<entrydata columnnumber="1" name="$18">
+<text></text></entrydata>
+<entrydata columnnumber="2" name="$11">
+<text></text></entrydata>
+<entrydata columnnumber="3" name="$20">
+<text></text></entrydata>
+<entrydata columnnumber="4" name="$12">
+<text></text></entrydata>
+<entrydata columnnumber="5" name="$13">
+<text></text></entrydata>
+<entrydata columnnumber="6" name="$15">
+<text></text></entrydata>
+</viewentry>
+</viewentries>

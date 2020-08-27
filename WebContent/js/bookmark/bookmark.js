@@ -101,7 +101,7 @@ $.Bookmark = {
                 sbFont.append(" ");
             }
 
-            var fontSize = parseInt(rectInfo.MARK_FontSize) * 0.1;
+            var fontSize = parseInt(rectInfo.MARK_FontSize) * 0.4;
             sbFont.append(fontSize);
             sbFont.append("px");
             sbFont.append(" ");

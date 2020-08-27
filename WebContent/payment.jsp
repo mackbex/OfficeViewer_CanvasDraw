@@ -11,10 +11,6 @@
 
     <%
         //Generate system id
-        String strSysID			=	null;
-        String strCurTime			=	new java.text.SimpleDateFormat("yyyyMMddHHmmssSSS").format(new java.util.Date());
-        strSysID						=	session.getId()+strCurTime;
-
         if(request.getParameterMap().size() > 0) {
             String strServerKey = g_profile.getString(request.getParameter("SVR_MODE"), "KEY", "");
             pageContext.setAttribute("SERVER_KEY", strServerKey);
@@ -39,7 +35,8 @@
                 KEY		 				: "<c:out value="${mParams['KEY'][0]}" />",
                 VIEW_MODE			    : "<c:url value ="${mParams['VIEW_MODE'][0]}" />",
                 SVR_MODE				: "<c:url value ="${mParams['SVR_MODE'][0]}" />",
-                XPI_PORT                : "<c:url value="${mParams['XPI_PORT'][0]}" />",
+                XPI_PORT_HTTP                : "<c:url value="${mParams['XPI_PORT_HTTP'][0]}" />",
+                XPI_PORT_HTTPS                : "<c:url value="${mParams['XPI_PORT_HTTPS'][0]}" />",
                 PAYMENT_LIST_URL             : "<c:url value="${PAYMENT_LIST_URL}" />",
                 PAYMENT_TYPE_URL             : "<c:url value="${PAYMENT_TYPE_URL}" />",
             }
@@ -108,11 +105,11 @@
                             <span class="title" data-i18n="ITEM_DRAFT_DATE"></span>
                         </div>
                         <div class="item_content">
-                            <input type='text' id="date" class="date_picker"
-                                   data-multiple-dates-separator=" - "
-                                   data-position="bottom left"
-                                   placeholder="yyyy/mm/dd - yyyy/mm/dd"
-                                    />
+                            <input type='text' id="fromDate" class="date_picker"
+                                   data-position="bottom left" maxlength="10"/>
+                            ~
+                            <input type='text' id="toDate" class="date_picker"
+                                   data-position="bottom left" maxlength="10"/>
                         </div>
                     </div>
                 </div>
