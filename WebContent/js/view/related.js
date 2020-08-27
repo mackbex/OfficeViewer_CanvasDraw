@@ -212,59 +212,64 @@ $.Related = {
         };
 
 
-        $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
-            if("T" === objRes.RESULT.toUpperCase())
-            {
-                try {
-                    var res = $.parseXML(objRes.MSG);
-                    $.Related.displayOrgList(res);
-                }
-                catch(e) {
-                    $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-                }
-            }
-            else
-            {
-                $.Common.simpleToast("Failed get result.");
-            }
-            $.Common.HideProgress("#org_list_progress");
-        });
+        // $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
+        //     if("T" === objRes.RESULT.toUpperCase())
+        //     {
+        //         try {
+        //             var res = $.parseXML(objRes.MSG);
+        //             $.Related.displayOrgList(res);
+        //         }
+        //         catch(e) {
+        //             $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         $.Common.simpleToast("Failed get result.");
+        //     }
+        //     $.Common.HideProgress("#org_list_progress");
+        // });
 
-        //
-        //  $.ajax({
-        //      type: "GET",
-        //      // url : url.toString(),
-        //      url: g_RootURL + "testdoc",
-        //      dataType: 'xml',
-        //      crossOrigin : true,
-        //      success: function (data) {
-        //          $.Related.displayOrgList(data);
-        //      },
-        //      fail :function(e) {
-        //          $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-        //      },
-        //      error : function(d, textStatus, error) {
-        //          $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-        //      },
-        //      complete: function () {
-        //          $.Common.HideProgress("#org_list_progress");
-        //      }
-        //      // jsonp : "callback",
-        // //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        //      // data: params,
-        //      // success: function (data) {
-        //      //     $.Related.displayOrgList(data);
-        //      // },
-        //      // fail :function(d, textStatus, error) {
-        //      //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-        //      // },
-        //      // error : function() {
-        //      //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-        //      // },
-        //      // complete: function () {
-        //      //     $.Common.HideProgress("#org_list_progress");
-        //      // }
-        //  });
+
+         $.ajax({
+             type: "GET",
+             // url : url.toString(),
+             url: g_RootURL + "testdoc_2020",
+             dataType: 'xml',
+             crossOrigin : true,
+             success: function (data) {
+                 if($.Common.isBlank(year) || year === "cur") {
+                     $.Related.displayOrgListForCur(data);
+                 }
+                 else {
+                     $.Related.displayOrgList(data);
+                 }
+             },
+             fail :function(e) {
+                 $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+             },
+             error : function(d, textStatus, error) {
+                 $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+             },
+             complete: function () {
+                 $.Common.HideProgress("#org_list_progress");
+             }
+             // jsonp : "callback",
+        //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             // data: params,
+             // success: function (data) {
+             //     $.Related.displayOrgList(data);
+             // },
+             // fail :function(d, textStatus, error) {
+             //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+             // },
+             // error : function() {
+             //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+             // },
+             // complete: function () {
+             //     $.Common.HideProgress("#org_list_progress");
+             // }
+         });
 
 
     },
@@ -273,6 +278,7 @@ $.Related = {
         var tree = {};
         $.Related.orgTreeXml = $.parseXML("<org/>");
         $(data).find("entrydata").each(function(i){
+
             if($(this).attr("columnnumber") === "5") {
                 var val = $(this).find("text").text();
                 if($.Common.isBlank(val)) {
@@ -319,6 +325,139 @@ $.Related = {
         $.Related.drawOrgTree();
 
     },
+
+    createRootNodeForCur : function(strName, code) {
+        var newElement = $.Related.orgTreeXml.createElement("item");
+        // newElement.appendChild(document.createTextNode(name));
+        newElement.setAttribute("code", code);
+        // newElement.setAttribute("key", key);
+        newElement.setAttribute("name", strName);
+        $.Related.orgTreeXml.documentElement.appendChild(newElement);
+        newElement.setAttribute("child",true);
+        newElement.setAttribute("isRoot",true);
+            // <P id="NODE_ROOT">ROOT1{`본/지사{`is_node=1^kind=2^DeptCode=ROOT1^DeptName=본/지사^DeptAlias=본/지사^DeptUniqueCode=ROOT1^</P>
+            // <P id="NODE_ROOT">ROOT6{`혈액{`is_node=1^kind=2^DeptCode=ROOT6^DeptName=혈액^DeptAlias=혈액^DeptUniqueCode=ROOT6^</P>
+            // <P id="NODE_ROOT">ROOT3{`병원{`is_node=1^kind=2^DeptCode=ROOT3^DeptName=병원^DeptAlias=병원^DeptUniqueCode=ROOT3^</P>
+            // <P id="NODE_ROOT">ROOT4{`기타{`is_node=1^kind=2^DeptCode=ROOT4^DeptName=기타^DeptAlias=기타^DeptUniqueCode=ROOT4^</P>
+    },
+
+    displayOrgListForCur : function(data) {
+
+        var tree = {};
+        $.Related.orgTreeXml = $.parseXML("<org/>");
+
+        $.Related.createRootNodeForCur("본/지사","NODE_ROOT1");
+        $.Related.createRootNodeForCur("혈액","NODE_ROOT6");
+        $.Related.createRootNodeForCur("병원","NODE_ROOT3");
+        $.Related.createRootNodeForCur("기타","NODE_ROOT4");
+
+        $(data).find("entrydata").each(function(){
+            if($(this).attr("columnnumber") === "5") {
+
+                var entry = $(this).parent().find("entrydata[columnnumber=0]");
+                var rootNode = entry.find("text").text().toUpperCase();
+                rootNode = rootNode.substring(rootNode.indexOf("\"") + 1, rootNode.lastIndexOf("\""));
+                //verify valid node
+                if (rootNode.indexOf("ROOT") > -1) {
+
+                    var child = $.Related.orgTreeXml.documentElement.childNodes;
+
+                    for(var i = 0; i < child.length; i++) {
+                        var curChild = $.Related.orgTreeXml.documentElement.childNodes[i];
+                        var code = curChild.getAttribute("code");
+
+                        if(code === rootNode) {
+                            var childCode = $(this).parent().find("entrydata[columnnumber=1]").find("text").text();
+                            var curChildVal = curChild.getAttribute("childcode");
+                            if($.Common.isBlank(curChildVal)) {
+                                curChildVal = childCode;
+                            }
+                            else {
+                                curChildVal = curChildVal + ";" + childCode;
+                            }
+                            curChild.setAttribute("childcode",curChildVal);
+                        }
+                    }
+                }
+            }
+        })
+
+        $(data).find("entrydata").each(function(i){
+
+            if($(this).attr("columnnumber") === "5") {
+
+                var entry       = $(this).parent().find("entrydata[columnnumber=0]");
+                var rootNode    = entry.find("text").text().toUpperCase();
+                rootNode = rootNode.substring(rootNode.indexOf("\"") + 1, rootNode.lastIndexOf("\""));
+
+                var val = $(this).find("text").text();
+                if($.Common.isBlank(val)) {
+                    return true;
+                }
+
+                val = val.split("^");
+
+                var objDeptItem = {};
+                $.each(val, function(){
+                    var pair = this.split("=");
+                    switch(pair[0]) {
+                        case "DeptCode" :
+                        case "DeptUniqueCode" :
+                        case "DeptName" :
+                        case "DeptFullCode" :
+                        case "DeptFullName" :
+                            objDeptItem[pair[0]] = pair[1];
+                            break;
+                    }
+                });
+
+                try {
+                    var deptCodes = objDeptItem["DeptFullCode"].split("!");
+                    var deptNames = objDeptItem["DeptFullName"].split("!");
+                    var key = objDeptItem["DeptUniqueCode"];
+
+                    var roots = $.Related.orgTreeXml.documentElement.childNodes;
+                    for(var i = 0; i < roots.length; i++) {
+                        var curChild = roots[i];
+                        var childCode = curChild.getAttribute("childcode").split(";");
+
+                        var isFound = false;
+                        for(var j = 0; j < childCode.length; j++) {
+                            if(deptCodes[0] === childCode[j]) {
+                                deptNames.unshift(curChild.getAttribute("name"));
+                                deptCodes.unshift(curChild.getAttribute("code"));
+                                isFound = true;
+                                break;
+                            }
+                        }
+
+                        if(isFound) {
+                            break;
+                        }
+
+                    }
+
+                }
+                catch (e) {
+                    $.Common.simpleToast("Failed get org list.");
+                    // objDeptItem
+                    // console.log(e)
+                }
+
+                //Get organization list.
+                var parentCode = null;
+                $.each(deptCodes, function(i) {
+                    parentCode = $.Related.getTreeSection(parentCode, key, this, deptNames[i]);
+                });
+            }
+        });
+
+
+        //Draw org tree
+        $.Related.drawOrgTree();
+
+    },
+
     getTreeSection : function(parentCode, key, code, name) {
         var org = $.Related.orgTreeXml;
 
@@ -361,13 +500,16 @@ $.Related = {
             var child = object.childNodes[i];
             var code = child.getAttribute("code");
             var name = child.getAttribute("name");
+            var isRoot = child.getAttribute("isRoot");
             var item = document.createElement("li");
-            var itemName = new StringBuffer();
-            itemName.append("<a href=\"javascript:$.Related.checkOrg('"+code+"','"+name+"')\">");
-            itemName.append(name);
-            itemName.append("</a>");
-            item.innerHTML = itemName.toString();
 
+            if(!isRoot) {
+                var itemName = new StringBuffer();
+                itemName.append("<a href=\"javascript:$.Related.checkOrg('"+code+"','"+name+"')\">");
+                itemName.append(name);
+                itemName.append("</a>");
+                item.innerHTML = itemName.toString();
+            }
             if(!$.Common.isBlank(code)) {
                 item.setAttribute('code', code);
                 $(list).addClass("nested");
@@ -384,9 +526,15 @@ $.Related = {
 
                     var modified = new StringBuffer();
                     modified.append("<span class=\"caret\"></span>");
-                    modified.append("<a href=\"javascript:$.Related.checkOrg('"+code+"','"+name+"')\">");
-                    modified.append(name);
-                    modified.append("</a>");
+                    if(!isRoot) {
+                        modified.append("<a href=\"javascript:$.Related.checkOrg('" + code + "','" + name + "')\">");
+                        modified.append(name);
+                        modified.append("</a>");
+                    }
+                    else {
+                        modified.append(name);
+                    }
+
                     $(item).html(modified.toString());
                 // }
 
@@ -409,8 +557,8 @@ $.Related = {
 
     drawOrgTree : function() {
 
-        // xmlString = (new XMLSerializer()).serializeToString($.Related.orgTreeXml);
-        // console.log(xmlString);
+        xmlString = (new XMLSerializer()).serializeToString($.Related.orgTreeXml);
+        console.log(xmlString);
 
 
         $("#conts").empty();
