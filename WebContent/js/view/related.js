@@ -5,6 +5,7 @@ $.Related = {
     colorSet: null,
     orgTreeXml : $.parseXML("<org/>"),
     curOrg : {name:"", code:"815000001"},
+    oriOrg : {name:"", code:""},
   //  orgTree : new StringBuffer(),
     init : function(params) {
         $.Common.ShowProgress("#area_progress","Waiting..","000000","0.7");
@@ -14,6 +15,7 @@ $.Related = {
         //Set globalization.
         $.Related.localeMsg = $.Common.Localize($.Lang, "data-i18n", params.LANG,"Related");
 
+        $.Related.oriOrg.code = this.params.RELATED_PART_NO;
         // if($.Common.isBlank(this.params.RELATED_LIST_URL)) {
         //     $.Common.simpleAlert(null,this.localeMsg.RELATED_TYPE_URL);
         //     return
@@ -212,64 +214,64 @@ $.Related = {
         };
 
 
-        // $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
-        //     if("T" === objRes.RESULT.toUpperCase())
-        //     {
-        //         try {
-        //             var res = $.parseXML(objRes.MSG);
-        //             $.Related.displayOrgList(res);
-        //         }
-        //         catch(e) {
-        //             $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         $.Common.simpleToast("Failed get result.");
-        //     }
-        //     $.Common.HideProgress("#org_list_progress");
-        // });
+        $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
+            if("T" === objRes.RESULT.toUpperCase())
+            {
+                try {
+                    var res = $.parseXML(objRes.MSG);
+                    $.Related.displayOrgList(res);
+                }
+                catch(e) {
+                    $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+                }
+            }
+            else
+            {
+                $.Common.simpleToast("Failed get result.");
+            }
+            $.Common.HideProgress("#org_list_progress");
+        });
 
 
-         $.ajax({
-             type: "GET",
-             // url : url.toString(),
-             url: g_RootURL + "testdoc_2020",
-             dataType: 'xml',
-             crossOrigin : true,
-             success: function (data) {
-                 if($.Common.isBlank(year) || year === "cur") {
-                     $.Related.displayOrgListForCur(data);
-                 }
-                 else {
-                     $.Related.displayOrgList(data);
-                 }
-             },
-             fail :function(e) {
-                 $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-             },
-             error : function(d, textStatus, error) {
-                 $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-             },
-             complete: function () {
-                 $.Common.HideProgress("#org_list_progress");
-             }
-             // jsonp : "callback",
-        //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-             // data: params,
-             // success: function (data) {
-             //     $.Related.displayOrgList(data);
-             // },
-             // fail :function(d, textStatus, error) {
-             //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-             // },
-             // error : function() {
-             //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-             // },
-             // complete: function () {
-             //     $.Common.HideProgress("#org_list_progress");
-             // }
-         });
+        //  $.ajax({
+        //      type: "GET",
+        //      // url : url.toString(),
+        //      url: g_RootURL + "testdoc_2020",
+        //      dataType: 'xml',
+        //      crossOrigin : true,
+        //      success: function (data) {
+        //          if($.Common.isBlank(year) || year === "cur") {
+        //              $.Related.displayOrgListForCur(data);
+        //          }
+        //          else {
+        //              $.Related.displayOrgList(data);
+        //          }
+        //      },
+        //      fail :function(e) {
+        //          $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+        //      },
+        //      error : function(d, textStatus, error) {
+        //          $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+        //      },
+        //      complete: function () {
+        //          $.Common.HideProgress("#org_list_progress");
+        //      }
+        //      // jsonp : "callback",
+        // //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        //      // data: params,
+        //      // success: function (data) {
+        //      //     $.Related.displayOrgList(data);
+        //      // },
+        //      // fail :function(d, textStatus, error) {
+        //      //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+        //      // },
+        //      // error : function() {
+        //      //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+        //      // },
+        //      // complete: function () {
+        //      //     $.Common.HideProgress("#org_list_progress");
+        //      // }
+        //  });
 
 
     },
@@ -479,6 +481,7 @@ $.Related = {
             target.appendChild(newElement);
             target.setAttribute("child",true);
 
+
             // parent = newElement;
           //    xmlString = (new XMLSerializer()).serializeToString(org);
            // console.log(xmlString);
@@ -536,9 +539,16 @@ $.Related = {
                     }
 
                     $(item).html(modified.toString());
+
+
                 // }
 
                 $.Related.convertTreeHtml(child, item);
+            }
+            if($.Related.oriOrg.code === code) {
+                $(item).attr("current","1");
+                $.Related.oriOrg.name = name;
+                $.Related.oriOrg.code = code;
             }
             // else {
             //     console.log("no child");
@@ -557,8 +567,8 @@ $.Related = {
 
     drawOrgTree : function() {
 
-        xmlString = (new XMLSerializer()).serializeToString($.Related.orgTreeXml);
-        console.log(xmlString);
+        // xmlString = (new XMLSerializer()).serializeToString($.Related.orgTreeXml);
+        // console.log(xmlString);
 
 
         $("#conts").empty();
@@ -566,17 +576,37 @@ $.Related = {
 
         $("#conts").find("ul:first-child").removeClass("nested");
 
-        var toggler = document.getElementsByClassName("caret");
+        var toggler = $("#conts").find(".caret");// getElementsByClassName("caret");
         var i;
+
 
         for (i = 0; i < toggler.length; i++) {
             toggler[i].addEventListener("click", function() {
-                this.parentElement.querySelector(".nested").classList.toggle("active");
-                this.classList.toggle("caret-down");
+                $.Related.toggleTree(this);
             });
         }
+
+        var parentUl = $("#conts").find("[current=1]").parents("ul");
+
+
+        if(parentUl != null) {
+            for(var i = 0; i < parentUl.size() - 1; i++) {
+                $.Related.toggleTree(parentUl[i]);
+            }
+
+            $.Related.checkOrg($.Related.oriOrg.code, $.Related.oriOrg.name);
+        }
+        // $.Related.toggleTree(current.parent()[0]);
+        // current.parent().
+        // console.log(current);
+
+
     },
 
+    toggleTree:function($el){
+        $el.parentElement.querySelector(".nested").classList.toggle("active");
+        $el.classList.toggle("caret-down");
+    },
     addToSelectedList : function() {
         var items = $.grep($("#result_list").jsGrid("option", "data"), function(obj){
             return obj.isChecked === true;

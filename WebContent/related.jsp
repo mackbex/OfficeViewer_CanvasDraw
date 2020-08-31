@@ -43,7 +43,8 @@
                 MAIN_URL                : "<c:url value="${MAIN_URL}" />",
                 ORG_OLD_URL                : "<c:url value="${ORG_OLD_URL}" />",
                 ORG_CUR_URL                : "<c:url value="${ORG_CUR_URL}" />",
-                OPEN_DOC_URL            : "<c:url value="${OPEN_DOC_URL}" />"
+                OPEN_DOC_URL            : "<c:url value="${OPEN_DOC_URL}" />",
+                RELATED_PART_NO            : "<c:out value="${sessionScope.RELATED_PART_NO}" />",
             }
            $.Related.init(params);
         })
