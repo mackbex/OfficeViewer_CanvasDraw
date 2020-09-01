@@ -125,7 +125,6 @@ $.Lang = {
 				"CURRENT_ORG" : "현조직",
 				"SELECTED_ORG" : "선택된 조직",
 				"CLOSE" : "닫기",
-				"ORG_LOCAL" :"국내기관",
 				"ALERT_SELECT_ORG" : "조직을 선택하세요.",
 				"DOC_ALL" : "전체대장",
 				"DOC_PROD" : "생산대장",

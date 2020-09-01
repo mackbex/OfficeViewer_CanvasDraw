@@ -111,10 +111,10 @@ public class GetModel {
     	return obj_Res;
 	}
 
-	public String getSDocNo(String key) {
+	public JsonObject getSlipInfo(String key) {
 
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
-		String res = null;
+		JsonObject res = new JsonObject();
 
 		if (m_AC == null)	return null;
 
@@ -128,7 +128,8 @@ public class GetModel {
 
 			while(m_AC.next())
 			{
-				res = m_AC.GetString("SDOC_NO");
+				res.addProperty("SDOC_NO",m_AC.GetString("SDOC_NO"));
+				res.addProperty("SLIP_IRN",m_AC.GetString("SLIP_IRN"));
 			}
 		}
 		catch(Exception e)

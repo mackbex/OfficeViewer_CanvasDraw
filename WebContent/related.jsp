@@ -45,6 +45,7 @@
                 ORG_CUR_URL                : "<c:url value="${ORG_CUR_URL}" />",
                 OPEN_DOC_URL            : "<c:url value="${OPEN_DOC_URL}" />",
                 RELATED_PART_NO            : "<c:out value="${sessionScope.RELATED_PART_NO}" />",
+                RELATED_PART_NM            : "<c:out value="${sessionScope.RELATED_PART_NM}" />",
             }
            $.Related.init(params);
         })
@@ -69,7 +70,7 @@
                     <span class="text_search_option" data-i18n="SEARCH_OPTION"></span>
                 </div>
                 <div class="area_selected_org" id="selectedOrg">
-                    (<span data-i18n="ORG_LOCAL"></span>)
+<%--                    (<span data-i18n="ORG_LOCAL"></span>)--%>
                 </div>
                 <div class="btn_move_doc" onclick="$.Related.Open_organization();">
                     <span data-i18n="MOVE_DOC"></span>

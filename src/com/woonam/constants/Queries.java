@@ -42,8 +42,8 @@ public class Queries {
 	public final static String GET_ORIGINAL_INFO = " Select DOC_IRN, ORG_FILE From " 
 			+ " IMG_ORGFILE_T Where ORG_IRN = ? And ORG_FLAG !='9' ";
 
-	public final static String GET_SDOC_NO = " Select SDOC_NO From "
-			+ " IMG_SLIPDOC_T Where JDOC_NO = ? and SDOC_STEP !='9' and ROWNUM < 1 ";
+	public final static String GET_SDOC_NO = " Select a.SDOC_NO, b.SLIP_IRN From "
+			+ " IMG_SLIPDOC_T a Inner Join IMG_SLIP_T b On a.SDOC_NO = b.SDOC_NO Where a.JDOC_NO = ? and a.SDOC_STEP !='9' and ROWNUM <= 1 ";
 	
     public final static String GET_API_SLIP_CNT = " EXEC ProcImg_GetCnt ?, ?, ? ";
     public final static String GET_API_SLIP_LIST = " EXEC ProcImg_GetList ?, ?, ?, ? ";
@@ -58,8 +58,8 @@ public class Queries {
     public final static String COPY_SLIP_JDOC_NO = " EXEC ProcImg_Copy ?, ?, ?, ? ";
     public final static String GET_SLIP_INFO = " EXEC ProcImg_SlipDOC ?, ?, ? ";
 	public final static String ADD_BOOKMARK_FOR_CARD = " Insert Into IMG_BOOKMARK_T (MARK_IRN, DEVICE, SDOC_NO, SLIP_IRN, MARK_TYPE,  MARK_RECT," +
-			"MARK_LineWidth, MARK_LineColor, MARK_BackColor, MARK_Alpha, MARK_Comment, MARK_TextColor, MARK_FontName, MARK_FontSize" +
-			"MARK_BackGround, MARK_Italic, MARK_Bold, ENABLE, CORP_NO, REG_USER, REG_TIME, SDOC_SYSTEM ) Values (" +
+			"\"MARK_LineWidth\", \"MARK_LineColor\", \"MARK_BackColor\", \"MARK_Alpha\", \"MARK_Comment\", \"MARK_TextColor\", \"MARK_FontName\", \"MARK_FontSize\"," +
+			"\"MARK_BackGround\", \"MARK_Italic\", \"MARK_Bold\", ENABLE, CORP_NO, REG_USER, REG_TIME, SDOC_SYSTEM ) Values (" +
 			" ?, 'PC', ?, ?, '2', '379,2050,1405,2591', '1', '0,0,0' , '255,255,0', '50', ? , '0,128,0', '굴림' ,'35', " +
 			" '1', '0', '0', '1', ?, ?, CURRENT_TIMESTAMP, '1' " +
 			") ";

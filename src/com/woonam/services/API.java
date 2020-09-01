@@ -1,7 +1,6 @@
 package com.woonam.services;
 
 import java.io.File;
-import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -737,7 +736,7 @@ public class API {
 							"ko");
 
 					String key = m_C.getParamValue(params, "KEY", "");
-					m_SM.addBookmark(objUserInfo, m_GM.getSDocNo(key));
+					m_SM.addBookmark(objUserInfo, m_GM.getSlipInfo(key));
 				}
 				else {
 					obj_res = ResultMsg("F", res_total+"");

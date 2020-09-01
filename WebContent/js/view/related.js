@@ -4,7 +4,7 @@ $.Related = {
     localeMsg : null,
     colorSet: null,
     orgTreeXml : $.parseXML("<org/>"),
-    curOrg : {name:"", code:"815000001"},
+    curOrg : {name:"", code:""},
     oriOrg : {name:"", code:""},
   //  orgTree : new StringBuffer(),
     init : function(params) {
@@ -16,6 +16,10 @@ $.Related = {
         $.Related.localeMsg = $.Common.Localize($.Lang, "data-i18n", params.LANG,"Related");
 
         $.Related.oriOrg.code = this.params.RELATED_PART_NO;
+
+        $.Related.checkOrg(this.params.RELATED_PART_NO, this.params.RELATED_PART_NM);
+
+
         // if($.Common.isBlank(this.params.RELATED_LIST_URL)) {
         //     $.Common.simpleAlert(null,this.localeMsg.RELATED_TYPE_URL);
         //     return
@@ -43,6 +47,9 @@ $.Related = {
         //Set UI set
         $.Related.setUIColor();
         $.Related.initializeRelated();
+
+        $.Related.confirmOrgSelect();
+
     },
     initInputDateProc : function() {
         $("#sel_date").inputFilter(function(value) {
@@ -214,64 +221,64 @@ $.Related = {
         };
 
 
-        $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
-            if("T" === objRes.RESULT.toUpperCase())
-            {
-                try {
-                    var res = $.parseXML(objRes.MSG);
-                    $.Related.displayOrgList(res);
-                }
-                catch(e) {
-                    $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-                }
-            }
-            else
-            {
-                $.Common.simpleToast("Failed get result.");
-            }
-            $.Common.HideProgress("#org_list_progress");
-        });
+        // $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
+        //     if("T" === objRes.RESULT.toUpperCase())
+        //     {
+        //         try {
+        //             var res = $.parseXML(objRes.MSG);
+        //             $.Related.displayOrgList(res);
+        //         }
+        //         catch(e) {
+        //             $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         $.Common.simpleToast("Failed get result.");
+        //     }
+        //     $.Common.HideProgress("#org_list_progress");
+        // });
 
 
-        //  $.ajax({
-        //      type: "GET",
-        //      // url : url.toString(),
-        //      url: g_RootURL + "testdoc_2020",
-        //      dataType: 'xml',
-        //      crossOrigin : true,
-        //      success: function (data) {
-        //          if($.Common.isBlank(year) || year === "cur") {
-        //              $.Related.displayOrgListForCur(data);
-        //          }
-        //          else {
-        //              $.Related.displayOrgList(data);
-        //          }
-        //      },
-        //      fail :function(e) {
-        //          $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-        //      },
-        //      error : function(d, textStatus, error) {
-        //          $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-        //      },
-        //      complete: function () {
-        //          $.Common.HideProgress("#org_list_progress");
-        //      }
-        //      // jsonp : "callback",
-        // //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        //      // data: params,
-        //      // success: function (data) {
-        //      //     $.Related.displayOrgList(data);
-        //      // },
-        //      // fail :function(d, textStatus, error) {
-        //      //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-        //      // },
-        //      // error : function() {
-        //      //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-        //      // },
-        //      // complete: function () {
-        //      //     $.Common.HideProgress("#org_list_progress");
-        //      // }
-        //  });
+         $.ajax({
+             type: "GET",
+             // url : url.toString(),
+             url: g_RootURL + "testdoc_2020",
+             dataType: 'xml',
+             crossOrigin : true,
+             success: function (data) {
+                 if($.Common.isBlank(year) || year === "cur") {
+                     $.Related.displayOrgListForCur(data);
+                 }
+                 else {
+                     $.Related.displayOrgList(data);
+                 }
+             },
+             fail :function(e) {
+                 $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+             },
+             error : function(d, textStatus, error) {
+                 $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+             },
+             complete: function () {
+                 $.Common.HideProgress("#org_list_progress");
+             }
+             // jsonp : "callback",
+        //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+             // data: params,
+             // success: function (data) {
+             //     $.Related.displayOrgList(data);
+             // },
+             // fail :function(d, textStatus, error) {
+             //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+             // },
+             // error : function() {
+             //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+             // },
+             // complete: function () {
+             //     $.Common.HideProgress("#org_list_progress");
+             // }
+         });
 
 
     },
@@ -623,12 +630,12 @@ $.Related = {
                 });
 
                 var info = new StringBuffer();
-                if($.Related.curOrg !== null && $.Related.curOrg.code !== "815000001") {
+                // if($.Related.curOrg !== null && $.Related.curOrg.code !== "815000001") {
                     info.append($.Related.curOrg.name);
-                }
-                else {
-                    info.append($.Related.localeMsg.ORG_LOCAL);
-                }
+                // }
+                // else {
+                //     info.append($.Related.localeMsg.ORG_LOCAL);
+                // }
                 info.append("-");
                 info.append(this.REG_NO);
 
@@ -679,12 +686,17 @@ $.Related = {
 
             var category = $("input[name='chk_category']:checked").val();
 
+            var optionSelected = $("#doc_year").find(":selected").val();
+            if(optionSelected === "cur" || $.Common.isBlank(optionSelected)) {
+                optionSelected = new Date().getFullYear();
+            }
+
             var url = new StringBuffer();
             url.append($.Related.params.MAIN_URL);
             url.append("approve/repository/doc");
             url.append($.Related.curOrg.code);
             url.append("_");
-            url.append(params.SELECT_DATE.substring(0, 4));
+            url.append(optionSelected);
             url.append(".nsf/web_by_aprv_all_link?readviewentries&view=web_by_aprv_all_link&start=1&count=10000&page_no=1&all_view=0&flat_view=0&RestrictToCategory=");
             url.append(params.SELECT_DATE);
             url.append("&category=");
@@ -697,53 +709,54 @@ $.Related = {
                 URL : url.toString()
             };
 
-            $.when($.Common.RunCommand(g_RelatedCommand, "GET_DOC_LIST", params)).then(function(objRes){
-                if("T" === objRes.RESULT.toUpperCase())
-                {
-                    try {
-                        // var res = $.parseXML(objRes.MSG);
-                        var res = $.parseJSON(objRes.MSG);
-                        $.Related.Push_SearchResultItem(res);
-                    }
-                    catch(e) {
-                        $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-                    }
-                }
-                else
-                {
-                    $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_DOCLIST);
-                }
-
-                $.Common.HideProgress("#related_progress");
-            });
-
-            // $.ajax({
-            //     type : "GET",
-            //     url : url.toString(),
-            //     // url: g_RootURL + "searchRes.json",
-            //     dataType: 'json',
-            //     crossOrigin : true,
-            //     data:params,
-            //      success: function(data) {
-            //         $.Related.Push_SearchResultItem(data);
-            //     },
-            //     error: function(error) {
-            //         $.Common.simpleToast("Failed get result.");
-            //         //     deferred.reject(error);
-            //     },
-            //     //
-            //     // success: function(data) {
-            //     //     $.Related.Push_SearchResultItem(data);
-            //     // },
-            //     // error: function(error) {
-            //     //     $.Common.simpleToast("Failed get result.");
-            //     //     //     deferred.reject(error);
-            //     // },
-            //     //
-            //     // complete: function(){
-            //     //     $.Common.HideProgress("#related_progress");
-            //     // }
+            // $.when($.Common.RunCommand(g_RelatedCommand, "GET_DOC_LIST", params)).then(function(objRes){
+            //     if("T" === objRes.RESULT.toUpperCase())
+            //     {
+            //         try {
+            //             // var res = $.parseXML(objRes.MSG);
+            //             var res = $.parseJSON(objRes.MSG);
+            //             $.Related.Push_SearchResultItem(res);
+            //         }
+            //         catch(e) {
+            //             $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+            //         }
+            //     }
+            //     else
+            //     {
+            //         $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_DOCLIST);
+            //     }
+            //
+            //     $.Common.HideProgress("#related_progress");
             // });
+
+            $.ajax({
+                type : "GET",
+                // url : url.toString(),
+                url: g_RootURL + "searchRes.json",
+                dataType: 'json',
+                crossOrigin : true,
+                data:params,
+                success: function(data) {
+                    $.Related.Push_SearchResultItem(data);
+                },
+                error: function(error) {
+                    $.Common.simpleToast("Failed get result.");
+                    //     deferred.reject(error);
+                },
+                complete: function(){
+                    $.Common.HideProgress("#related_progress");
+                }
+                //
+                // success: function(data) {
+                //     $.Related.Push_SearchResultItem(data);
+                // },
+                // error: function(error) {
+                //     $.Common.simpleToast("Failed get result.");
+                //     //     deferred.reject(error);
+                // },
+                //
+
+            });
         }
     },
 
@@ -900,7 +913,7 @@ $.Related = {
     },
     confirmOrgSelect : function() {
 
-        if($.Related.curOrg !== null && $.Related.curOrg.code !== "815000001") {
+        if($.Related.curOrg !== null) {
 
             $("#selectedOrg").html("("+$.Related.curOrg.name+")");
             $.Related.closeLayer();

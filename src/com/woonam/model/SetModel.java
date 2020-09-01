@@ -911,7 +911,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return nResCnt;
 	}
 
-	public int addBookmark(JsonObject userInfo, String sdocNo)
+	public int addBookmark(JsonObject userInfo, JsonObject slipInfo)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		int nResCnt	 = -1;
@@ -923,13 +923,13 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 
 			pStmt.setString(0, m_C.getIRN(""));
-			pStmt.setString(1, sdocNo);
-			pStmt.setString(2, m_C.getIRN(""));
+			pStmt.setString(1, slipInfo.get("SDOC_NO").getAsString());
+			pStmt.setString(2, slipInfo.get("SLIP_IRN").getAsString());
 			pStmt.setString(3, userInfo.get("USER_NM").getAsString());
 			pStmt.setString(4, userInfo.get("CORP_NO").getAsString());
 			pStmt.setString(5, userInfo.get("USER_ID").getAsString());
 
-			String res 			= m_AC.SetProcedure(pStmt.getQuery(), strFuncName);
+			String res 			= m_AC.SetData(pStmt.getQuery(), strFuncName);
 			String resFlag		= res.substring(0,1);
 			nResCnt			=  m_C.getResCnt(res);
 
