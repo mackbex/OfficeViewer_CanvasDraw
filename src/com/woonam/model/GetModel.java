@@ -64,7 +64,6 @@ public class GetModel {
 			
 			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
 
-			
 			while(m_AC.next()) 
 			{
 				objRes = m_AC.Get_itemObj(objRes, m_AC.Get_CurIndex());
