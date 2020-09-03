@@ -63,6 +63,7 @@ public class GetModel {
 			pStmt.setString(2, strLang);
 			
 			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
+
 			
 			while(m_AC.next()) 
 			{

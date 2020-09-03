@@ -97,7 +97,7 @@
 		session.setAttribute("RELATED_PART_NO",	"101700119001");//C.getParamValue(mParams, "RELATED_PART_NO", ""));	//objUserInfo.get("RELATED_PART_NO").getAsString());
 		session.setAttribute("RELATED_PART_NM",	"101700119001");//C.getParamValue(mParams, "RELATED_PART_NM", ""));	//objUserInfo.get("RELATED_PART_NM").getAsString());
 		session.setAttribute("TOKEN",		"AAECAzVGNDQ3RDBDNUY0NTA5QUNDTj0RudoRyL8RwaQvT1U9UjIwMTkyNTQvTz1LUkMPkTMecmsMGccHPPmIlomoh/X1pA=="); //C.getParamValue(mParams, "TOKEN", ""));
-	
+
 
 	}
 	catch(Exception e)
