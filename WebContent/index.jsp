@@ -5,6 +5,7 @@
 <%@ include file="/common/common.jsp"%>
 <%@ page import="com.woonam.connect.AgentConnect" %>
 <%@ page import="com.woonam.model.GetModel" %>
+<%@ page import="java.net.URLDecoder" %>
 <%
 	//Prepend session disappearing bugs on IE.
 	response.setHeader("P3P","CP='CAO PSA CONi OTR OUR DEM ONL'");
@@ -43,6 +44,34 @@
 
 	String command 										= request.getParameter("COMMAND");
 	String isInterface 									= request.getParameter("INTERFACE");
+
+	String token = C.getParamValue(mParams, "TOKEN", "");
+	String relatedPartNo = C.getParamValue(mParams, "RELATED_PART_NO", "");
+	String relatedPartNm = C.getParamValue(mParams, "RELATED_PART_NM", "");
+
+//	if(C.isBlank(relatedPartNo))
+//	{
+//		RequestDispatcher rd = request.getRequestDispatcher("slip_error.jsp?ERR_MSG=EMPTY_PART_INFO");
+//		rd.forward(request,response);
+//		return;
+//	}
+//
+//
+//	if(C.isBlank(relatedPartNm))
+//	{
+//		RequestDispatcher rd = request.getRequestDispatcher("slip_error.jsp?ERR_MSG=EMPTY_PART_INFO");
+//		rd.forward(request,response);
+//		return;
+//	}
+//
+//
+//	if(C.isBlank(token))
+//	{
+//		RequestDispatcher rd = request.getRequestDispatcher("slip_error.jsp?ERR_MSG=EMPTY_TOKEN");
+//		rd.forward(request,response);
+//		return;
+//	}
+
 
 	if(C.isBlank(strKey))
   	{
@@ -94,9 +123,9 @@
 		session.setAttribute("USER_LANG",	strLang.toLowerCase());
 		session.setAttribute("VIEW_MODE",	strViewMode);
 		session.setAttribute("AUTH",		objUserInfo.get("AUTH").getAsString());
-		session.setAttribute("RELATED_PART_NO",	"101700119001");//C.getParamValue(mParams, "RELATED_PART_NO", ""));	//objUserInfo.get("RELATED_PART_NO").getAsString());
-		session.setAttribute("RELATED_PART_NM",	"101700119001");//C.getParamValue(mParams, "RELATED_PART_NM", ""));	//objUserInfo.get("RELATED_PART_NM").getAsString());
-		session.setAttribute("TOKEN",		"AAECAzVGNDQ3RDBDNUY0NTA5QUNDTj0RudoRyL8RwaQvT1U9UjIwMTkyNTQvTz1LUkMPkTMecmsMGccHPPmIlomoh/X1pA=="); //C.getParamValue(mParams, "TOKEN", ""));
+		session.setAttribute("RELATED_PART_NO", relatedPartNo);	//objUserInfo.get("RELATED_PART_NO").getAsString());
+		session.setAttribute("RELATED_PART_NM",	relatedPartNm);	//objUserInfo.get("RELATED_PART_NM").getAsString());
+		session.setAttribute("TOKEN",		token);
 
 
 	}

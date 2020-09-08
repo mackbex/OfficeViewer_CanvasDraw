@@ -8,6 +8,9 @@ $.Sample = {
 	vUserID : null,
 	vSvrMode : null,
 	vCorpNo : null,
+	relPartNo : null,
+	relPartNm : null,
+	token : null,
 	vViewMode : null,
 	vJDocNo : null,
 	init : function(params){
@@ -286,6 +289,10 @@ $.Sample = {
 							+"&USER_ID="		+ $.Sample.vUserID
 							+"&CORP_NO="		+ $.Sample.vCorpNo
 							+"&VIEW_MODE="		+ $.Sample.vViewMode
+							+"&RELATED_PART_NO="	+ $.Sample.relPartNo
+							+"&RELATED_PART_NM="	+ $.Sample.relPartNm
+							+"&TOKEN="			+ $.Sample.token;
+
 
 
 		var vResult		= $.Sample.vURL + "index.jsp?"+ vParams;
@@ -306,19 +313,22 @@ $.Sample = {
 	  	var fnUserInfo		= $("#SLIPCreate_UserInfo").val();
 	  	var fnLang			= $(':radio[name="SLIPCreate_Lang"]:checked').val();
 	  	var fnCorpNo 		= $("#SLIPCreate_CorpNo").val();
+		var relPartNo 		= $("#SLIPCreate_RelPartNo").val();
+		var relPartNm 		= $("#SLIPCreate_RelPartNm").val();
+		var token 		= $("#SLIPCreate_Token").val();
 	  	
 	  	if(fnCorpNo == "")
 	  	{
 	  		alert("법인을 입력하세요.");
 	  		return;
 	  	}
-	  	
-	  	var ret = $.Sample.SLIP_Create(fnURL, fnSvrMode, fnJDocNo, fnUserInfo, fnCorpNo, fnViewMode);
+
+	  	var ret = $.Sample.SLIP_Create(fnURL, fnSvrMode, fnJDocNo, fnUserInfo, fnCorpNo, fnViewMode, relPartNo, relPartNm, token);
 
 	  	//뷰어 새로고침
 		$("#OfficeXPIFrm").attr("src", ret);
 	},
-	SLIP_Create : function(fnURL, fnSvrMode, fnJDocNo, fnUserInfo, fnCorpNo, fnViewMode){
+	SLIP_Create : function(fnURL, fnSvrMode, fnJDocNo, fnUserInfo, fnCorpNo, fnViewMode, relPartNo, relPartNm, token){
 		
 		$.Sample.vURL			= fnURL;
 		$.Sample.vSvrMode		= fnSvrMode;
@@ -326,6 +336,9 @@ $.Sample = {
 		$.Sample.vUserID		= fnUserInfo;
 		$.Sample.vCorpNo		= fnCorpNo;
 		$.Sample.vViewMode		= fnViewMode;
+		$.Sample.relPartNm		= relPartNm;
+		$.Sample.relPartNo		= relPartNo;
+		$.Sample.token			= token;
 		
 		return $.Sample.makeViewerUrl($.Sample.vJDocNo);
 	},

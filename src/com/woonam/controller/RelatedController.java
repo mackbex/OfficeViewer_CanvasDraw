@@ -20,6 +20,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -133,12 +134,13 @@ public class RelatedController extends HttpServlet{
 
 				try {
 					urlVal += "?tmp=" + m_C.getToday("yyyyMMddHHmmssSSS");
-					logger.debug(urlVal);
-//
+					String token = URLDecoder.decode(session.getAttribute("TOKEN").toString(),"UTF-8");
+					logger.debug(urlVal + " token : "+token);
+
 					HttpURLConnection con = (HttpURLConnection) (new URL(urlVal).openConnection());
 					con.setInstanceFollowRedirects(false);
 					con.setRequestProperty("Cookie",
-							"LtpaToken="+session.getAttribute("TOKEN")+"; " +
+							"LtpaToken="+token+"; " +
 							"domain="+ profile.getString("INTERFACE","MAIN_URL","") + "; " +
 							"path=/");
 
@@ -200,12 +202,13 @@ public class RelatedController extends HttpServlet{
 
 				try {
 //					urlVal += "?tmp=" + m_C.getToday("yyyyMMddHHmmssSSS");
-					logger.debug(urlVal);
-//
+					String token = URLDecoder.decode(session.getAttribute("TOKEN").toString(),"UTF-8");
+					logger.debug(urlVal + " token : "+token);
+
 					HttpURLConnection con = (HttpURLConnection) (new URL(urlVal).openConnection());
 					con.setInstanceFollowRedirects(false);
 					con.setRequestProperty("Cookie",
-							"LtpaToken="+session.getAttribute("TOKEN")+"; " +
+							"LtpaToken="+token+"; " +
 									"domain="+ profile.getString("INTERFACE","MAIN_URL","") + "; " +
 									"path=/");
 

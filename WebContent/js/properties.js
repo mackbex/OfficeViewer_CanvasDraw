@@ -229,7 +229,9 @@ $.Lang = {
 				"FAILED_ROTATE_SLIP" : "증빙 회전에 실패했습니다.",
 				"ACCESS_DENIED" : "Access denied.",
 				"ERR_INVALID_PATH" : "Invalid path.",
-				"INPUT_VALID_DATE" : "날짜를 정확히 입력하세요."
+				"INPUT_VALID_DATE" : "날짜를 정확히 입력하세요.",
+				"EMPTY_TOKEN" : "토큰값을 전달받지 못했습니다.",
+				"EMPTY_PART_INFO" : "부서정보를 확인해주세요."
 			}
 		}
 }

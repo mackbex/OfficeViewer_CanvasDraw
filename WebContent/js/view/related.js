@@ -221,64 +221,64 @@ $.Related = {
         };
 
 
-        // $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
-        //     if("T" === objRes.RESULT.toUpperCase())
-        //     {
-        //         try {
-        //             var res = $.parseXML(objRes.MSG);
-        //             $.Related.displayOrgList(res);
-        //         }
-        //         catch(e) {
-        //             $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-        //         }
-        //     }
-        //     else
-        //     {
-        //         $.Common.simpleToast("Failed get result.");
-        //     }
-        //     $.Common.HideProgress("#org_list_progress");
-        // });
+        $.when($.Common.RunCommand(g_RelatedCommand, "GET_ORG_LIST", params)).then(function(objRes){
+            if("T" === objRes.RESULT.toUpperCase())
+            {
+                try {
+                    var res = $.parseXML(objRes.MSG);
+                    $.Related.displayOrgList(res);
+                }
+                catch(e) {
+                    $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+                }
+            }
+            else
+            {
+                $.Common.simpleToast("Failed get result.");
+            }
+            $.Common.HideProgress("#org_list_progress");
+        });
 
 
-         $.ajax({
-             type: "GET",
-             // url : url.toString(),
-             url: g_RootURL + "testdoc_2020",
-             dataType: 'xml',
-             crossOrigin : true,
-             success: function (data) {
-                 if($.Common.isBlank(year) || year === "cur") {
-                     $.Related.displayOrgListForCur(data);
-                 }
-                 else {
-                     $.Related.displayOrgList(data);
-                 }
-             },
-             fail :function(e) {
-                 $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-             },
-             error : function(d, textStatus, error) {
-                 $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-             },
-             complete: function () {
-                 $.Common.HideProgress("#org_list_progress");
-             }
-             // jsonp : "callback",
-        //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-             // data: params,
-             // success: function (data) {
-             //     $.Related.displayOrgList(data);
-             // },
-             // fail :function(d, textStatus, error) {
-             //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
-             // },
-             // error : function() {
-             //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-             // },
-             // complete: function () {
-             //     $.Common.HideProgress("#org_list_progress");
-             // }
-         });
+        //  $.ajax({
+        //      type: "GET",
+        //      // url : url.toString(),
+        //      url: g_RootURL + "testdoc_2020",
+        //      dataType: 'xml',
+        //      crossOrigin : true,
+        //      success: function (data) {
+        //          if($.Common.isBlank(year) || year === "cur") {
+        //              $.Related.displayOrgListForCur(data);
+        //          }
+        //          else {
+        //              $.Related.displayOrgList(data);
+        //          }
+        //      },
+        //      fail :function(e) {
+        //          $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+        //      },
+        //      error : function(d, textStatus, error) {
+        //          $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+        //      },
+        //      complete: function () {
+        //          $.Common.HideProgress("#org_list_progress");
+        //      }
+        //      // jsonp : "callback",
+        // //     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        //      // data: params,
+        //      // success: function (data) {
+        //      //     $.Related.displayOrgList(data);
+        //      // },
+        //      // fail :function(d, textStatus, error) {
+        //      //     $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_ORGLIST);
+        //      // },
+        //      // error : function() {
+        //      //     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+        //      // },
+        //      // complete: function () {
+        //      //     $.Common.HideProgress("#org_list_progress");
+        //      // }
+        //  });
 
 
     },
@@ -709,54 +709,54 @@ $.Related = {
                 URL : url.toString()
             };
 
-            // $.when($.Common.RunCommand(g_RelatedCommand, "GET_DOC_LIST", params)).then(function(objRes){
-            //     if("T" === objRes.RESULT.toUpperCase())
-            //     {
-            //         try {
-            //             // var res = $.parseXML(objRes.MSG);
-            //             var res = $.parseJSON(objRes.MSG);
-            //             $.Related.Push_SearchResultItem(res);
-            //         }
-            //         catch(e) {
-            //             $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
-            //         }
-            //     }
-            //     else
-            //     {
-            //         $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_DOCLIST);
-            //     }
-            //
-            //     $.Common.HideProgress("#related_progress");
-            // });
-
-            $.ajax({
-                type : "GET",
-                // url : url.toString(),
-                url: g_RootURL + "searchRes.json",
-                dataType: 'json',
-                crossOrigin : true,
-                data:params,
-                success: function(data) {
-                    $.Related.Push_SearchResultItem(data);
-                },
-                error: function(error) {
-                    $.Common.simpleToast("Failed get result.");
-                    //     deferred.reject(error);
-                },
-                complete: function(){
-                    $.Common.HideProgress("#related_progress");
+            $.when($.Common.RunCommand(g_RelatedCommand, "GET_DOC_LIST", params)).then(function(objRes){
+                if("T" === objRes.RESULT.toUpperCase())
+                {
+                    try {
+                        // var res = $.parseXML(objRes.MSG);
+                        var res = $.parseJSON(objRes.MSG);
+                        $.Related.Push_SearchResultItem(res);
+                    }
+                    catch(e) {
+                        $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);
+                    }
                 }
-                //
-                // success: function(data) {
-                //     $.Related.Push_SearchResultItem(data);
-                // },
-                // error: function(error) {
-                //     $.Common.simpleToast("Failed get result.");
-                //     //     deferred.reject(error);
-                // },
-                //
+                else
+                {
+                    $.Common.simpleToast($.Related.localeMsg.FAILED_LOAD_DOCLIST);
+                }
 
+                $.Common.HideProgress("#related_progress");
             });
+
+            // $.ajax({
+            //     type : "GET",
+            //     // url : url.toString(),
+            //     url: g_RootURL + "searchRes.json",
+            //     dataType: 'json',
+            //     crossOrigin : true,
+            //     data:params,
+            //     success: function(data) {
+            //         $.Related.Push_SearchResultItem(data);
+            //     },
+            //     error: function(error) {
+            //         $.Common.simpleToast("Failed get result.");
+            //         //     deferred.reject(error);
+            //     },
+            //     complete: function(){
+            //         $.Common.HideProgress("#related_progress");
+            //     }
+            //     //
+            //     // success: function(data) {
+            //     //     $.Related.Push_SearchResultItem(data);
+            //     // },
+            //     // error: function(error) {
+            //     //     $.Common.simpleToast("Failed get result.");
+            //     //     //     deferred.reject(error);
+            //     // },
+            //     //
+            //
+            // });
         }
     },
 

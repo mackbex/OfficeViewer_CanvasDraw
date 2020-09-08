@@ -160,6 +160,12 @@ $.ContextMenu = {
 				}
 			}
 
+			if("OPEN_RELATED_POPUP" === command) {
+				if($.Common.isBlank(item.TOKEN)) {
+					$(this).hide();
+				}
+			}
+
 		});
 
 

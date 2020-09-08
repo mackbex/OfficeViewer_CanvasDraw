@@ -821,22 +821,22 @@ public class TemplateTool {
 			File file = new File(strSavePath);
 			ImageIO.write(m_bBackgroud, "JPEG", file);
 
-			image = ImageIO.read(new File(orgPath));
-			imageOrgWidth = image.getWidth(null);
-			imageOrgHeight = image.getHeight(null);
-			newWidth = imageOrgWidth / 2;
-			ratio = (double)newWidth / (double)imageOrgWidth;
-			w = (int)(imageOrgWidth * ratio);
-			h = (int)(imageOrgHeight * ratio);
+//			image = ImageIO.read(new File(orgPath));
+//			imageOrgWidth = image.getWidth(null);
+//			imageOrgHeight = image.getHeight(null);
+//			newWidth = imageOrgWidth / 2;
+//			ratio = (double)newWidth / (double)imageOrgWidth;
+//			w = (int)(imageOrgWidth * ratio);
+//			h = (int)(imageOrgHeight * ratio);
+//
+//			Image resizeImage = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+//			file.delete();
+//			m_bBackgroud = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+//			Graphics g = m_bBackgroud.getGraphics();
+//			g.drawImage(resizeImage, 0, 0, null);
+//			g.dispose();
 
-			Image resizeImage = image.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-			file.delete();
-			m_bBackgroud = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-			Graphics g = m_bBackgroud.getGraphics();
-			g.drawImage(resizeImage, 0, 0, null);
-			g.dispose();
-
-			ImageIO.write(m_bBackgroud, "JPEG", new File(strSavePath));
+//			ImageIO.write(m_bBackgroud, "JPEG", new File(strSavePath));
 			lResFileSize = file.length();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

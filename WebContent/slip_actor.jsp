@@ -89,7 +89,8 @@
 				PAGE					:"ACTOR",
 				FOLD					:  "<c:out value="${FOLD}" />",
 				MAXIMIZED				:  "<c:out value="${MAXIMIZED}" />",
-				USE_MAGNIFIER			:  "<c:out value="${USE_MAGNIFIER}" />"
+				USE_MAGNIFIER			:  "<c:out value="${USE_MAGNIFIER}" />",
+				TOKEN					: "<c:out value="${sessionScope.TOKEN}" />",
 
 			}
 
@@ -157,7 +158,7 @@
 						<c:choose>
 							<c:when test="${isMultiKey eq true }">
 								<div class="key_title">
-									-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :
+<%--									-&nbsp;<span data-i18n="EVIDENCE_KEY"></span> :--%>
 								</div>
 								<div class="area_key_select">
 									<select class="key_select" onchange="javascript:$.Actor.change_GroupKey(this);">

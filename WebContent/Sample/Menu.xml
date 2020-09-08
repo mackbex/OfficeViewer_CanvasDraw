@@ -39,6 +39,16 @@
 					<Input type="Text" name="SLIPCreate_CorpNo" Title="vCorpNo">
 						<Item ID="CorpNo" Title="CorpNo" Value="1000" Hint="법인코드를 입력하세요."></Item>
 					</Input>
+					<Input type="Text" name="SLIPCreate_RelPartNo" Title="vRelPartNo">
+						<Item ID="RelPartNo" Title="RelPartNo" Value="8160000" Hint="부서코드를 입력하세요."></Item>
+					</Input>
+					<Input type="Text" name="SLIPCreate_RelPartNm" Title="vRelPartNm">
+						<Item ID="RelPartNm" Title="RelPartNm" Value="" Hint="부서명을 입력하세요."></Item>
+					</Input>
+					<Input type="Text" name="SLIPCreate_Token" Title="vToken">
+						<Item ID="Token" Title="Token" Value="" Hint="토큰을 입력하세요."></Item>
+					</Input>
+
 				</Parameter>
 			</Column>
 		</Title>
@@ -81,6 +91,15 @@
 					</Input>
 					<Input type="Text" name="SLIPCreate_CorpNo" Title="vCorpNo">
 						<Item Title="CorpNo" Value="1000" Hint="법인코드를 입력하세요."></Item>
+					</Input>
+					<Input type="Text" name="SLIPCreate_RelPartNo" Title="vRelPartNo">
+						<Item ID="RelPartNo" Title="RelPartNo" Value="8160000" Hint="부서코드를 입력하세요."></Item>
+					</Input>
+					<Input type="Text" name="SLIPCreate_RelPartNm" Title="vRelPartNm">
+						<Item ID="RelPartNm" Title="RelPartNm" Value="" Hint="부서명을 입력하세요."></Item>
+					</Input>
+					<Input type="Text" name="SLIPCreate_Token" Title="vToken">
+						<Item ID="Token" Title="Token" Value="" Hint="토큰을 입력하세요."></Item>
 					</Input>
 				</Parameter>
 				<SampleURL>index.jsp?KEY=test&amp;SVR_MODE=PRD&amp;USER_ID=woonam&amp;CORP_NO=1000&amp;VIEW_MODE=EDIT</SampleURL>

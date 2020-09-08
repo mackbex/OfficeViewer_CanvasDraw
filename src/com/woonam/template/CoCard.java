@@ -78,7 +78,7 @@ public class CoCard extends TemplateImpl{
 
 			//카드번호
 			String strCardNo = obj_cardInfo.get("CardNo").getAsString();
-			strCardNo = strCardNo.replaceAll("(\\d{4})(\\d{4})(\\d{4})(\\d{3,4})", "$1-$2-$3-$4");
+			strCardNo = strCardNo.replaceAll("(\\d{4})(\\d{4})(\\d{4})(\\d{3,4})", "$1-$2-****-$4");
 			tool.DrawText(strCardNo, nSecondVerticalLineX, 453);
 
 			//승인일

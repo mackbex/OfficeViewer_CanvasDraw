@@ -63,62 +63,74 @@ public class CashReceipt extends TemplateImpl{
 	private JsonObject Draw(TemplateTool tool)
 	{
 		JsonObject obj_res = new JsonObject();
-		tool.setFontStyle("NanumGothic", tool.NORMAL, 40);
+		tool.setFontStyle("NanumGothic", tool.NORMAL, 20);
 
 		boolean isDivided = false;
 
 		try
 		{
-
-
 			//사업자등록번호
 			String strBizrNo = this.obj_cashInfo.get("BIZ_NO").getAsString();
 			strBizrNo = strBizrNo.replaceAll("(\\d{3})(\\d{2})(\\d{5})", "$1-$2-$3");
-			tool.DrawText(strBizrNo, 188, 400);
+			tool.DrawText(strBizrNo, 60, 126);
 
 			//거래일시
 			String strUseDT = this.obj_cashInfo.get("APPR_DATE").getAsString().substring(2, this.obj_cashInfo.get("APPR_DATE").getAsString().length());
 			String strUseTM = this.obj_cashInfo.get("APPR_TIME").getAsString();
 
 			String strFormatted = strUseDT.replaceAll("(\\d{2})(\\d{2})(\\d{2})", "$1.$2.$3") +"."+ strUseTM.replaceAll("(\\d{2})(\\d{2})(\\d{2})", "$1.$2.$3");
-			tool.DrawText(strFormatted, 188, 740);
+			tool.DrawText(strFormatted, 60, 236);
 
 			//결제구분
+			tool.setFontStyle("NanumGothic", tool.BOLD, 14);
 			String strTranFG = this.obj_cashInfo.get("APPR_ST").getAsString();
-			tool.DrawText(strTranFG, 188, 916);
+			tool.DrawText(strTranFG, 60, 296);
 
-			//공급금액
-			String strSPPRCAmt = this.obj_cashInfo.get("AMOUNT").getAsString();
-			strSPPRCAmt = strSPPRCAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-			tool.DrawText(strSPPRCAmt, 1000, 840, 1420, 930, tool.RIGHT);
+			tool.setFontStyle("NanumGothic", tool.NORMAL, 20);
+
 
 			//세액금액
 			String strTAXAmt = this.obj_cashInfo.get("TAX").getAsString();
-			strTAXAmt = strTAXAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-			tool.DrawText(strTAXAmt, 1000, 990, 1420, 1060, tool.RIGHT);
+			String strTAXAmtText = strTAXAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+			tool.DrawText(strTAXAmtText, 324, 324, 466, 348, tool.RIGHT);
 
-			//봉사금액
-			String strTIPAmt = this.obj_cashInfo.get("TIPS").getAsString();
-			strTIPAmt = strTIPAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-			tool.DrawText(strTIPAmt, 1000, 1120, 1420, 1190, tool.RIGHT);
+//			//봉사금액
+//			String strTIPAmt = this.obj_cashInfo.get("TIPS").getAsString();
+//			strTIPAmt = strTIPAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+//			tool.DrawText(strTIPAmt, 324, 366, 466, 390, tool.RIGHT);
 
 			//합계금액
 			String strTotalAmt = this.obj_cashInfo.get("TOTAL").getAsString();
-			strTotalAmt = strTotalAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-			tool.DrawText(strTotalAmt, 1000, 1250, 1420, 1320, tool.RIGHT);
+			String strTotalAmtText = strTotalAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+			tool.DrawText(strTotalAmtText, 324, 410, 466, 438, tool.RIGHT);
+
+			//공급금액
+			String strSPPRCAmt = "";
+
+			if(strTranFG.contains("승인")) {
+				strSPPRCAmt = (Integer.parseInt(strTotalAmt) - Integer.parseInt(strTAXAmt)) + "";
+			}
+			else {
+				strSPPRCAmt = ((Integer.parseInt(strTotalAmt) - Integer.parseInt(strTAXAmt)) * -1 ) + "";
+			}
+			strSPPRCAmt = strSPPRCAmt.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+			tool.DrawText(strSPPRCAmt, 324, 278, 466, 304, tool.RIGHT);
+
 
 			//승인번호
 			String strAprvlNo = this.obj_cashInfo.get("APPR_NO").getAsString();
-			tool.DrawText(strAprvlNo, 730, 1440);
+			tool.DrawText(strAprvlNo, 240, 466);
 
+			tool.setFontStyle("NanumGothic", tool.BOLD, 14);
 			//가명점 명
 			String strFRCSName = this.obj_cashInfo.get("MERCH_NAME").getAsString();
-			tool.DrawText(strFRCSName, 188, 1600);
+			tool.DrawText(strFRCSName, 60, 524);
 
+			tool.setFontStyle("NanumGothic", tool.NORMAL, 20);
 			//가맹점 사용자등록번호
 			String strSPLRNo = this.obj_cashInfo.get("MERCH_BIZ_NO").getAsString();
 			strSPLRNo = strSPLRNo.replaceAll("(\\d{3})(\\d{2})(\\d{5})", "$1-$2-$3");
-			tool.DrawText(strSPLRNo, 188, 1820, 670, 1940, tool.CENTER);
+			tool.DrawText(strSPLRNo, 60, 604, 216, 634, tool.CENTER);
 
 //			//대표자 명
 //			String strCEOName = this.m_imageData.GetString("CEO_NM");

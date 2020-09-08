@@ -545,6 +545,7 @@ public class API {
 					
 					// Set work path
 					sbWorkPath.append(m_C.Get_RootPathForJava() + profile.getString("WAS_INFO", "TEMP_DIR",  "temp"));
+					sbWorkPath.append(File.separator);
 					sbWorkPath.append(m_C.getIRN(""));
 					sbWorkPath.append(m_C.getParamValue(params, "USER_ID", "system"));
 					sbWorkPath.append(m_C.getToday("yyyyMMddHHmmssSSS"));
