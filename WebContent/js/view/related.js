@@ -226,7 +226,12 @@ $.Related = {
             {
                 try {
                     var res = $.parseXML(objRes.MSG);
-                    $.Related.displayOrgList(res);
+                    if($.Common.isBlank(year) || year === "cur") {
+                        $.Related.displayOrgListForCur(res);
+                    }
+                    else {
+                        $.Related.displayOrgList(res);
+                    }
                 }
                 catch(e) {
                     $.Common.simpleToast($.Related.localeMsg.CHECK_SSO);

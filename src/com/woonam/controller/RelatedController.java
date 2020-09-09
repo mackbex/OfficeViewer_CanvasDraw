@@ -154,7 +154,7 @@ public class RelatedController extends HttpServlet{
 					while ((line = br.readLine()) != null) {
 						sbRes.append(line);
 					}
-					logger.debug(sbRes.toString());
+//					logger.debug(sbRes.toString());
 				}  catch (Exception ioe) {
 					logger.error(ioe);
 					sbRes = null;
@@ -222,7 +222,7 @@ public class RelatedController extends HttpServlet{
 					while ((line = br.readLine()) != null) {
 						sbRes.append(line);
 					}
-					logger.debug(sbRes.toString());
+//					logger.debug(sbRes.toString());
 				}  catch (Exception ioe) {
 					logger.error(ioe);
 					sbRes = null;
