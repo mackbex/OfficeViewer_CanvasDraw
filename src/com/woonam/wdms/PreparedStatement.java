@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.woonam.util.Common;
+import com.woonam.util.Profile;
 
 /**
  * Preparestatement for Agent.
@@ -25,13 +26,34 @@ public class PreparedStatement {
 	private DB db = null;
 	private Common m_C = new Common();
 
+	/**
+	 * Get query for prepareStatement.
+	 * @param
+	 */
+
+	public PreparedStatement(/*String strQuery,*/ Profile profile) {
+//		this.strQuery = strQuery;
+		String db =  profile.getString("AGENT_INFO","DB","MSSQL");
+		this.db = DB.valueOf(db.toUpperCase());
+
+//		String regEx = "[?]";
+//
+//	    Pattern pat = Pattern.compile(regEx);
+//	    matcher = pat.matcher(this.strQuery);
+//
+//	    while (matcher.find()) {
+//	    	nQMCnt++;
+//	    }
+//
+//	    matcher.reset();
+	}
 
 	/**
 	 * Get query for prepareStatement.
-	 * @param strQuery
+	 * @param
 	 */
 
-	public PreparedStatement(String strQuery) {
+	/*public PreparedStatement(String strQuery) {
 		this.strQuery = strQuery;
 		this.db = DB.valueOf("MSSQL");
 
@@ -47,30 +69,23 @@ public class PreparedStatement {
 
 
 		matcher.reset();
-	}
+	}*/
 
-	/**
-	 * Get query for prepareStatement.
-	 * @param strQuery
-	 */
-	
-	public PreparedStatement(String strQuery, String db) {
-		this.strQuery = strQuery;
-		this.db = DB.valueOf(db);
-		
+	public void setQuery(String query) {
+		this.strQuery = query;
+
 		String regEx = "[?]";
-		
-	    Pattern pat = Pattern.compile(regEx); 
-	    matcher = pat.matcher(this.strQuery);
-	    
-	    while (matcher.find()) {
-	    	nQMCnt++;
-	    }
 
+		Pattern pat = Pattern.compile(regEx);
+		matcher = pat.matcher(this.strQuery);
 
-	    
-	    matcher.reset();
+		while (matcher.find()) {
+			nQMCnt++;
+		}
+
+		matcher.reset();
 	}
+
 	
 	/**
 	 * Convert ? to actual value with index (the index is starting from 0)

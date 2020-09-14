@@ -22,8 +22,8 @@ public class SetModel {
 	private Profile m_Profile				= null;
 	private Common m_C				 	= null;
 	private HttpSession session		= null;
-
 	private Logger logger = null;
+	private PreparedStatement pStmt = null;
 	
 	public SetModel(AgentConnect AC, HttpSession session)
 	{
@@ -32,6 +32,7 @@ public class SetModel {
 		this.m_Profile 	= AC.getProfile();
 		this.m_C 		= new Common();
 		this.session 	= session;
+		this.pStmt		= new PreparedStatement(m_Profile);
 	}
 	
 	public SetModel(AgentConnect AC)
@@ -41,6 +42,7 @@ public class SetModel {
 		this.m_Profile 	= AC.getProfile();
 		this.m_C 		= new Common();
 		this.session 	= null;
+		this.pStmt		= new PreparedStatement(m_Profile);
 	}
 	
 	public boolean Update_cardStatus(String convertKey, String status) {
@@ -50,8 +52,8 @@ public class SetModel {
 			
     	try
     	{
-    		
-    		PreparedStatement pStmt = new PreparedStatement(Queries.UPDATE_CARD_STATUS);
+
+			pStmt.setQuery(Queries.UPDATE_CARD_STATUS);
     		pStmt.setString(0, convertKey); 
         	pStmt.setString(1, status);
         	
@@ -78,7 +80,7 @@ public class SetModel {
     	try
     	{
     		
-    		PreparedStatement pStmt = new PreparedStatement(Queries.UPDATE_REPORT_STATUS);
+    		pStmt.setQuery(Queries.UPDATE_REPORT_STATUS);
     		pStmt.setString(0, convertKey); 
         	pStmt.setString(1, status);
         	
@@ -106,8 +108,8 @@ public class SetModel {
 			
     	try
     	{
-    		
-    		PreparedStatement pStmt = new PreparedStatement(Queries.UPDATE_TAX_STATUS);
+
+			pStmt.setQuery(Queries.UPDATE_TAX_STATUS);
     		pStmt.setString(0, convertKey); 
         	pStmt.setString(1, status);
         	
@@ -134,7 +136,7 @@ public class SetModel {
     	try
     	{
     		
-    		PreparedStatement pStmt = new PreparedStatement(Queries.UPDATE_ORDER_STATUS);
+    		pStmt.setQuery(Queries.UPDATE_ORDER_STATUS);
     		pStmt.setString(0, convertKey); 
         	pStmt.setString(1, status);
         	
@@ -162,7 +164,7 @@ public class SetModel {
     	try
     	{
     		
-    		PreparedStatement pStmt = new PreparedStatement(Queries.HISTORY_ADD);
+    		pStmt.setQuery(Queries.HISTORY_ADD);
     		pStmt.setString(0, sdocNo);
         	pStmt.setString(1, "");
         	pStmt.setString(2, "");
@@ -195,7 +197,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	try
     	{
     		
-    		PreparedStatement pStmt = new PreparedStatement(Queries.COPY_REPLACE);
+    		pStmt.setQuery(Queries.COPY_REPLACE);
     		pStmt.setString(0, jdocNo);
         	pStmt.setString(1, sdocNo);
         	pStmt.setString(2, corpNo);
@@ -225,7 +227,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	try
     	{
     		
-    		PreparedStatement pStmt = new PreparedStatement(Queries.INSERT_SLIPDOC);
+    		pStmt.setQuery(Queries.INSERT_SLIPDOC);
     		pStmt.setString(0, sdocNo); // SDOC_NO
         	pStmt.setString(1, corpNo); //CORP_NO
         	pStmt.setString(2, partNo); //PART_NO
@@ -271,7 +273,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 				String sdocNo = m_C.getIRN("S");
 
-				PreparedStatement pStmt = new PreparedStatement(Queries.INSERT_ADDFILE);
+				pStmt.setQuery(Queries.INSERT_ADDFILE);
 				pStmt.setString(0, sdocNo); // SDOC_NO
 				pStmt.setString(1, corpNo); //CORP_NO
 				pStmt.setString(2, partNo); //PART_NO
@@ -287,7 +289,8 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 				sbQuery.append(pStmt.getQuery());
 				sbQuery.append(";=");
 
-				PreparedStatement orgStmt = new PreparedStatement(Queries.INSERT_ORGFILE);
+				PreparedStatement orgStmt = new PreparedStatement(m_Profile);
+				orgStmt.setQuery(Queries.INSERT_ORGFILE);
 				orgStmt.setString(0, m_C.getIRN("")); // ORG_IRN
 				orgStmt.setString(1, "ORG"); // FOLDER
 				orgStmt.setString(2, sdocNo); // SDOC_NO
@@ -327,7 +330,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 			String key = this.m_C.getParamValue(mapParams, "VALUE", "");
 			String corpNo = this.m_C.getParamValue(mapParams, "CORP_NO", "");
 			String userID = this.m_C.getParamValue(mapParams, "USER_ID", "");
-			PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_AFTER);
+			pStmt.setQuery(Queries.REMOVE_AFTER);
 			pStmt.setString(0, key);
 			pStmt.setString(1, corpNo);
 			pStmt.setString(2, userID);
@@ -354,7 +357,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 			String key = this.m_C.getParamValue(mapParams, "VALUE", "");
 			String corpNo = this.m_C.getParamValue(mapParams, "CORP_NO", "");
 			String userID = this.m_C.getParamValue(mapParams, "USER_ID", "");
-			PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_AFTER_ALL);
+			pStmt.setQuery(Queries.REMOVE_AFTER_ALL);
 			pStmt.setString(0, key);
 			pStmt.setString(1, corpNo);
 			pStmt.setString(2, userID);
@@ -389,7 +392,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	try
     	{
     		
-			PreparedStatement pStmt = new PreparedStatement(Queries.INSERT_SLIP);
+			pStmt.setQuery(Queries.INSERT_SLIP);
     		pStmt.setString(0, m_C.getIRN("")); // SLIP_IRN
         	pStmt.setString(1, docIRN); //DOC_IRN
         	pStmt.setString(2, sdocNo); //SDOC_NO
@@ -430,7 +433,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
     	try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.CHANGE_KEY);
+    		pStmt.setQuery(Queries.CHANGE_KEY);
     		pStmt.setString(0, from);
         	pStmt.setString(1, to);
         	pStmt.setString(2, coCD);
@@ -469,7 +472,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
     	try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_COMMENT);
+    		pStmt.setQuery(Queries.REMOVE_COMMENT);
     		pStmt.setString(0, jdocNo);
     		pStmt.setString(1, comtIRN);
     		pStmt.setString(2, corpNo);
@@ -508,7 +511,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
     	try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.MODIFY_COMMENT);
+    		pStmt.setQuery(Queries.MODIFY_COMMENT);
     		pStmt.setString(0, title);
     		pStmt.setString(1, content);
     		pStmt.setString(2, comtIRN);
@@ -546,7 +549,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 
 
-			PreparedStatement pStmt = new PreparedStatement(Queries.UPDATE_COCARD_APPR);
+			pStmt.setQuery(Queries.UPDATE_COCARD_APPR);
 			pStmt.setString(0, apprNo);
 			pStmt.setString(1, sdocNo);
 
@@ -578,7 +581,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
 		try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_BY_KIND);
+    		pStmt.setQuery(Queries.REMOVE_BY_KIND);
     		pStmt.setString(0, key);
     		pStmt.setString(1, isSystem);
     		pStmt.setString(2, kind);
@@ -623,7 +626,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 			String userID		= m_C.getParamValue(mapParams, "USER_ID", "");
 
 
-			PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_ALL);
+			pStmt.setQuery(Queries.REMOVE_ALL);
     		pStmt.setString(0, key);
     		pStmt.setString(1, corpNo);
     		pStmt.setString(2, userID);
@@ -660,7 +663,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
 		try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.CHANGE_STEP);
+    		pStmt.setQuery(Queries.CHANGE_STEP);
     		pStmt.setString(0, key);
     		pStmt.setString(1, step);
     		
@@ -696,7 +699,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 		try
 		{
-			PreparedStatement pStmt = new PreparedStatement(Queries.UNMAPPING_CARD);
+			pStmt.setQuery(Queries.UNMAPPING_CARD);
 
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(key)));
 			pStmt.setArray(1, new ArrayList<Object>(Arrays.asList(appr_no)));
@@ -733,7 +736,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
 		try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.ROTATE_SLIP);
+    		pStmt.setQuery(Queries.ROTATE_SLIP);
     		pStmt.setString(0, field);
     		pStmt.setString(1, value);
     		pStmt.setString(2, degree);
@@ -771,7 +774,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
 		try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_SLIP);
+    		pStmt.setQuery(Queries.REMOVE_SLIP);
     		pStmt.setProcArray(0, new ArrayList<Object>(Arrays.asList(value)));
     		pStmt.setString(1, field);
     		pStmt.setString(2, corpNo);
@@ -809,7 +812,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
 		try
     	{
-			PreparedStatement pStmt = new PreparedStatement(Queries.REMOVE_ATTACH);
+			pStmt.setQuery(Queries.REMOVE_ATTACH);
     		pStmt.setProcArray(0, new ArrayList<Object>(Arrays.asList(value)));
     		pStmt.setString(1, field);
     		pStmt.setString(2, corpNo);
@@ -849,7 +852,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
     	try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.WRITE_COMMENT);
+    		pStmt.setQuery(Queries.WRITE_COMMENT);
     		pStmt.setString(0, m_C.getIRN("C"));
     		pStmt.setString(1, jdocNo);
     		pStmt.setString(2, corpNo);
@@ -892,7 +895,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
     	try
     	{
-    		PreparedStatement pStmt = new PreparedStatement(Queries.COPY_SLIP_JDOC_NO);
+    		pStmt.setQuery(Queries.COPY_SLIP_JDOC_NO);
     		pStmt.setString(0, from);
         	pStmt.setString(1, to);
         	pStmt.setString(2, corpNo);
@@ -919,7 +922,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 		try
 		{
-			PreparedStatement pStmt = new PreparedStatement(Queries.ADD_BOOKMARK_FOR_CARD);
+			pStmt.setQuery(Queries.ADD_BOOKMARK_FOR_CARD);
 
 
 			pStmt.setString(0, m_C.getIRN(""));

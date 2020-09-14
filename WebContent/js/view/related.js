@@ -782,6 +782,8 @@ $.Related = {
                 //
                 // arTest.push(objTest);
 
+                var unid = this["entrydata"][0]["text"][0];
+                unid = unid.substring(unid.length - 32 , unid.length);
                 var docInfo = this["entrydata"][2]["text"][0].split("{`");
                 var docTitle = this["entrydata"][5]["text"][0];
 
@@ -790,7 +792,7 @@ $.Related = {
                 }
 
                 var objDoc = {};
-                objDoc["UNID"] = this["@unid"];
+                objDoc["UNID"] = unid;
                 objDoc["REG_FLAG"] = docInfo[0];
                 objDoc["DOC_TYPE"] = docInfo[1];
                 objDoc["REG_NO"] = docInfo[2];

@@ -189,8 +189,8 @@ $.Actor = {
 			// $.Actor.addSlipItem($.Actor.objSlipItem, $("#slip_masonry"), key);
 			$.Actor.addAttachItem($.Actor.objAttachItem, $("#area_attach"), key);
 
-			var slipKeys = Object.keys($.Actor.objSlipItem);
-			var attachKeys = Object.keys($.Actor.objAttachItem);
+			var slipKeys = $.Actor.objSlipItem === null ? [] : Object.keys($.Actor.objSlipItem);
+			var attachKeys = $.Actor.objAttachItem === null ? [] : Object.keys($.Actor.objAttachItem);
 			var slipCnt = 0;
 			var attachCnt = 0;
 			if($.Common.isBlank(key) || key.indexOf(",") > -1){
@@ -1206,6 +1206,7 @@ $.Actor = {
 			//Draw attach Type area
 			var elAttachTypeArea = $(document.createElement('div'));
 			elAttachTypeArea.addClass("area_type");
+			elAttachTypeArea.css("right","30px");
 			elAttachTypeArea.appendTo(elAttach);
 
 			if(objData.SDOC_URL === "1") {
@@ -1221,21 +1222,25 @@ $.Actor = {
 			elAttachType.appendTo(elAttachTypeArea);
 
 			}
-			
-			
+
 			//Draw attach Type area
 			var elAttachBtnArea = $(document.createElement('div'));
 			elAttachBtnArea.addClass("area_btn");
-			elAttachBtnArea.attr("type","ATTACH");
+			elAttachBtnArea.attr("type", "ATTACH");
 			elAttachBtnArea.appendTo(elAttach);
-			
-			var elDownBtn = $(document.createElement('div'));
-			elDownBtn.addClass("down_attach");
-			elDownBtn.attr("command","DOWN_ORIGINAL_ATTACH")
-			elDownBtn.append($(document.createElement('img')).attr("src", g_RootURL+"image/common/context/download_cs.png"));
-			elDownBtn.unbind("click").bind("click",function(e){ e.stopPropagation(); $.Operation.execute($.Actor, elDownBtn, objData); });
-			elDownBtn.appendTo(elAttachBtnArea);
-			
+
+			if(objData.SDOC_URL !== "1") {
+
+				var elDownBtn = $(document.createElement('div'));
+				elDownBtn.addClass("down_attach");
+				elDownBtn.attr("command", "DOWN_ORIGINAL_ATTACH")
+				elDownBtn.append($(document.createElement('img')).attr("src", g_RootURL + "image/common/context/download_cs.png"));
+				elDownBtn.unbind("click").bind("click", function (e) {
+					e.stopPropagation();
+					$.Operation.execute($.Actor, elDownBtn, objData);
+				});
+				elDownBtn.appendTo(elAttachBtnArea);
+			}
 //			var elAttachOption = $(document.createElement('div'));
 //			elAttachOption.addClass("option");
 //			elAttachOption.append($(document.createElement('img')).attr("src", g_RootURL+"image/common/option.png"));

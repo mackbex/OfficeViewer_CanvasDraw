@@ -166,6 +166,12 @@ $.ContextMenu = {
 				}
 			}
 
+			if("DOWN_ORIGINAL_ATTACH" === command) {
+				if("1" === item.SDOC_URL) {
+					$(this).hide();
+				}
+			}
+
 		});
 
 
