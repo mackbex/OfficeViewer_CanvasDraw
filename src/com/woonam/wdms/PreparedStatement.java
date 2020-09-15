@@ -108,6 +108,7 @@ public class PreparedStatement {
 		switch (this.db) {
 			case ORACLE: {
 				listVal.add(nIdx,"CURRENT_TIMESTAMP");
+				return;
 			}
 			default: {
 				listVal.add(nIdx,"getDate()");
