@@ -10,7 +10,7 @@ $.Lang = {
 			Actor : {
 				"E-EVIDENCE" : "전자증빙",
 				"EVIDENCE_KEY" : "승인번호",
-				"ATTACH" : "첨부파일",
+				"ATTACH" : "관련근거 및 첨부파일",
 				"SDOC_NAME" : "증빙서 명",
 				"REG_USER" : "등록자",
 				"CHECKING_XPI" : "전자증빙 설치여부를 확인중입니다.",
@@ -23,6 +23,14 @@ $.Lang = {
 				"ROTATE_CCW" : "좌측으로 회전",
 				"OPEN_RELATED_POPUP" : "관련문서 조회",
 				"RELATED_DOC" : "관련문서",
+				"SCHEDULED_LIST" : "지급예정리스트",
+				"TOOLTIP_MENU" : "메뉴",
+				"TOOLTIP_ADD_SLIP" : "증빙 추가",
+				"TOOLTIP_COMMENT" : "코멘트",
+				"TOOLTIP_HISTORY" : "히스토리",
+				"TOOLTIP_REMOVE" : "삭제",
+				"TOOLTIP_PRINT" : "인쇄",
+				"TOOLTIP_MAGNIFIER" : "돋보기",
 				
 			},
 			CoCard: {
@@ -55,7 +63,8 @@ $.Lang = {
 				"INPUT_CONTENTS" : "코멘트를 입력하세요.",
 				"FAILED_WRITE_COMMENT" : "코멘트 등록에 실패했습니다.",
 				"CONFIRM_DOWNLOAD" : "코멘트를 삭제하시겠습니까?",
-				"EVIDENCE_KEY" : "승인번호"
+				"EVIDENCE_KEY" : "승인번호",
+				"COMMENT_TIP" : "코멘트는 출력 시 화면에 표시되지 않습니다.",
 			},
 			Payment : {
 				"TITLE" : "전자결재 검색",
@@ -197,7 +206,7 @@ $.Lang = {
 				"OPEN_HISTORY" : "히스토리 보기",
 				"REMOVE_SLIP" : "증빙/첨부파일 삭제",
 				"REMOVE_MENU_SLIP" : "증빙 삭제",
-				"REMOVE_MENU_ATTACH" : "첨부파일 삭제",
+				"REMOVE_MENU_ATTACH" : "삭제",
 				"REMOVE_ALL" : "증빙/첨부파일 전체삭제",
 				"OPEN_PROPERTY" : "증빙 속성",
 				"MOVE_FRONT" : "증빙 맨 위로 이동",
@@ -214,7 +223,7 @@ $.Lang = {
 				"ADD_SEARCH":"증빙조회 첨부",
 				"DOWN_ORIGINAL_SLIP" : "증빙 원본 다운로드",
 				"DOWN_ORIGINAL_ATTACH" : "첨부파일 원본 다운로드",
-				"ADD_SCAN" : "스캔 등록"
+				"ADD_SCAN" : "Scan"
 			},
 			Error : {
 				"PARAMETER_IS_NULL" :"파라미터 값이 없습니다.",
@@ -231,7 +240,10 @@ $.Lang = {
 				"ERR_INVALID_PATH" : "Invalid path.",
 				"INPUT_VALID_DATE" : "날짜를 정확히 입력하세요.",
 				"EMPTY_TOKEN" : "토큰값을 전달받지 못했습니다.",
-				"EMPTY_PART_INFO" : "부서정보를 확인해주세요."
+				"EMPTY_PART_INFO" : "부서정보를 확인해주세요.",
+				"SERVER_EXCEPTION" : "Server exception.",
+				"NO_TARGET_INDEX" : "이동할 증빙 대상이 없습니다.",
+				"FAILED_LOAD_DRAW_BOOKMARK_TOOL" : "북마크 툴 로드에 실패했습니다.",
 			}
 		}
 }
@@ -319,12 +331,18 @@ $.Menu = {
 					"CS_OPERATION" :"1",
 					"MODE" : "EDIT"
 				},
-				{
-					"ID" : "ADD_SCAN",
-					"ICON" : "image/common/context/scanner.png",
-					"CS_OPERATION" :"1",
-					"MODE" : "EDIT"
-				},
+				// {
+				// 	"ID" : "SCHEDULED_LIST",
+				// 	"ICON" : "image/common/context/scheduled_list.png",
+				// 	"CS_OPERATION" :"1",
+				// 	"MODE" : "EDIT"
+				// },
+				// {
+				// 	"ID" : "ADD_SCAN",
+				// 	"ICON" : "image/common/context/scanner.png",
+				// 	"CS_OPERATION" :"1",
+				// 	"MODE" : "EDIT"
+				// },
 				// {
 				// 	"ID" : "ADD_AFTER",
 				// 	"ICON" : "image/common/context/add_after.png",
@@ -505,12 +523,18 @@ $.Menu = {
 					"CS_OPERATION" :"1",
 					"MODE" : "EDIT"
 				},
-				{
-					"ID" : "ADD_SCAN",
-					"ICON" : "image/common/context/scanner.png",
-					"CS_OPERATION" :"1",
-					"MODE" : "EDIT"
-				},
+				// {
+				// 	"ID" : "SCHEDULED_LIST",
+				// 	"ICON" : "image/common/context/scheduled_list.png",
+				// 	"CS_OPERATION" :"1",
+				// 	"MODE" : "EDIT"
+				// },
+				// {
+				// 	"ID" : "ADD_SCAN",
+				// 	"ICON" : "image/common/context/scanner.png",
+				// 	"CS_OPERATION" :"1",
+				// 	"MODE" : "EDIT"
+				// },
 				// {
 				// 	"ID" : "ADD_AFTER",
 				// 	"ICON" : "image/common/context/add_after.png",

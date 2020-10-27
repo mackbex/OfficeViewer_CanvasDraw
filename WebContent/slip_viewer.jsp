@@ -20,6 +20,9 @@
 				pageContext.setAttribute("mParams", mParams);
 
 				String key = request.getParameter("KEY");
+				key = URLDecoder.decode(key, "utf-8");
+
+				pageContext.setAttribute("KEY_ORIGIN", key);
 				//Detect whether multikey.
 				boolean isMultiKey = false;
 				if (!C.isBlank(key)) {
@@ -30,6 +33,8 @@
 				pageContext.setAttribute("MULTI_KEY", isMultiKey);
 				pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO", "FOLD", "T"));
 				pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
+				pageContext.setAttribute("USE_BOOKMARK_DRAW", g_profile.getString("WAS_INFO","USE_BOOKMARK_DRAW","F"));
+				pageContext.setAttribute("USE_BOOKMARK", g_profile.getString("WAS_INFO","USE_BOOKMARK","F"));
 			}
 		}
 		catch(Exception e) {
@@ -64,6 +69,8 @@
 				FOLD					:  "<c:out value="${FOLD}" />",
 				MAXIMIZED				:  "<c:out value="${MAXIMIZED}" />",
 				CLICKED_SLIP_IRN		:  "<c:out value="${mParams['CLICKED_SLIP_IRN'][0]}" />",
+				USE_BOOKMARK_DRAW		:  "<c:out value="${USE_BOOKMARK_DRAW}" />",
+				USE_BOOKMARK			:  "<c:out value="${USE_BOOKMARK}" />",
 			}
 
 			$.Viewer.init(ViewerParams);
@@ -143,7 +150,8 @@
 		</div>
 		<div class="area_viewer_content">
 			<div class="viewer_left" id="viewer_left" min-width="300">
-				<div>
+				<div id="drawToolbox" class="draw_toolbox"></div>
+				<div id="viewerContainer" class="viewer_container">
 					<div class="viewer_info">
 						<div class="info_title"><span class="title" data-i18n="INFO_TITLE"></span></div>
 						<div class="info" id="slip_info">
@@ -189,7 +197,7 @@
 				<div>
 					<div id="original_progress" class="original_progress"></div>
 					<div class="title">
-						<div class="slip_title_left">
+						<div class="viewer_title_left">
 							<div class="icon-btn" onclick="javascript:$.Viewer.Download_Original(this);" command="DOWN_ORIGINAL_SLIP">
 								<img src="<c:url value="/image/pc/viewer/icon_down.png" />" />
 							</div>
@@ -200,7 +208,7 @@
 								<img src="<c:url value="/image/pc/viewer/zoom_out.png" />" />
 							</div>
 						</div>
-						<div class="slip_title_right">
+						<div id="bookmarkBtnList" class="viewer_title_right">
 
 							<%-- <div class="area_key">
                                 (<span data-i18n="EVIDENCE_KEY"></span> : <span class="key" ><c:out value="${mParams['JDocNo'][0]}" /></span>)
@@ -234,7 +242,6 @@
 <script src="<c:url value='js/localWAS/OfficeXPI.js' />"></script>
 <script src="<c:url value='js/view/actor.js' />"></script>
 <script src="<c:url value='js/view/viewer.js' />"></script>
-<script src="<c:url value='js/bookmark/bookmark.js' />"></script>
 <script src="<c:url value='js/effect/ripple.js' />"></script>
 <script src="<c:url value='js/masonry/masonry.pkgd.min.js' />"></script>
 <script src="<c:url value='js/masonry/imagesloaded.pkgd.min.js' />"></script>
@@ -244,5 +251,7 @@
 <script src="<c:url value='js/zoom/jquery.panzoom.js' />"></script>
 <script src="<c:url value='js/zoom/rotate.js' />"></script>
 <script src="<c:url value='/js/jquery.nicescroll.min.js' />"></script>
+<script src="<c:url value='js/bookmark/bookmark.js' />"></script>
+<script src="<c:url value='js/bookmark/konva.min.js' />"></script>
 </body>
 </html>

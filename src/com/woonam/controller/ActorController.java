@@ -45,6 +45,8 @@ public class ActorController extends HttpServlet{
 		REMOVE_SELECTED_ATTACH,
 		REMOVE_ALL,
 		ROTATE_SLIP,
+		MOVE_UP_INDEX,
+		MOVE_DOWN_INDEX
 	}
 	
 	public ActorController() {
@@ -288,6 +290,50 @@ public class ActorController extends HttpServlet{
 				}
 				else {
 					out.print(m_C.writeResultMsg("F", "FAILED_ROTATE_SLIP"));
+				}
+				break;
+			}
+			case MOVE_UP_INDEX: {
+
+				String[] arrParam = {"SDOC_NO"};
+				if(m_C.IsNullParam(arrParam, mapParams))
+				{
+					logger.error("Parameter of "+strCommand+" is NULL.");
+					out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
+					return;
+				}
+
+
+
+				boolean bRes = m_SM.moveIndex(mapParams, "PREV");
+
+				if(bRes) {
+					out.print(m_C.writeResultMsg("T", ""));
+				}
+				else {
+					out.print(m_C.writeResultMsg("F", "FAILED_MOVE_INDEX"));
+				}
+				break;
+			}
+			case MOVE_DOWN_INDEX: {
+
+				String[] arrParam = {"SDOC_NO"};
+				if(m_C.IsNullParam(arrParam, mapParams))
+				{
+					logger.error("Parameter of "+strCommand+" is NULL.");
+					out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
+					return;
+				}
+
+
+
+				boolean bRes = m_SM.moveIndex(mapParams, "NEXT");
+
+				if(bRes) {
+					out.print(m_C.writeResultMsg("T", ""));
+				}
+				else {
+					out.print(m_C.writeResultMsg("F", "FAILED_MOVE_INDEX"));
 				}
 				break;
 			}

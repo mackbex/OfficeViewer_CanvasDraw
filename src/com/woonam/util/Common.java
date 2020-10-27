@@ -1,21 +1,18 @@
 package com.woonam.util;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Map;
-import java.util.SimpleTimeZone;
-import java.util.UUID;
+import java.util.*;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +38,34 @@ public class Common {
 
 
 
+	public Dimension getImageInfo(String path) {
+		Dimension res = null;
+		ImageInputStream in = null;
+		FileInputStream fis = null;
+
+		try {
+			fis = new FileInputStream(new File(path));
+			in = ImageIO.createImageInputStream(fis);
+
+			final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+			if (readers.hasNext()) {
+				ImageReader reader = readers.next();
+				try {
+					reader.setInput(in);
+					res =  new Dimension(reader.getWidth(0), reader.getHeight(0));
+				} finally {
+					reader.dispose();
+				}
+			}
+		} catch (Exception e) { }
+		finally {
+				try {
+					if(fis != null) { fis.close(); }
+					if(fis != null) { in.close(); }
+				} catch (IOException e) { }
+			}
+		return res;
+	}
 	public int getResCnt(String str)
 	{
 		int nResCnt = 0;

@@ -100,7 +100,34 @@ public class SetModel {
 	}
 
 
-	
+	public boolean Update_urlStatus(String convertKey, String status, String msg) {
+		boolean res = false;
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		if (m_AC == null)	return false;
+
+		try
+		{
+
+			pStmt.setQuery(Queries.UPDATE_URL_STATUS);
+			pStmt.setString(0, convertKey);
+			pStmt.setString(1, status);
+			pStmt.setString(2, msg);
+
+			String resQuery 	= m_AC.SetProcedure(pStmt.getQuery(), strFuncName);
+			String resFlag		= resQuery.substring(0,1);
+			int nResCnt			=  m_C.getResCnt(resQuery);
+			if(nResCnt > 0) res = true;
+
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+//			bRes = false;
+		}
+
+		return res;
+	}
+
 	public boolean Update_taxStatus(String convertKey, String status) {
 		boolean res = false;
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
@@ -219,7 +246,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		
 	}
 	
-	public boolean Insert_SlipDocFromTemplate(String sdocNo, String corpNo, String partNo, String userID, String sdocKind, String sdocName, int slipCnt, String jdocNo, boolean isFollow) {
+	public boolean Insert_SlipDocFromTemplate(String sdocNo, String corpNo, String partNo, String userID, String sdocKind, String sdocName, int slipCnt, String jdocNo, boolean isFollow, String unique) {
 		boolean res = false;
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		if (m_AC == null)	return false;
@@ -238,6 +265,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
         	pStmt.setString(7, slipCnt+""); //SLIP_CNT
         	pStmt.setString(8, jdocNo); //JDOC_NO
 			pStmt.setString(9, isFollow ? "1" : "0");
+			pStmt.setString(10, unique);
 
     		String resQuery 	= m_AC.SetData(pStmt.getQuery(), strFuncName);
     		String resFlag		= resQuery.substring(0,1);
@@ -254,11 +282,11 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return res;
 	}
 
-	public boolean addDocURL(Map mapParams) {
+	public boolean addDocURL(Map mapParams, GetModel GM) {
 		String strFuncName = (new Object() {}).getClass().getEnclosingMethod().getName();
-		boolean bRes = false;
+		boolean bRes = true;
 		if (this.m_AC == null)
-			return bRes;
+			return false;
 		try {
 			String[] docInfo 	= this.m_C.getParamValue(mapParams, "DOC_INFO");
 			String jdocNo 		= this.m_C.getParamValue(mapParams, "JDOC_NO", "");
@@ -268,7 +296,14 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 			StringBuffer sbQuery = new StringBuffer();
 
+//			int jdocIndex = Integer.parseInt(GM.getNextIndex(jdocNo));
+
+//				m_
+
 			for(int i = 0; i < docInfo.length; i ++) {
+
+				sbQuery.setLength(0);
+
 				JsonObject objDocInfo = (new JsonParser()).parse(docInfo[i]).getAsJsonObject();
 
 				String sdocNo = m_C.getIRN("S");
@@ -283,8 +318,9 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 				pStmt.setString(6, URLDecoder.decode(objDocInfo.get("TITLE").getAsString(),m_Profile.getString("AGENT_INFO", "CHARSET", ""))); //SDOC_NAME
 				pStmt.setString(7, "1"); //SLIP_CNT
 				pStmt.setString(8, jdocNo); //JDOC_NO
-				pStmt.setString(9, "0");
-				pStmt.setString(10, objDocInfo.get("URL").getAsString());
+				pStmt.setString(9, GM.getNextIndex(jdocNo)); //JDOC_INDEX
+				pStmt.setString(10, "0");
+				pStmt.setString(11, objDocInfo.get("URL").getAsString());
 
 				sbQuery.append(pStmt.getQuery());
 				sbQuery.append(";=");
@@ -303,16 +339,24 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 
 				sbQuery.append(orgStmt.getQuery());
-				if(i < docInfo.length -1) {
-					sbQuery.append(";=");
+//				if(i < docInfo.length -1) {
+//					sbQuery.append(";=");
+//				}
+
+				String res = this.m_AC.SetData(sbQuery.toString(), strFuncName);
+//				String resFlag = res.substring(0, 1);
+				int nResCnt = this.m_C.getResCnt(res);
+				if (nResCnt <= 0) {
+					bRes = false;
+					break;
 				}
 			}
 
-			String res = this.m_AC.SetData(sbQuery.toString(), strFuncName);
-			String resFlag = res.substring(0, 1);
-			int nResCnt = this.m_C.getResCnt(res);
-			if (nResCnt > 0)
-				bRes = true;
+//			String res = this.m_AC.SetData(sbQuery.toString(), strFuncName);
+//			String resFlag = res.substring(0, 1);
+//			int nResCnt = this.m_C.getResCnt(res);
+//			if (nResCnt > 0)
+//				bRes = true;
 		} catch (Exception e) {
 			this.logger.error(strFuncName, e);
 			bRes = false;
@@ -339,6 +383,34 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 			int nResCnt = this.m_C.getResCnt(res);
 			if (nResCnt > 0)
 				bRes = true;
+		} catch (Exception e) {
+			this.logger.error(strFuncName, e);
+			bRes = false;
+		}
+		return bRes;
+	}
+
+	public boolean moveIndex(Map mapParams, String direction) {
+		String strFuncName = (new Object() {}).getClass().getEnclosingMethod().getName();
+		boolean bRes = false;
+		if (this.m_AC == null)
+			return bRes;
+		try {
+			String sdocNo = this.m_C.getParamValue(mapParams, "SDOC_NO", "");
+			pStmt.setQuery(Queries.MOVE_INDEX);
+			pStmt.setString(0, sdocNo);
+			pStmt.setString(1, direction);
+
+			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
+			String res = null;
+			while(m_AC.next()) {
+				res = m_AC.GetString("RESULT");
+			}
+
+			if("T".equalsIgnoreCase(res)) {
+				bRes = true;
+			}
+
 		} catch (Exception e) {
 			this.logger.error(strFuncName, e);
 			bRes = false;
@@ -517,6 +589,7 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     		pStmt.setString(2, comtIRN);
     		pStmt.setString(3, jdocNo);
     		pStmt.setString(4, userID);
+    		pStmt.setDBDate(5);
     	
     		String res 			= m_AC.SetData(pStmt.getQuery(), strFuncName);
     		String resFlag		= res.substring(0,1);
@@ -609,6 +682,48 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	
     	return bRes;
 	
+	}
+
+	public boolean removeReceipt(Map<String, Object> mapParams) {
+
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		boolean bRes = false;
+		if (m_AC == null)	return bRes;
+
+		String key			= m_C.getParamValue(mapParams, "KEY", "");
+		String kind			= m_C.getParamValue(mapParams, "SDOC_KIND", "");
+		String receiptKey	= m_C.getParamValue(mapParams, "RECEIPT_KEY", "");
+		String userID 	= m_C.getParamValue(mapParams, "USER_ID", null);
+		String coCD 	= m_C.getParamValue(mapParams, "CORP_NO", null);
+
+		try
+		{
+			pStmt.setQuery(Queries.REMOVE_RECEIPT);
+			pStmt.setString(0, key);
+			pStmt.setString(1, receiptKey);
+			pStmt.setString(2, kind);
+			pStmt.setString(3, coCD);
+			pStmt.setString(4, userID);
+
+
+
+			String res 			= m_AC.SetProcedure(pStmt.getQuery(), strFuncName);
+			String resFlag		= res.substring(0,1);
+			int nResCnt			=  m_C.getResCnt(res);
+
+			if(nResCnt > 0)
+			{
+				bRes = true;
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+			bRes = false;
+		}
+
+		return bRes;
+
 	}
 	
 	public boolean removeAll(Map<String, Object> mapParams)
@@ -914,7 +1029,9 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
     	return nResCnt;
 	}
 
-	public int addBookmark(JsonObject userInfo, JsonObject slipInfo)
+
+
+	public int addBookmarkCard(JsonObject userInfo, JsonObject slipInfo)
 	{
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		int nResCnt	 = -1;
@@ -924,13 +1041,16 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 		{
 			pStmt.setQuery(Queries.ADD_BOOKMARK_FOR_CARD);
 
+			String position = m_Profile.getString("INTERFACE","CARD_BOOKMARK_POSITION","785,4023,2821,4571");
+
 
 			pStmt.setString(0, m_C.getIRN(""));
 			pStmt.setString(1, slipInfo.get("SDOC_NO").getAsString());
 			pStmt.setString(2, slipInfo.get("SLIP_IRN").getAsString());
-			pStmt.setString(3, userInfo.get("USER_NM").getAsString());
-			pStmt.setString(4, userInfo.get("CORP_NO").getAsString());
-			pStmt.setString(5, userInfo.get("USER_ID").getAsString());
+			pStmt.setString(3, position);
+			pStmt.setString(4, userInfo.get("USER_NM").getAsString());
+			pStmt.setString(5, userInfo.get("CORP_NO").getAsString());
+			pStmt.setString(6, userInfo.get("USER_ID").getAsString());
 
 			String res 			= m_AC.SetData(pStmt.getQuery(), strFuncName);
 			String resFlag		= res.substring(0,1);
@@ -944,5 +1064,38 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 
 		return nResCnt;
 	}
-	
+
+	public int addBookmarkCash(JsonObject userInfo, JsonObject slipInfo)
+	{
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		int nResCnt	 = -1;
+		if (m_AC == null)	return nResCnt;
+
+		try
+		{
+			pStmt.setQuery(Queries.ADD_BOOKMARK_FOR_CASH);
+
+			String position = m_Profile.getString("INTERFACE","CASH_BOOKMARK_POSITION","163,1573,828,1793");
+
+
+			pStmt.setString(0, m_C.getIRN(""));
+			pStmt.setString(1, slipInfo.get("SDOC_NO").getAsString());
+			pStmt.setString(2, slipInfo.get("SLIP_IRN").getAsString());
+			pStmt.setString(3, position);
+			pStmt.setString(4, userInfo.get("USER_NM").getAsString());
+			pStmt.setString(5, userInfo.get("CORP_NO").getAsString());
+			pStmt.setString(6, userInfo.get("USER_ID").getAsString());
+
+			String res 			= m_AC.SetData(pStmt.getQuery(), strFuncName);
+			String resFlag		= res.substring(0,1);
+			nResCnt			=  m_C.getResCnt(res);
+
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+		}
+
+		return nResCnt;
+	}
 }

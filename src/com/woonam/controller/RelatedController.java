@@ -202,8 +202,9 @@ public class RelatedController extends HttpServlet{
 
 				try {
 //					urlVal += "?tmp=" + m_C.getToday("yyyyMMddHHmmssSSS");
-					String token = URLDecoder.decode(session.getAttribute("TOKEN").toString(),"UTF-8");
+					String token = session.getAttribute("TOKEN").toString();
 					logger.debug(urlVal + " token : "+token);
+//					token = URLDecoder.decode(token,"UTF-8");
 
 					HttpURLConnection con = (HttpURLConnection) (new URL(urlVal).openConnection());
 					con.setInstanceFollowRedirects(false);
@@ -260,7 +261,7 @@ public class RelatedController extends HttpServlet{
 					return;
 				}
 
-				Boolean bRes = m_SM.addDocURL(mapParams);
+				Boolean bRes = m_SM.addDocURL(mapParams, m_GM);
 				if(bRes)
 				{
 					out.print(m_C.writeResultMsg("T", ""));

@@ -16,6 +16,7 @@ $.Viewer = {
 		currentKey : null,
 		IS_FOLD : true,
 		Cur_Slip : null,
+		isBookmarkLoaded : false,
 		init : function(params) {
 			
 			this.params 			= params;
@@ -27,8 +28,17 @@ $.Viewer = {
 			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
 			$.Common.ShowProgress("#info_progress","Waiting..","000000","0.7");
 			$.Common.ShowProgress("#original_progress","Waiting..","000000","0.7");
-		
-			
+
+			// if($.Viewer.params.USE_BOOKMARK) {
+			// 	$.getMultiScripts([g_VIEW_BOOKMARK_URL, g_CANVAS_LIB])
+			// 		.fail(function(err) {
+			// 			$.Common.simpleToast("Failed to load Bookmark.");
+			// 		})
+			// 		.done(function(){
+			// 			$.Viewer.isBookmarkLoaded = true;
+			// 		});
+			// }
+
 			$(window).on('resize', function() {
 				// $.each($("[tag=drag]"), function(){
 				// 	var elPrev = $(this).prev();
@@ -92,6 +102,7 @@ $.Viewer = {
 			//
 			// }
 			$.Viewer.viewer = $.Viewer.setImageViewer();
+
 			
 		},
 
@@ -763,23 +774,67 @@ $.Viewer = {
 			});
 			elImage.appendTo($("#originalImage"));
 			elImage.load(function() {
+
 				var version = $.Common.GetBrowserVersion().ActingVersion;
 				if(version >= 9) {
 
-					var bookmarkItem = objData["BOOKMARKS"];
-						if(bookmarkItem != null && bookmarkItem.length > 0) {
-						var bookmark = $(document.createElement('canvas'));
-						bookmark.attr({
-							"width": elImage.width(),
-							"height": elImage.height(),
-							"id": "bookmark",
-							"class": "bookmark"
-						});
-						bookmark.appendTo($("#originalImage"));
 
-						$.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
-					}
+					var canvas = null;
+
+					// if($.Viewer.isBookmarkLoaded) {
+						var bookmarkItem = objData["BOOKMARKS"];
+							if(bookmarkItem != null && bookmarkItem.length > 0) {
+								var width = elImage.width();
+								var height = elImage.height();
+								canvas = $(document.createElement('div'));
+								canvas.attr({
+								"id": "bookmark",
+								"class": "bookmark",
+								}).css({
+									"width": elImage.width(),
+									"height": elImage.height(),
+								});
+								canvas.appendTo($("#originalImage"));
+
+
+							var bookmarkContext = Bookmark();
+							bookmarkContext.init(canvas, bookmarkItem);
+							bookmarkContext.drawItems(objData["SLIP_ROTATE"]);
+							// $.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
+						}
+					// }
+
+					//
+					// var bookmarkItem = objData["BOOKMARKS"];
+					// 	if(bookmarkItem != null && bookmarkItem.length > 0) {
+					// 	bookmark = $(document.createElement('canvas'));
+					// 	bookmark.attr({
+					// 		"width": elImage.width(),
+					// 		"height": elImage.height(),
+					// 		"id": "bookmark",
+					// 		"class": "bookmark",
+					// 	});
+					// 	bookmark.appendTo($("#originalImage"));
+					//
+					// 	$.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
+					// }
 				}
+
+				// if(version >= 11 && "T" === $.Viewer.params.USE_BOOKMARK_DRAW) {
+				//
+				// 	// $.getScript(g_DRAW_BOOKMARK_WEB_URL, function() {
+				// 	var canvas = bookmark[0];
+				// 	$.Draw.init($.Bookmark, canvas);
+				//
+				// 	// }).fail(function(){
+				// 	//
+				// 	// 	$.Common.simpleToast($.Viewer.localeMsg.FAILED_LOAD_DRAW_BOOKMARK_TOOL);
+				// 	//
+				// 	// });
+				//
+				//
+				//
+				// }
 
 				$.Common.HideProgress("#original_progress");
 			});
@@ -996,7 +1051,8 @@ $.Viewer = {
 				maxScale: 5,
 				   $zoomIn:$("#zoomIn"),
 				  $zoomOut:$("#zoomOut"), 
-				animate:true
+				animate:true,
+				cursor:'inherit'
 			});
 			
 			panzoom.parent().on('mousewheel.focal', function(e) {

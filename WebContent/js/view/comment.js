@@ -14,29 +14,26 @@ $.Comment = {
 		$.Comment.setUIColor();
 		$.Comment.initializeComment();
 
+
 	},
 
-	initializeComment : function()
-	{
+	initializeComment : function() {
 
-		$(window).on('resize', $.Common.windowCallback(function(){
+		$(window).on('resize', $.Common.windowCallback(function () {
 			$("#ipt_content").getNiceScroll().resize();
 			$("#comtList").getNiceScroll().resize();
 		}));
 
-		$(window).on("unload", function() {
-			if(window.opener != null)
-			{
+		$(window).on("unload", function () {
+			if (window.opener != null) {
 				switch ($.Comment.params.OPENER.toUpperCase()) {
 					case "ACTOR" :
-						if(window.opener.$.Actor != null)
-						{
+						if (window.opener.$.Actor != null) {
 							window.opener.$.Actor.getCommentCnt();
 						}
 						break;
 					case "VIEWER" :
-						if(window.opener.$.Viewer != null)
-						{
+						if (window.opener.$.Viewer != null) {
 							window.opener.$.Viewer.getCommentCnt();
 						}
 						break;
@@ -45,15 +42,14 @@ $.Comment = {
 			}
 		});
 
-		$("#ipt_content").on("keypress",function(e){
+		$("#ipt_content").on("keypress", function (e) {
 			var code = (e.keyCode ? e.keyCode : e.which);
-			if (code == 13)
-			{
+			if (code == 13) {
 				$("#ipt_content").getNiceScroll().resize();
 			}
 		});
 
-		$("#apply").unbind().bind("click",function(){
+		$("#apply").unbind().bind("click", function () {
 			$.Comment.write($("#ipt_title"), $("#ipt_content"));
 		});
 
@@ -61,7 +57,15 @@ $.Comment = {
 
 		$.Comment.change_GroupKey($.Comment.params.KEY);
 
+		$("#commentTip").attr("title", $.Comment.localeMsg.COMMENT_TIP);
 
+		// if ("EDIT" !== $.Comment.params.VIEW_MODE.toUpperCase()) {
+		// 	$.Comment.toggleIptComment(false);
+		// }
+		// else
+		{
+			$.Comment.toggleIptComment(true);
+		}
 	},
 	change_GroupKey : function(option){
 
@@ -123,9 +127,26 @@ $.Comment = {
 			}
 
 		})
-			.always(function(){
-				$.Common.HideProgress("#comment_progress");
-			});
+		.always(function(){
+			$.Common.HideProgress("#comment_progress");
+			// if ("EDIT" !== $.Comment.params.VIEW_MODE.toUpperCase()) {
+			// 	$.Comment.toggleIptComment(false);
+			// }
+			// else
+			{
+				$.Comment.toggleIptComment(true);
+			}
+		});
+	},
+	toggleIptComment : function(isVisible) {
+		if(isVisible) {
+			$("#comtEditText").show();
+			$("#comtList").css("bottom","210px");
+		}
+		else {
+			$("#comtEditText").hide();
+			$("#comtList").css("bottom","0");
+		}
 	},
 	/**
 	 * Draw comment
@@ -196,57 +217,58 @@ $.Comment = {
 		var elCommentArea =  $(document.createElement('div'));
 		elCommentArea.attr("comt-irn",comtIrn);
 
-		if(myComt == "1")
+		if(myComt === "1")
 		{
 			elContentsArea.attr("my_comt", "1");
 			elContentsArea.css("float","right");
 
-			var elRemove = $(document.createElement('div'));
-			elRemove.addClass("remove");
-			elRemove.append($(document.createElement('img')).attr("src",g_RootURL + "image/common/remove.png"));
-			elRemove.appendTo(elContentsArea);
+			if ("EDIT" === $.Comment.params.VIEW_MODE.toUpperCase()) {
+				var elRemove = $(document.createElement('div'));
+				elRemove.addClass("remove");
+				elRemove.append($(document.createElement('img')).attr("src", g_RootURL + "image/common/remove.png"));
+				elRemove.appendTo(elContentsArea);
 
-			elRemove.on({
-				mouseenter : function() {
-					$(this).css("opacity","0.5");
-				},
-				mouseleave : function() {
-					$(this).css("opacity","1");
-				},
-				click : function(){
-					$.Comment.remove(comtIrn);
-				}
-			});
+				elRemove.on({
+					mouseenter: function () {
+						$(this).css("opacity", "0.5");
+					},
+					mouseleave: function () {
+						$(this).css("opacity", "1");
+					},
+					click: function () {
+						$.Comment.remove(comtIrn);
+					}
+				});
 
-			var elModify = $(document.createElement('div'));
-			elModify.addClass("modify");
-			elModify.append($(document.createElement('img')).attr("src",g_RootURL + "image/common/modify.png"));
-			elModify.appendTo(elContentsArea);
+				var elModify = $(document.createElement('div'));
+				elModify.addClass("modify");
+				elModify.append($(document.createElement('img')).attr("src", g_RootURL + "image/common/modify.png"));
+				elModify.appendTo(elContentsArea);
 
-			elModify.on({
-				mouseenter : function() {
-					$(this).css("opacity","0.5");
-				},
-				mouseleave : function() {
-					$(this).css("opacity","1");
-				},
-				click : function(){
-					$.Comment.modify(elCommentArea, objItem);
-				}
-			});
+				elModify.on({
+					mouseenter: function () {
+						$(this).css("opacity", "0.5");
+					},
+					mouseleave: function () {
+						$(this).css("opacity", "1");
+					},
+					click: function () {
+						$.Comment.modify(elCommentArea, objItem);
+					}
+				});
 
-			//Add mouse event.
-			elContentsArea.on({
-				mouseenter : function() {
-					elRemove.css("visibility", "visible");
-					elModify.css("visibility", "visible");
-				},
-				mouseleave : function() {
-					elRemove.css("visibility", "hidden");
-					elModify.css("visibility", "hidden");
-				}
-			});
-
+				//Add mouse event.
+				elContentsArea.on({
+					mouseenter: function () {
+						elRemove.css("visibility", "visible");
+						elModify.css("visibility", "visible");
+					},
+					mouseleave: function () {
+						elRemove.css("visibility", "hidden");
+						elModify.css("visibility", "hidden");
+					}
+				});
+			}
 		}
 		else
 		{
@@ -276,6 +298,15 @@ $.Comment = {
 		var elDivider = $(document.createElement('div'));
 		elDivider.addClass("comt_divider");
 		elDivider.appendTo($("#comtList"));
+
+		if("EDIT" !== $.Comment.params.VIEW_MODE.toUpperCase()) {
+			$("#comtEditText").hide();
+			$("#comtList").css("bottom","0");
+		}
+		else {
+			$("#comtEditText").show();
+			$("#comtList").css("bottom","210px");
+		}
 
 	},
 

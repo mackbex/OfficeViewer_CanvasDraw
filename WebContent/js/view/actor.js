@@ -6,7 +6,7 @@ $.Actor = {
 		colorSet : null,
 		params : null,
 		slipRange : 10,
-		attachRange : 20,
+		attachRange : 100,
 		thumbWidth : 160,
 	//	startIdx : 0,
 		slipTotalCnt : 0,
@@ -21,11 +21,14 @@ $.Actor = {
 		isSlipLoading : false,
 		isAttachLoading : false,
 		USE_MAGNIFIER : false,
+		isBookmarkLoaded : false,
 		init : function(params) {
 			 
 			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
 			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
-			
+
+
+
 			/**
 			 * resize scroll window on resize browser
 			 */
@@ -56,8 +59,18 @@ $.Actor = {
 			$.Actor.USE_MAGNIFIER = params.USE_MAGNIFIER === "T" ? true : false;
 			$.Actor.IS_FOLD = params.FOLD === "T" ? true : false;
 			//if(!$.Actor.params.MULTI_KEY) {
-				$.Actor.currentKey = $.Actor.params.KEY;
+			$.Actor.currentKey = $.Actor.params.KEY;
 			//}
+
+			// if($.Actor.params.USE_BOOKMARK) {
+			// 	$.getMultiScripts([g_VIEW_BOOKMARK_URL, g_CANVAS_LIB])
+			// 		.fail(function(err) {
+			// 			$.Common.simpleToast("Failed to load Bookmark.");
+			// 		})
+			// 		.done(function(){
+			// 			$.Actor.isBookmarkLoaded = true;
+			// 		});
+			// }
 			
 			$.Actor.initButtons();
 			//Set globalization.
@@ -69,6 +82,7 @@ $.Actor = {
 			$.Actor.contextMenu = $.Menu.PC.Actor;
 			
 			$.Actor.Draw_MainContext();
+			$.Actor.setBtnToolTip();
 			
 			var arObjAdd = $.Common.sortContextMenuItem($.Actor.localeMsg,  $.Actor.contextMenu['Add'], $.Actor.params.VIEW_MODE, $.Actor.currentKey);
 			$.ContextMenu.getMenu($.Actor, $("#btn_add_slip"), $("#btn_add_slip"), arObjAdd, $.Actor.params, { spacing_top : true});				
@@ -115,9 +129,19 @@ $.Actor = {
 
 		        }).fail(function(){
 		        	//$.Actor.attachDownloadLink();
-		        	
 		        });
 			}
+
+
+		},
+		setBtnToolTip : function () {
+			$("#btn_open_menu").attr("title", $.Actor.localeMsg.TOOLTIP_MENU);
+			$("#btn_add_slip").attr("title", $.Actor.localeMsg.TOOLTIP_ADD_SLIP);
+			$("#btn_open_comment").attr("title", $.Actor.localeMsg.TOOLTIP_COMMENT);
+			$("#btn_open_history").attr("title", $.Actor.localeMsg.TOOLTIP_HISTORY);
+			$("#btn_remove").attr("title", $.Actor.localeMsg.TOOLTIP_REMOVE);
+			$("#btn_print").attr("title", $.Actor.localeMsg.TOOLTIP_PRINT);
+
 		},
 		Draw_MainContext :function() {
 			var arObjMenu = $.Common.sortContextMenuItem($.Actor.localeMsg,  $.Actor.contextMenu['Menu'], $.Actor.params.VIEW_MODE, $.Actor.currentKey);
@@ -1010,28 +1034,35 @@ $.Actor = {
 
 					//Draw option icon
 
+					// if(parent.isBookmarkLoaded) {
 
-					var curObj 			= parent.objSlipItem[idx];
+						var curObj 			= parent.objSlipItem[idx];
 
-					var bookmarkItem = curObj["BOOKMARKS"];
-					//
-					// $.each(bookmarkItem, function(){
+						var bookmarkItem = curObj["BOOKMARKS"];
+						//
+						// $.each(bookmarkItem, function(){
 
-					var bookmark = $(document.createElement('canvas'))[0];
-					$(bookmark).attr({
-						"width": $(this).find(".area_thumb").width(),
-						"height": $(this).find(".area_thumb").height(),
-						"class":"bookmark"
-					});
+						var canvas = $(document.createElement('div'));
+						$(canvas).attr({
+							"class":"bookmark",
+							"id": curObj["SLIP_IRN"],
+						}).css({
+							"width": $(this).find(".area_thumb").width(),
+							"height": $(this).find(".area_thumb").height(),
+						});
 
-					$(bookmark).insertAfter($(this).find(".link"));
+						$(canvas).insertAfter($(this).find(".link"));
 
-					$.Bookmark.Draw_BookmarkItem(bookmark, bookmarkItem, curObj["SLIP_ROTATE"]);
+
+						var bookmarkContext = Bookmark();
+						bookmarkContext.init(canvas, bookmarkItem);
+						bookmarkContext.drawItems(curObj["SLIP_ROTATE"]);
+						// var canvas = Bookmark();
+						// canvas.Draw_BookmarkItem(bookmark, bookmarkItem, curObj["SLIP_ROTATE"]);
+					// }
 
 
 				});
-				// $("[class=thumb_title]").niceScroll({horizrailenabled: true, cursorcolor:"#"+$.Color.Common.NAVIGATION});
-
 			});
 		},
 
@@ -1206,7 +1237,7 @@ $.Actor = {
 			//Draw attach Type area
 			var elAttachTypeArea = $(document.createElement('div'));
 			elAttachTypeArea.addClass("area_type");
-			elAttachTypeArea.css("right","30px");
+			elAttachTypeArea.css("right","66px");
 			elAttachTypeArea.appendTo(elAttach);
 
 			if(objData.SDOC_URL === "1") {
@@ -1241,6 +1272,73 @@ $.Actor = {
 				});
 				elDownBtn.appendTo(elAttachBtnArea);
 			}
+
+
+			var elMoveBtn = $(document.createElement('div'));
+			elMoveBtn.addClass("move_index");
+
+			var elMoveUpBtn = $(document.createElement('div'));
+			elMoveUpBtn.addClass("move_up");
+			elMoveUpBtn.attr("command", "MOVE_UP_INDEX")
+			elMoveUpBtn.append($(document.createElement('img')).attr("src", g_RootURL + "image/pc/actor/move_up.png"));
+			elMoveUpBtn.unbind("click").bind("click", function (e) {
+
+				e.stopPropagation();
+				$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
+				$.when($.Operation.execute($.Actor, elMoveUpBtn, objData)).then(function (flag) {
+					if ("T" === flag) {
+
+					// var attachList = Object.keys($.Actor.objAttachItem);
+					// var targetSDocNo = attachList[attachList.indexOf(objData.SDOC_NO) - 1];
+					//
+					// $.Common.swapObject($.Actor.objAttachItem, objData.SDOC_NO, targetSDocNo);
+						$.Actor.objAttachItem = null;
+						$.Actor.getAttachList($.Actor, $.Actor.params, $.Actor.attachRange);
+
+						$("#area_attach").empty();
+						$.Actor.addAttachItem($.Actor.objAttachItem, $("#area_attach"), $.Actor.currentKey);
+					} else {
+						$.Common.simpleToast($.Actor.localeMsg.NO_TARGET_INDEX);
+					}
+				}, function(){
+					$.Common.simpleToast($.Actor.localeMsg.NO_TARGET_INDEX);
+
+				}).always(function(){
+					$.Common.HideProgress("#attach_progress");
+				});
+
+			});
+			elMoveUpBtn.appendTo(elMoveBtn);
+
+			var elMoveDownBtn = $(document.createElement('div'));
+			elMoveDownBtn.addClass("move_down");
+			elMoveDownBtn.attr("command", "MOVE_DOWN_INDEX")
+			elMoveDownBtn.append($(document.createElement('img')).attr("src", g_RootURL + "image/pc/actor/move_down.png"));
+			elMoveDownBtn.unbind("click").bind("click", function (e) {
+
+				e.stopPropagation();
+				$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
+				$.when($.Operation.execute($.Actor, elMoveDownBtn, objData)).then(function (flag) {
+					if ("T" === flag) {
+
+						$.Actor.objAttachItem = null;
+						$.Actor.getAttachList($.Actor, $.Actor.params, $.Actor.attachRange);
+						$("#area_attach").empty();
+						$.Actor.addAttachItem($.Actor.objAttachItem, $("#area_attach"), $.Actor.currentKey);
+					} else {
+						$.Common.simpleToast($.Actor.localeMsg.NO_TARGET_INDEX);
+
+					}
+				}, function(){
+					$.Common.simpleToast($.Actor.localeMsg.SERVER_EXCEPTION);
+				}).always(function(){
+					$.Common.HideProgress("#attach_progress");
+				});
+			});
+			elMoveDownBtn.appendTo(elMoveBtn);
+
+			elMoveBtn.appendTo(elAttachBtnArea);
+
 //			var elAttachOption = $(document.createElement('div'));
 //			elAttachOption.addClass("option");
 //			elAttachOption.append($(document.createElement('img')).attr("src", g_RootURL+"image/common/option.png"));
@@ -1327,6 +1425,7 @@ $.Actor = {
 				elMagnifier.addClass("btn_magnifier");
 				elMagnifier.append($(document.createElement('img')).attr("src",g_RootURL+"image/common/context/magnifier.png"));
 				elMagnifier.appendTo(elThumbBtnArea);
+				elMagnifier.attr("title",$.Actor.localeMsg.TOOLTIP_MAGNIFIER);
 			}
 			
 			//Draw image area
@@ -1484,7 +1583,6 @@ $.Actor = {
 		},
 		displayFoldThumb : function(parent, id, groupNo) {
 
-			var arThumbInfo = Object.keys(parent.objSlipItem);
 
 			var itemIdx = $("#slip_masonry").find("[idx=" + id + "]").index();
 

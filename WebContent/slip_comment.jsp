@@ -39,6 +39,7 @@ $(function(){
 			LANG 					: "<c:out value="${mParams['LANG'][0]}" />",
 			KEY		 				: "<c:out value="${KEY}" />",
 			OPENER					: "<c:out value="${mParams['PAGE'][0]}" />",
+			VIEW_MODE				: "<c:out value="${mParams['VIEW_MODE'][0]}" />",
 			MULTI_KEY				: <c:out value="${MULTI_KEY}" />,
 	}
 
@@ -56,6 +57,9 @@ $(function(){
 		</div>
 		<div class="comment_title">
 			<span class="title" data-i18n="TITLE"></span><span id="comt_cnt"></span>
+		</div>
+		<div id="icon_right">
+			<img src="<c:url value='/image/common/question.png' />" id="commentTip" />
 		</div>
 		<c:if test="${isMultiKey eq true }">
 			<div class="area_key_select">
@@ -84,7 +88,9 @@ $(function(){
 	</div>
 	<div id="comtEditText" class="area_comment_write">
 			<div class="area_write_title">
-				<div class="header"><span class="title" data-i18n="WRITE_HEADER"></span></div>
+				<div class="header">
+					<span class="title" data-i18n="WRITE_HEADER"></span>
+				</div>
 				<input type="text" id="ipt_title" class="ipt_title" tabindex="1" />
 			</div>
 			<div class="area_write_content">

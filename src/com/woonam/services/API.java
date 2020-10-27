@@ -1,10 +1,8 @@
 package com.woonam.services;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 
 import com.woonam.template.*;
 import org.apache.commons.io.FileUtils;
@@ -48,7 +46,9 @@ public class API {
 		UNMAPPING_CARD,
 		UPLOAD_AFTER,
 		REMOVE_AFTER,
-		REMOVE_AFTER_ALL
+		REMOVE_AFTER_ALL,
+		UPLOAD_URL,
+		REMOVE_RECEIPT
 	}
 	
 	API() {
@@ -156,7 +156,7 @@ public class API {
 							+ "USER_ID : " + userID 
 							+ " CORP_NO : " + coCD 
 							+ " LANG : " + lang);
-					return ResultMsg("F","ERR_INVALIED_PARAM");
+					return ResultMsg("F","NO_USER_EXIST");
 				}
 				
 				JsonObject resMsg = null;
@@ -173,6 +173,42 @@ public class API {
 				
 				return resMsg;
 				
+			}
+			case REMOVE_RECEIPT : {
+				String[] verifyList = {"USER_ID","KEY","CORP_NO","RECEIPT_KEY", "SDOC_KIND"};
+
+				//Parameter validation.
+				if(!VerifyParams(verifyList, params)) {
+					return ResultMsg("F","ERR_INVALIED_PARAM");
+				}
+
+
+				String userID 	= m_C.getParamValue(params, "USER_ID", null);
+				String coCD 	= m_C.getParamValue(params, "CORP_NO", null);
+				String lang 		= m_C.getParamValue(params, "LANG", "ko");
+
+				//Verify user info
+				JsonObject obj_userInfo = m_GM.getUserInfo(userID, coCD, lang);
+
+				if(obj_userInfo == null || obj_userInfo.isJsonNull()) {
+					logger.info("WebService : No user exists. "
+							+ "USER_ID : " + userID
+							+ " CORP_NO : " + coCD
+							+ " LANG : " + lang);
+					return ResultMsg("F","NO_USER_EXIST");
+				}
+
+				boolean bRes = m_SM.removeReceipt(params);
+
+				JsonObject obj_res = null;
+				if(bRes) {
+					obj_res = ResultMsg("T", "");
+				}
+				else {
+					obj_res = ResultMsg("F", "");
+				}
+
+				return obj_res;
 			}
 			case DELETE_BY_KIND : {
 				String[] verifyList = {"USER_ID","KEY","CORP_NO","KIND"};
@@ -433,6 +469,7 @@ public class API {
 				if(!VerifyParams(verifyList, params)) {
 					return ResultMsg("F","ERR_INVALIED_PARAM");
 				}
+				params.put("RECEIPT_KEY", params.get("ISSUE_ID"));
 //				JsonObject obj_taxInfo = new JsonObject();
 //				obj_taxInfo.addProperty("ConvertKey","2017100550000002f1225920");
 //				obj_taxInfo.addProperty("ItemJoinKey","2017100550000002f1225920");
@@ -610,13 +647,177 @@ public class API {
 				
 				return obj_res;
 			}
+			case UPLOAD_URL : {
+				String[] verifyList = {"URL", "KEY", "USER_ID", "CORP_NO", "SDOC_KIND"};
 
+				if(!VerifyParams(verifyList, params)) {
+					return ResultMsg("F","ERR_INVALIED_PARAM");
+				}
+
+				String userID 	= m_C.getParamValue(params, "USER_ID", null);
+				String coCD 	= m_C.getParamValue(params, "CORP_NO", null);
+				String lang 		= m_C.getParamValue(params, "LANG", "ko");
+				String sdocKind 		= m_C.getParamValue(params, "SDOC_KIND", "1001");
+				String key 		= m_C.getParamValue(params, "KEY", "");
+
+
+				JsonObject obj_userInfo = m_GM.getUserInfo(userID, coCD, lang);
+
+				if(obj_userInfo == null || obj_userInfo.isJsonNull()) {
+					logger.info("WebService : No user exists. "
+							+ "USER_ID : " + userID
+							+ " CORP_NO : " + coCD
+							+ " LANG : " + lang);
+					return ResultMsg("F","ERR_INVALIED_PARAM");
+				}
+
+				InputStream is = null;
+//				StringBuffer sbRes = new StringBuffer();
+				String urlVal = m_C.getParamValue(params, "URL", "");
+				urlVal = urlVal.replaceAll("＆","&");
+				//Command process
+				Process p = null;
+
+				JsonObject resMsg =  ResultMsg("F", "FAILED_CONVERT_URL");
+				BufferedReader stdInput = null;
+				BufferedReader stdError = null;
+				try {
+
+//					String docIrn = m_C.getIRN("");
+//					//set workpath
+//					sbWorkPath.append(m_C.Get_RootPathForJava() + profile.getString("WAS_INFO", "TEMP_DIR",  "temp"));
+//					sbWorkPath.append(File.separator);
+//					sbWorkPath.append(m_C.getIRN(""));
+//					sbWorkPath.append(m_C.getParamValue(params, "USER_ID", "system"));
+//					sbWorkPath.append(m_C.getToday("yyyyMMddHHmmssSSS"));
+//					sbWorkPath.append(File.separator);
+//
+//					File workPath = new File(sbWorkPath.toString());
+//					if(!workPath.exists()) {
+//						workPath.mkdirs();
+//					}
+//
+//					//set command
+//					String imagePath = sbWorkPath.toString() + File.separator + docIrn + ".jpg";
+//
+//					ProcessBuilder pb = new ProcessBuilder();
+//					pb.command(
+//							profile.getString("INTERFACE", "CONVERT_COMMAND",  ""),
+//							"--disable-smart-width",
+//							"--width",
+//							profile.getString("INTERFACE", "CONVERT_URL_WIDTH",  "3125"),
+//							"--zoom",
+//							profile.getString("INTERFACE", "CONVERT_URL_ZOOM",  "3.125"),
+//							urlVal,
+//							imagePath
+//					);
+//
+//					logger.debug("Convert Command : ");
+//					for (String s : pb.command())
+//					{
+//						logger.debug(s);
+//					}
+//
+//					p = pb.start();
+//
+//					stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//
+//					stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+//
+//					String s = null;
+//					while ((s = stdInput.readLine()) != null) {
+//						logger.debug(s);
+//					}
+//
+//					while ((s = stdError.readLine()) != null) {
+//						logger.debug(s);
+//					}
+//
+//					p.getOutputStream().close();
+//					int rst = p.waitFor();
+//
+//					if (0 == rst) {
+//						logger.debug("RunProgram success.");
+//
+//						//Set slipdoc info
+//						JsonObject uploadInfo = new JsonObject();
+//						uploadInfo.addProperty("SDOC_KIND", sdocKind);
+//						uploadInfo.addProperty("USER_ID", userID);
+//						uploadInfo.addProperty("PART_NO", obj_userInfo.get("PART_NO").getAsString());
+//						uploadInfo.addProperty("CORP_NO", coCD);
+//						uploadInfo.addProperty("SDOC_NAME", key);
+//						uploadInfo.addProperty("CONVERT_KEY", key);
+//						uploadInfo.addProperty("COPY_REPLACE",false);
+//
+//						//Set image info
+//
+//						Dimension d = m_C.getImageInfo(imagePath);
+//
+//						JsonArray arImage = new JsonArray();
+//						JsonObject imageInfo = new JsonObject();
+//						imageInfo.addProperty("PATH", imagePath);
+//						imageInfo.addProperty("DOC_IRN", docIrn);
+//						imageInfo.addProperty("WIDTH", d.width);
+//						imageInfo.addProperty("HEIGHT", d.height);
+//						imageInfo.addProperty("SIZE", new File(imagePath).length() + "");
+//						imageInfo.addProperty("NAME", docIrn + ".jpg");
+//
+//
+//						arImage.add(imageInfo);
+//						uploadInfo.add("IMG_INFO",arImage);
+//
+//
+//						UploadSlip upload = new UploadSlip(profile);
+//						JsonObject res = upload.run(uploadInfo, params, sbWorkPath.toString());
+//
+//						if("T".equalsIgnoreCase(res.get("result").getAsString())) {
+//
+
+					StringBuffer sbMsg = new StringBuffer();
+
+					sbMsg.append("/USER_ID");
+					sbMsg.append("'"+userID+"'");
+					sbMsg.append(" /CORP_NO");
+					sbMsg.append("'"+coCD+"'");
+					sbMsg.append(" /SDOC_KIND");
+					sbMsg.append("'"+sdocKind+"'");
+					sbMsg.append(" /KEY");
+					sbMsg.append("'"+key+"'");
+					sbMsg.append(" /URL");
+					sbMsg.append("'"+urlVal+"'");
+
+
+					if(m_SM.Update_urlStatus(key, "00", sbMsg.toString())) {
+								resMsg = ResultMsg("T", key);
+							}
+//						}
+						else {
+							resMsg = ResultMsg("F","FAILED_UPLOAD_SLIP");
+						}
+//					} else {
+//						logger.debug("RunProgram failed. rst : " + rst);
+//					}
+				}  catch (Exception ioe) {
+					logger.error(ioe);
+				} finally {
+					try {
+						if (is != null) is.close();
+						if (null != p) p.destroy();
+						if(stdError != null) stdError.close();
+						if(stdInput != null) stdInput.close();
+					} catch (IOException ioe) { }
+				}
+
+				return resMsg;
+//				break;
+			}
 			case UPLOAD_CARD : {
 				String[] verifyList = {"APPR_NO", "KEY", "USER_ID", "CORP_NO"};
 				
 				if(!VerifyParams(verifyList, params)) {
 					return ResultMsg("F","ERR_INVALIED_PARAM");
 				}
+				params.put("RECEIPT_KEY", params.get("APPR_NO"));
 
 //				JsonObject obj_cardInfo = new JsonObject();
 //				obj_cardInfo.addProperty("ConvertKey","198585");
@@ -666,6 +867,7 @@ public class API {
 				int res_total = 0;
 				resStat = obj_cardInfo.get("PTI_STATUS").getAsString();
 //				resStat = "00";
+				JsonObject resInfo = null;
 				switch (resStat) {
 				case "00":
 					CoCard cardForm 				= new CoCard(profile);
@@ -694,9 +896,8 @@ public class API {
 							mapVals.put("TO", params.get("KEY"));
 							mapVals.put("USER_ID", params.get("USER_ID"));
 							mapVals.put("CORP_NO", params.get("CORP_NO"));
-							
-							int resCnt = m_SM.Copy_SlipDoc(mapVals);
-							res_total += resCnt;
+
+							resInfo = m_GM.Copy_Cocard(mapVals);
 						}
 					} else {
 						return res;
@@ -711,14 +912,16 @@ public class API {
 				case "10":
 					//Already exists.
 					HashMap mapVals = new HashMap<String, String[]>();
-					mapVals.put("FROM", params.get("APPR_NO"));
+					String apprNo = m_C.getParamValue(params,"APPR_NO",null);
+					apprNo = apprNo.substring(1, apprNo.length());
+					String[] from = {apprNo};
+
+					mapVals.put("FROM", from);
 					mapVals.put("TO", params.get("KEY"));
 					mapVals.put("USER_ID", params.get("USER_ID"));
 					mapVals.put("CORP_NO", params.get("CORP_NO"));
-					
-					int resCnt = m_SM.Copy_SlipDoc(mapVals);
 
-					res_total += resCnt;
+					resInfo = m_GM.Copy_Cocard(mapVals);
 					break;
 					
 				case "20":
@@ -729,20 +932,20 @@ public class API {
 				}
 				
 //				JsonObject obj_res = null;
-				if(res_total > 0) {
-					obj_res = ResultMsg("T", res_total+"");
+				if(resInfo != null) {
+					obj_res = ResultMsg("T", "1");
 					JsonObject objUserInfo = m_GM.getUserInfo(
 							m_C.getParamValue(params, "USER_ID", ""),
 							m_C.getParamValue(params, "CORP_NO", ""),
 							"ko");
 
 					String key = m_C.getParamValue(params, "KEY", "");
-					m_SM.addBookmark(objUserInfo, m_GM.getSlipInfo(key));
+					m_SM.addBookmarkCard(objUserInfo, resInfo);
 				}
 				else {
 					obj_res = ResultMsg("F", res_total+"");
 				}
-				
+
 				return obj_res;
 			}
 			case UPLOAD_CASH: {
@@ -751,6 +954,7 @@ public class API {
 				if(!VerifyParams(verifyList, params)) {
 					return ResultMsg("F","ERR_INVALIED_PARAM");
 				}
+				params.put("RECEIPT_KEY", params.get("APPR_NO"));
 
 
 //				JsonObject obj_cashInfo = new JsonObject();
@@ -783,6 +987,7 @@ public class API {
 				int res_total = 0;
 				resStat = obj_cashInfo.get("PTI_STATUS").getAsString();
 //				resStat = "00";
+				JsonObject resInfo = null;
 				switch (resStat) {
 					case "00":
 						CashReceipt cashForm 				= new CashReceipt(profile);
@@ -812,8 +1017,7 @@ public class API {
 								mapVals.put("USER_ID", params.get("USER_ID"));
 								mapVals.put("CORP_NO", params.get("CORP_NO"));
 
-								int resCnt = m_SM.Copy_SlipDoc(mapVals);
-								res_total += resCnt;
+								resInfo = m_GM.Copy_Cocard(mapVals);
 							}
 						} else {
 							return res;
@@ -833,8 +1037,7 @@ public class API {
 						mapVals.put("USER_ID", params.get("USER_ID"));
 						mapVals.put("CORP_NO", params.get("CORP_NO"));
 
-						int resCnt = m_SM.Copy_SlipDoc(mapVals);
-						res_total += resCnt;
+						resInfo = m_GM.Copy_Cocard(mapVals);
 						break;
 
 					case "20":
@@ -845,8 +1048,15 @@ public class API {
 				}
 
 //				JsonObject obj_res = null;
-				if(res_total > 0) {
-					obj_res = ResultMsg("T", res_total+"");
+				if(resInfo != null) {
+					obj_res = ResultMsg("T", "1");
+					JsonObject objUserInfo = m_GM.getUserInfo(
+							m_C.getParamValue(params, "USER_ID", ""),
+							m_C.getParamValue(params, "CORP_NO", ""),
+							"ko");
+
+					String key = m_C.getParamValue(params, "KEY", "");
+					m_SM.addBookmarkCash(objUserInfo, resInfo);
 				}
 				else {
 					obj_res = ResultMsg("F", res_total+"");

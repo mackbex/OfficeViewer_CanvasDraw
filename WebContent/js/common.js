@@ -21,6 +21,33 @@ jQuery.fn.reduce = function(func,initial){
 	return jQuery.reduce(this,func,initial);
 };
 
+Array.prototype.inArray = function(comparer) {
+	for(var i=0; i < this.length; i++) {
+		if(comparer(this[i])) return true;
+	}
+	return false;
+};
+
+// adds an element to the array if it does not already exist using a comparer
+// function
+Array.prototype.pushIfNotExist = function(element, comparer) {
+	if (!this.inArray(comparer)) {
+		this.push(element);
+	}
+};
+
+$.getMultiScripts = function(arr) {
+	var _arr = $.map(arr, function(scr) {
+		return $.getScript(scr );
+	});
+
+	_arr.push($.Deferred(function( deferred ){
+		$( deferred.resolve );
+	}));
+
+	return $.when.apply($, _arr);
+}
+
 String.prototype.insert = function(index, string) {
 	if (index > 0)
 	{
@@ -174,6 +201,24 @@ $.Common = {
 			    document.body.appendChild(form);
 			    form.submit();
 			    form.remove();
+		},
+		swapObject : function(obj, fromKey, toKey) {
+
+			var list = Object.keys(obj);
+
+			var fromIdx = list.indexOf(fromKey);
+			var toIdx = list.indexOf(toKey);
+
+			list = list.move(fromIdx ,toIdx);
+
+			var newObject = {};
+			$.each(list, function(){
+				var key = this;
+					newObject[key] = JSON.parse(JSON.stringify(obj[key]));
+			});
+
+			return newObject;
+
 		},
 		stringToDate : function(str,divider) {
 

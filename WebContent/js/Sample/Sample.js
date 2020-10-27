@@ -151,6 +151,23 @@ $.Sample = {
 			elBtn.attr("onclick", "$.Sample.fn"+$(this).attr("ID")+"()");
 			elBtn.appendTo(elApiFunc);
 			elApiFunc.appendTo(elTitle);
+
+			if("SLIP_Create" === $(this).attr("ID")) {
+				var elPopup = $(document.createElement('div'));
+				elPopup.addClass("api_func_run");
+				elPopup.html("Popup");
+				elPopup.click(function(){
+					var nWidth 	= 1250;
+					var nHeight 	= 700;
+					var url = $.Sample.makeViewerUrl($.Sample.vJDocNo);
+					var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
+
+					window.open(url, '', vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=yes');
+
+				});
+				elPopup.appendTo(elApiFunc);
+				elApiFunc.appendTo(elTitle);
+			}
 			
 			// Draw Contents 
 			var elContents = $(document.createElement('div'));
@@ -327,6 +344,7 @@ $.Sample = {
 
 	  	//뷰어 새로고침
 		$("#OfficeXPIFrm").attr("src", ret);
+
 	},
 	SLIP_Create : function(fnURL, fnSvrMode, fnJDocNo, fnUserInfo, fnCorpNo, fnViewMode, relPartNo, relPartNm, token){
 		

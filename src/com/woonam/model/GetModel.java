@@ -71,7 +71,7 @@ public class GetModel {
 			{
 				objRes = m_AC.Get_itemObj(objRes, m_AC.Get_CurIndex());
 				objRes.addProperty("USER_ID", strUserID);
-				
+
 			}
 		}
 		catch(Exception e)
@@ -114,7 +114,71 @@ public class GetModel {
     	return obj_Res;
 	}
 
-	public JsonObject getSlipInfo(String key) {
+	public String getNextIndex(String jdocNo) {
+
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		String res = null;
+
+		if (m_AC == null)	return null;
+
+		try
+		{
+			pStmt.setQuery(Queries.GET_NEXT_JDOC_INDEX);
+			pStmt.setString(0, jdocNo);
+
+			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
+			while(m_AC.next()) {
+				res = m_AC.GetString("JDOC_INDEX");
+			}
+
+
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+		}
+
+		return res;
+
+	}
+
+	public JsonObject Copy_Cocard(Map<String, Object> mapParams)
+	{
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		JsonObject res = new JsonObject();
+
+		if (m_AC == null)	return null;
+
+		String from			= m_C.getParamValue(mapParams, "FROM", "");
+		String to				= m_C.getParamValue(mapParams, "TO", "");
+		String userID 		= m_C.getParamValue(mapParams, "USER_ID", null);
+		String corpNo		= m_C.getParamValue(mapParams, "CORP_NO", null);
+
+		try
+		{
+			pStmt.setQuery(Queries.COPY_SLIP_COCARD);
+			pStmt.setString(0, from);
+			pStmt.setString(1, to);
+			pStmt.setString(2, corpNo);
+			pStmt.setString(3, userID);
+
+			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
+			while(m_AC.next()) {
+				res.addProperty("SDOC_NO",m_AC.GetString("SDOC_NO"));
+				res.addProperty("SLIP_IRN",m_AC.GetString("SLIP_IRN"));
+			}
+
+
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+		}
+
+		return res;
+	}
+
+	public JsonObject getSlipInfo(String key, String sdocNo) {
 
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonObject res = new JsonObject();
@@ -126,6 +190,7 @@ public class GetModel {
 		{
 			pStmt.setQuery(Queries.GET_SDOC_NO);
 			pStmt.setString(0, key);
+			pStmt.setString(1, sdocNo);
 
 			m_AC.GetData(pStmt.getQuery(), strFuncName);
 

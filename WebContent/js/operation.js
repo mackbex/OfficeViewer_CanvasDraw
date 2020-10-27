@@ -101,8 +101,14 @@ $.Operation  = {
 			case "VIEW_ORIGINAL_ATTACH" : 
 				$.Operation.openAttach(target, objData);
 				break;
-			case "DOWN_ORIGINAL_ATTACH" : 
+			case "DOWN_ORIGINAL_ATTACH" :
 				$.Operation.downloadAttach(target, objData);
+				break;
+			case "MOVE_UP_INDEX" :
+				deferred = $.Operation.moveUpIndex(target, objData);
+				break;
+			case "MOVE_DOWN_INDEX" :
+				deferred = $.Operation.moveDownIndex(target, objData);
 				break;
 			case "DOWN_ORIGINAL_SLIP" : 
 				$.Operation.downloadOriginal(target, objData);
@@ -134,7 +140,9 @@ $.Operation  = {
 			case "OPEN_RELATED_POPUP" :
 				$.Operation.Open_Related(target, objData);
 				break;
-
+			case "SCHEDULED_LIST" :
+				$.Operation.Open_ScheduledLIst(target, objData);
+				break;
 			}
 
 			return deferred.promise();
@@ -195,7 +203,35 @@ $.Operation  = {
 			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
 			
 			$.OfficeXPI.CallLocalWAS(sbParam.toString(), target.pageSubmit);
-			
+
+		},
+		Open_ScheduledLIst : function(target, objData) {
+			if(!$.Operation.detectCS(target, objData, true)) {
+				return;
+			}
+
+			var sbParam 	= new StringBuffer();
+
+			sbParam.append("/RUN");
+			sbParam.append("/CMD'PTI'");
+			sbParam.append(" /PROJ'"+objData.SERVER_KEY+"'");
+			sbParam.append(" /SVR'"+objData.SVR_MODE+"'");
+			sbParam.append(" /CALL'WAS'");
+			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
+			sbParam.append(" /LANG'"+objData.LANG.toUpperCase()+"'");
+			sbParam.append(" /CORP'"+objData.CORP_NO+"'");
+			sbParam.append(" /USER'"+objData.USER_ID+"'");
+			sbParam.append(" /AUTORUN'PTI'");
+			sbParam.append(" /KEYTYPE'"+objData.KEY_TYPE+"'");
+			sbParam.append(" /KEY'"+target.currentKey+"'");
+			sbParam.append(" /SLIP_TYPE''");
+			sbParam.append(" /SDOC_KIND'1501'");
+			sbParam.append(" /MODE'"+objData.VIEW_MODE+"'");
+
+			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
+			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
+
+			$.OfficeXPI.CallLocalWAS(sbParam.toString(), target.pageSubmit);
 		},
 		addScanner : function(target, objData) {
 
@@ -256,7 +292,7 @@ $.Operation  = {
 			var nHeight 	= 785;
 			var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
 
-			var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0');
+			var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0');
 
 
 			//
@@ -688,7 +724,28 @@ $.Operation  = {
 				sbParam.append(" /CORP'"+target.params.CORP_NO+"'");
 				sbParam.append(" /USER'"+target.params.USER_ID+"'");
 				sbParam.append(" /KEYTYPE'"+target.params.KEY_TYPE+"'");
-				sbParam.append(" /KEY'"+target.currentKey+"'");
+
+				var curKey = target.currentKey;
+				var passKey = "";
+
+				if(target.params.MULTI_KEY) {
+					if(target.currentKey.indexOf(",") !== -1) {
+						passKey = target.params.KEY_ORIGIN;
+					}
+					else {
+						var arKeys = target.params.KEY.split(",");
+						var arKeyTitles = target.params.KEY_TITLE.split(",");
+						var curKeyTitle = arKeyTitles[arKeys.indexOf(curKey)];
+						passKey = target.currentKey + ";" + curKeyTitle;
+					}
+				}
+				else {
+					passKey = curKey;
+				}
+
+				passKey = encodeURIComponent(passKey);
+
+				sbParam.append(" /KEY'"+passKey+"'");
 				sbParam.append(" /MODE'"+target.params.VIEW_MODE+"'");
 				sbParam.append(" /VIEW'MULTI'");
 				sbParam.append(" /MENU'SHOW'");
@@ -741,7 +798,7 @@ $.Operation  = {
 				var nHeight 	= 700;
 				var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
 
-				var elPopup = window.open(sbURL.toString(), "", vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
+				var elPopup = window.open(sbURL.toString(), "", vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=yes');
 				
 			}
 			else {
@@ -754,6 +811,43 @@ $.Operation  = {
 				
 				self.window.open(sbURL.toString(), '_self');	
 			}
+		},
+
+		moveUpIndex : function(target, objData) {
+
+			var params = {
+				SDOC_NO : objData.SDOC_NO
+			};
+
+
+			var deferred = $.Deferred();
+			$.when($.Common.RunCommand(g_ActorCommand, "MOVE_UP_INDEX", params)).then(function(objRes) {
+
+				deferred.resolve(objRes.RESULT.toUpperCase());
+
+			}, function (reason) {
+				deferred.reject(reason)
+			});
+
+			return deferred.promise();
+		},
+		moveDownIndex : function(target, objData) {
+
+			var params = {
+				SDOC_NO : objData.SDOC_NO
+			};
+
+
+			var deferred = $.Deferred();
+			$.when($.Common.RunCommand(g_ActorCommand, "MOVE_DOWN_INDEX", params)).then(function(objRes) {
+
+				deferred.resolve(objRes.RESULT.toUpperCase());
+
+			}, function (reason) {
+				deferred.reject(reason)
+			});
+
+			return deferred.promise();
 		},
 		
 		downloadOriginal : function(target, objData) {
@@ -840,6 +934,7 @@ $.Operation  = {
 		sbURL.append("?KEY="+encodeURIComponent(target.currentKey));
 		sbURL.append("&PAGE="+target.params.PAGE);
 		sbURL.append("&LANG="+target.params.LANG);
+		sbURL.append("&VIEW_MODE="+target.params.VIEW_MODE);
 
 		var nWidth 	= 520;
 		var nHeight 	= 600;

@@ -130,7 +130,8 @@ public class UploadSlip {
 					objData.get("SDOC_NAME").getAsString(),
 					uploaded_slip_cnt,
 					objData.get("CONVERT_KEY").getAsString(),
-					isFollow
+					isFollow,
+					m_C.getParamValue(params, "RECEIPT_KEY", "")
 				)) {
 				boolean isCopyReplace = (objData.get("COPY_REPLACE") == null || objData.get("COPY_REPLACE").getAsBoolean());
 				if (isCopyReplace) {

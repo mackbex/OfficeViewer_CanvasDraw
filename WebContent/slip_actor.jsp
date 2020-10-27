@@ -22,6 +22,8 @@
 			String key = request.getParameter("KEY");
 			key = URLDecoder.decode(key, "utf-8");
 
+			pageContext.setAttribute("KEY_ORIGIN", key);
+
 			//Detect whether multikey.
 			boolean isMultiKey = false;
 			if (!C.isBlank(key)) {
@@ -56,6 +58,7 @@
 			pageContext.setAttribute("FOLD", g_profile.getString("WAS_INFO", "FOLD", "T"));
 			pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
 			pageContext.setAttribute("USE_MAGNIFIER", g_profile.getString("WAS_INFO", "USE_MAGNIFIER", "F"));
+			pageContext.setAttribute("USE_BOOKMARK", g_profile.getString("WAS_INFO","USE_BOOKMARK","F"));
 		}
 	}
 	catch(Exception e) {
@@ -78,6 +81,7 @@
 				LANG 					: "<c:out value="${mParams['LANG'][0]}" />",
 				KEY 					: "<c:out value="${KEY}" />",
 				KEY_TITLE		 		: "<c:out value="${KEY_TITLE}" />",
+				KEY_ORIGIN		 		: "<c:out value="${KEY_ORIGIN}" />",
 				KEY_TYPE		 		: "<c:out value="${mParams['KEY_TYPE'][0]}" />",
 				VIEW_MODE				: "<c:url value ="${mParams['VIEW_MODE'][0]}" />",
 				SVR_MODE				: "<c:url value ="${mParams['SVR_MODE'][0]}" />",
@@ -90,6 +94,7 @@
 				FOLD					:  "<c:out value="${FOLD}" />",
 				MAXIMIZED				:  "<c:out value="${MAXIMIZED}" />",
 				USE_MAGNIFIER			:  "<c:out value="${USE_MAGNIFIER}" />",
+				USE_BOOKMARK			:  "<c:out value="${USE_BOOKMARK}" />",
 				TOKEN					: "<c:out value="${sessionScope.TOKEN}" />",
 
 			}
@@ -260,6 +265,7 @@
 <script src="<c:url value='js/localWAS/OfficeXPI.js' />"></script>
 <script src="<c:url value='js/view/actor.js' />"></script>
 <script src="<c:url value='js/bookmark/bookmark.js' />"></script>
+<script src="<c:url value='js/bookmark/konva.min.js' />"></script>
 <script src="<c:url value='js/effect/ripple.js' />"></script>
 <script src="<c:url value='js/masonry/masonry.pkgd.min.js' />"></script>
 <script src="<c:url value='js/masonry/imagesloaded.pkgd.min.js' />"></script>

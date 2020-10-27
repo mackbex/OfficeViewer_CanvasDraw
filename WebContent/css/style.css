@@ -896,10 +896,34 @@ table {
     float: left;
     line-height: 30px;
 }
+.viewer_right .viewer_title_left:after {
+	display: block;
+	content: " ";
+	clear: both;
+}
 .viewer_right .icon-btn {
-	    height: 30px;
+	height: 28px;
     float: left;
-    line-height: 30px;
+    line-height: 28px;
+}
+.viewer_right .viewer_title_left {
+	float:left;
+}
+.viewer_right .viewer_title_right {
+	float:right;
+}
+.viewer_right .viewer_title_left .icon-btn {
+	margin-left: 6px;
+}
+.viewer_right .viewer_title_right .icon-btn {
+	margin-right: 6px;
+}
+.viewer_right  .icon-btn {
+	width: 22px;
+	cursor:pointer;
+}
+.viewer_right  .icon-btn:hover {
+	opacity:0.7;
 }
 .actor_right .area_slip {
 /*     position: absolute;
@@ -1137,7 +1161,7 @@ table {
 	width:100%;
 	max-height:100%;
 }
-.slip_item .area_thumb > canvas {
+.slip_item .area_thumb > .bookmark {
 	position: absolute;
 	top:0;
 	left: 0;
@@ -1186,7 +1210,7 @@ table {
 .actor_right .attach_title_left {
 	position: absolute;
 	left:0;
-	width:50%;
+	width:70%;
 	padding-left:4px;
 }
 .actor_right .attach_title {
@@ -1216,7 +1240,7 @@ table {
 .actor_right .attach_title_left {
 	position: absolute;
 	left:0;
-	width:50%;
+	width:70%;
 	padding-left:4px;
 }
 .actor_right .attach_title_right {
@@ -1351,6 +1375,59 @@ table {
     top: 0;
     bottom: 0;
     margin: auto;
+}
+.attach_item .area_btn .move_index {
+}
+.attach_item .area_btn .move_up {
+	position: relative;
+	width: 30px;
+	height: 12px;
+	margin-top: 3px;
+	background-color: #fff;
+	box-sizing: border-box;
+	border-radius: 4px 4px 0 0;
+	border: 1px solid #bbb;
+	cursor: pointer;
+}
+.attach_item .area_btn .move_up:hover,.attach_item .area_btn .move_down:hover  {
+	background-color: #ccc;
+}
+
+.attach_item .area_btn .move_down {
+	position: relative;
+	width: 30px;
+	height: 12px;
+	margin-bottom: 3px;
+	background-color: #fff;
+	box-sizing: border-box;
+	border-radius: 0 0 4px 4px;
+	border: 1px solid #bbb;
+	cursor: pointer;
+}
+
+.attach_item .area_btn .move_up img {
+	max-width: 100%;
+	max-height: 100%;
+	position: absolute;
+	left: 0;
+	right: 0;
+	/* top: 0; */
+	bottom: 1px;
+	margin: auto;
+	width: 15px;
+
+}
+.attach_item .area_btn .move_down img {
+	max-width: 100%;
+	max-height: 100%;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 1px;
+	/* bottom: 0; */
+	margin: auto;
+	width: 15px;
+
 }
 .attach_item .area_btn > div {
 	    float: left;
@@ -1849,7 +1926,13 @@ table {
 	display:block;
 	clear:both;
 }
-
+.area_comment_title #icon_right {
+	float: right;
+}
+.area_comment_title #icon_right > img{
+	padding: 6px;
+	width: 28px;
+}
 .area_comment_title .title_icon > img {
 	    padding: 6px;
     width: 28px;
@@ -1922,9 +2005,8 @@ table {
 .comment .area_write_content .ipt_content {
 	width: 100%;
     height: 100%;
-   font-family:   'Dotum', Gulim, Helvetica, sans-serif, 'NanumGothic',
-		'Nanum Gothic', 'Malgun Gothic', AppleSDGothicNeo-Regular,
-		HelveticaNeue, sans-serif;
+	font-family: 'NanumSquare', 'Dotum', Gulim, Helvetica, sans-serif, 'NanumGothic', 'Nanum Gothic', 'Malgun Gothic', AppleSDGothicNeo-Regular, HelveticaNeue, sans-serif;
+	font-size: 13pt;
     padding: 0 90px 10px 0;
     border-width: 0px 0px 1px;
     border-top-style: initial;
@@ -1934,7 +2016,6 @@ table {
     border-left-style: initial;
     border-right-style: initial;
     border-bottom-style: solid;
-    font-size: 12px;
     margin: 0px;
     resize: none;
     transition: border-bottom 0.3s ease-out;
@@ -2076,10 +2157,8 @@ table {
 }
 
 .area_comment_list div {
-	font-family:   'Dotum', Gulim, Helvetica, sans-serif, 'NanumGothic',
-		'Nanum Gothic', 'Malgun Gothic', AppleSDGothicNeo-Regular,
-		HelveticaNeue, sans-serif;
-    font-size: 12px;
+	font-family: 'NanumSquare', 'Dotum', Gulim, Helvetica, sans-serif, 'NanumGothic', 'Nanum Gothic', 'Malgun Gothic', AppleSDGothicNeo-Regular, HelveticaNeue, sans-serif;
+	font-size: 13pt;
     word-break: break-all;
 }
 
@@ -2739,12 +2818,20 @@ div.menu_on {
 .viewer_left {
 	width: 30%;
     height: 100%;
- 
-
 }
-.viewer_left > div {
-	width:100%;
-	height:100%	
+.viewer_left .draw_toolbox {
+	position: absolute;
+	left: 0;
+	right: 0;
+	width: 100%;
+	top: 0;
+}
+.viewer_left .viewer_container {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
 }
 .viewer_right {
 	width:70%;
@@ -2928,6 +3015,7 @@ div.menu_on {
 	top: 0;
 	left: 0;
 	right: 0;
+	bottom: 0;
 	margin: auto;
 }
 .viewer_right #originalImage > img {
@@ -3597,7 +3685,7 @@ float:none;
 	top: 0;
 	bottom: 0;
 	width: 50%;
-
+	max-width: 50%;
 	padding: 0 10px;
 }
 

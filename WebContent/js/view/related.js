@@ -98,7 +98,7 @@ $.Related = {
         $(window).on("unload", function() {
             if(window.opener != null)
             {
-               window.opener.$.Actor.reset();
+                window.opener.$.Actor.pageSubmit();
             }
         });
 
@@ -880,7 +880,7 @@ $.Related = {
                 url.append($.Related.curOrg.code);
                 url.append("_");
                 url.append(optionSelected);
-                url.append(".nsf/view_by_unid/");
+                url.append(".nsf/0/");
                 url.append(this.UNID);
                 url.append("?opendocument");
 
