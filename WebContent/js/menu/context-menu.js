@@ -122,7 +122,7 @@ $.ContextMenu = {
 		var windowHeight 	= $(document).height();
 
 		var isBottomAlign = menu.attr("bottom_align");
-		if("true" == isBottomAlign) {
+		if("true" === isBottomAlign) {
 			top = top + elTarget.height() - menuHeight;
 		}
 		else
@@ -134,7 +134,7 @@ $.ContextMenu = {
 		}
 
 		var isSpacingTop = menu.attr("spacing_top");
-		if("true" == isSpacingTop) {
+		if("true" === isSpacingTop) {
 			top =  top + (elTarget.height() / 4)
 		}
 		menu.css({

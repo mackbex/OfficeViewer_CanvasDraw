@@ -264,7 +264,7 @@ public class WdmFile {
 		}
 		
 	    BufferedOutputStream out 	= null;
-	    FileInputStream fis 				= null;
+	    ByteArrayInputStream byis 				= null;
 	    DataOutputStream dos 			= null;
 	    BufferedInputStream bis 		= null;
 	    
@@ -296,8 +296,9 @@ public class WdmFile {
 		      byte[] bufUploadInfo	=	stream(_wdOp, _wdDocIrn, _wdDocNo, strFileName, nFileSize );
 		      out.write(bufUploadInfo);
 		      
-		      fis = new FileInputStream( strFilePath );
-		      bis = new BufferedInputStream( fis );
+		      //fis = new FileInputStream( strFilePath );
+				byis = new ByteArrayInputStream(bufFile);
+				bis = new BufferedInputStream(byis);
 
               int ch = 0;
               while((ch = bis.read()  ) != -1) 
@@ -306,7 +307,6 @@ public class WdmFile {
               }    
               
               out.flush();
-	      
               bis 		= new BufferedInputStream( socket.getInputStream() );
 		      buf 		= new byte[2]; 
 		      
@@ -332,7 +332,7 @@ public class WdmFile {
 	    {
 	        try{ if(out!=null) 		out.close(); 				} 		catch( Exception se ){
 	        	logger.error("wdmAgent - Upload ", se);}
-		    try{ if(fis!=null) 			fis.close();  				}		catch( Exception se ){
+		    try{ if(byis!=null) 			byis.close();  				}		catch( Exception se ){
 				logger.error("wdmAgent - Upload ", se); }
 		    try{ if(bis!=null) 			bis.close();  				}		catch( Exception se ){
 				logger.error("wdmAgent - Upload ", se); }

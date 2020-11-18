@@ -1,42 +1,363 @@
-
-
 var Bookmark = function() {
-    var bookmarkModule = {
-        BOOKMARK_ENUM: {
+    var module = {
+        SHAPE_TYPE: {
             NONE: "0",
             MOVE: "1",
-            NOTEBOX: "2",
-            LIGHTPEN: "3",
-            RECTANGLE: "4",
-            ELLIPSE: "5",
-            SELECT: "6",
-            UNDRAW: "7"
+            NOTEBOX: {
+                KEY:"2",
+                DEFAULT_VALUES : {
+                    BACKGROUND : {
+                        COLOR:"#ffff00",
+                        OPACITY:50
+                    },
+                    FONT: {
+                        SIZE : 20,
+                        COLOR : "#329900",
+                        TEXT : "New Memo",
+                        FAMILY:"굴림"
+                    },
+                    LINE : {
+                        COLOR : "#ef4df7",
+                        WIDTH:1
+                    }
+                }
+            },
+            LIGHTPEN: {
+                KEY : "3",
+                DEFAULT_VALUES: {
+                    BACKGROUND : {
+                        HEIGHT:30,
+                        COLOR:"#ffff00"
+                    }
+                }
+            },
+            RECTANGLE: {
+                KEY : "4",
+                DEFAULT_VALUES: {
+                    BACKGROUND : {
+                        COLOR:"#ef4df7",
+                        OPACITY: 0.7,
+                    },
+                    LINE : {
+                        COLOR : "#000000",
+                        WIDTH:1
+                    }
+
+                }
+            },
+            ELLIPSE: {
+                KEY : "5",
+                DEFAULT_VALUES: {
+                    BACKGROUND : {
+                        COLOR:"#ef4df7",
+                        OPACITY: 0.7,
+                    },
+                    LINE : {
+                        COLOR : "#000000",
+                        WIDTH:1
+                    }
+
+                }
+            },
+            SELECT: {
+                KEY : "6"
+            },
+            UNDRAW: {
+                KEY : "7"
+            }
         },
         stage: null,
         items: [],
         degree : 0,
-        ratio : 1,
-        init: function (canvas, items) {
+        fontZoom : 1,
+        targetImage : null,
+        targetImageInfo : null,
+        minZoom : 0.5,
+        maxZoom : 3.0,
+        // padding : 10,
+        scaleBy : 1.1,
+        // bookmarkLayerId : null,
+        shapeLayer: null,
+        slipdocInfo : null,
+        imageRatio : 1,
+        actorComponent : null,
+        init: function (container, targetImage, imgInfo, slipdocInfo, actorComponent) {
+
+            this.targetImage        = targetImage;
+            this.targetImageInfo    = imgInfo;
+            // this.bookmarkLayerId    = ;
+            this.slipdocInfo        = slipdocInfo;
+            this.actorComponent     = actorComponent;
+
             this.stage = new Konva.Stage({
-                container: canvas.attr("id"),
-                width: canvas.width(),
-                height: canvas.height(),
+                container: container.attr("id"),
+                width: container.width(),
+                height: container.height(),
+                draggable: true,
+                name : "stage"
             });
-            this.items = items;
+
+            this.addScrollEvent();
         },
-        drawItems : function(degree) {
+        addScrollEvent : function(){
+            var scaleBy = module.scaleBy;
+            var stage = module.stage;
+            stage.on('wheel', function(e) {
+                e.evt.preventDefault();
+                var oldScale = stage.scaleX();
+                if(oldScale < module.minZoom) {
+                    // stage.scale({x:bookmarkModule.minZoom, y:bookmarkModule.minZoom});
+                    return;
+                }
+                else if(oldScale > module.maxZoom) {
+                    // stage.scale({x:bookmarkModule.minZoom, y:bookmarkModule.minZoom});
+                    return;
+                }
+
+                var pointer = stage.getPointerPosition();
+
+                var mousePointTo = {
+                    x: (pointer.x - stage.x()) / oldScale,
+                    y: (pointer.y - stage.y()) / oldScale,
+                };
+
+                var newScale =
+                    e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+
+                if(newScale < module.minZoom) {
+                    newScale = module.minZoom;
+                }
+                else if(newScale > module.maxZoom) {
+                    newScale = module.maxZoom;
+                }
+                stage.scale({ x: newScale, y: newScale });
+
+                var newPos = {
+                    x: pointer.x - mousePointTo.x * newScale,
+                    y: pointer.y - mousePointTo.y * newScale,
+                };
+                stage.position(newPos);
+                stage.batchDraw();
+            });
+        },
+        zoomIn : function() {
+            var stage = module.stage;
+            var oldScale = stage.scaleX();
+            var center = {
+                x: stage.width() / 2,
+                y: stage.height() / 2,
+            };
+            var relatedTo = {
+                x: (center.x - stage.x()) / oldScale,
+                y: (center.y - stage.y()) / oldScale,
+            };
+            var newScale =
+                 oldScale * module.scaleBy;
+            stage.scale({
+                x: newScale,
+                y: newScale
+            });
+            var newPos = {
+                x: center.x - relatedTo.x * newScale,
+                y: center.y - relatedTo.y * newScale,
+            };
+            stage.position(newPos);
+            stage.batchDraw();
+        },
+        zoomOut : function() {
+            var stage = module.stage;
+            var oldScale = stage.scaleX();
+            var center = {
+                x: stage.width() / 2,
+                y: stage.height() / 2,
+            };
+            var relatedTo = {
+                x: (center.x - stage.x()) / oldScale,
+                y: (center.y - stage.y()) / oldScale,
+            };
+            var newScale =
+                oldScale / module.scaleBy;
+            stage.scale({
+                x: newScale,
+                y: newScale
+            });
+            var newPos = {
+                x: center.x - relatedTo.x * newScale,
+                y: center.y - relatedTo.y * newScale,
+            };
+            stage.position(newPos);
+            stage.batchDraw();
+        },
+        drawTargetImage : function(progressId) {
+            var deferred = $.Deferred();
+
+            this.targetImage[0].onload = function () {
+                var imgWidth = this.width;
+                var imgHeight = this.height;
+
+                var wRatio = module.stage.getWidth() / imgWidth;
+                var hRatio = module.stage.getHeight() / imgHeight
+
+                var ratio = hRatio < wRatio ? hRatio : wRatio;
+
+                var fitImgWidth = imgWidth * ratio;
+                var fitImgHeight = imgHeight * ratio;
+
+
+                var image = new Konva.Image({
+                    image: module.targetImage[0],
+                    width:fitImgWidth /*- bookmarkModule.padding*/,
+                    height : fitImgHeight /*- bookmarkModule.padding*/,
+                    shadowColor: 'black',
+                    shadowBlur: 2,
+                    shadowOffset: { x: 3, y: 3 },
+                    shadowOpacity: 0.3,
+                });
+                image.id("ORI_IMAGE");
+
+                module.centerShape(image);
+
+                if(!$.Common.isBlank(progressId)) {
+                    $.Common.HideProgress(progressId);
+                }
+
+                var layer = new Konva.Layer();
+                layer.add(image);
+                layer.batchDraw();
+                module.stage.add(layer);
+                module.zoomOut();
+
+                deferred.resolve();
+            }
+            return deferred.promise();
+        },
+        centerShape : function(shape) {
+            shape.x( (( module.stage.getWidth() - shape.getWidth() ) / 2) /*- (bookmarkModule.padding / 2)*/);
+            shape.y( (( module.stage.getHeight() - shape.getHeight() ) / 2)/* + (bookmarkModule.padding / 2)*/);
+        },
+        setFontZoom : function() {
+            var oriRect = this.targetImageInfo["SLIP_RECT"].split(",");
+            var oriWidth = (oriRect[2] / 720 * this.targetImageInfo['IMG_DPI']);
+            var zoom = this.targetImage[0].naturalWidth / oriWidth;
+
+            this.fontZoom = zoom;
+        },
+        drawItems : function(bookmarkItem, degree) {
             if(degree !== undefined) {
                 this.degree = degree;
             }
-            var layer = new Konva.Layer();
+
+            module.items = null;
+            if(null !== module.shapeLayer) {
+                module.shapeLayer.destroy();
+            }
+            module.shapeLayer = new Konva.Layer();
+            module.shapeLayer.id(module.stage.container().id);
+            module.items = bookmarkItem;
+            module.setFontZoom();
 
             $.each(this.items, function () {
-                bookmarkModule.draw(layer, this);
+                module.draw(module.shapeLayer, this);
             });
-            this.stage.add(layer);
+            module.stage.add(module.shapeLayer);
 
-            var shape = this.stage.find('#202010277C8C8095504697')[0];
-            shape
+            // var shape = this.stage.find('#202010277C8C8095504697')[0];
+            // this.stage.off('mousemove');
+        },
+        addShape : function (shape) {
+
+            var oriImg =  this.stage.find("#ORI_IMAGE")[0];
+            var left = (shape.x() - oriImg.x()) / this.imageRatio;
+            var top = (shape.y() - oriImg.y()) / this.imageRatio;
+            var right = (shape.width() + shape.x() - oriImg.x()) / this.imageRatio;
+            var bottom = (shape.height() + shape.y() - oriImg.y()) / this.imageRatio;
+
+            var item = {};
+            item['CORP_NO'] = this.slipdocInfo.CORP_NO;
+            item['DEVICE'] = "PC";
+            item['ENABLE'] = "1";
+            item['MARK_RECT'] = parseInt(left) + "," + parseInt(top) + "," + parseInt(right) + "," + parseInt(bottom);
+            item['REG_USER'] = this.slipdocInfo.USER_ID;
+            item['SDOC_NO'] = this.targetImageInfo.SDOC_NO;
+            item['SLIP_IRN'] = this.targetImageInfo.SLIP_IRN;
+            item['SLIP_RECT'] = this.targetImageInfo.SLIP_RECT;
+
+            switch (shape.attrs.shapeType) {
+                case module.SHAPE_TYPE.LIGHTPEN :
+                    var lineColor = Konva.Util.getRGB(shape.fill());
+                    item['MARK_ALPHA'] = "0";
+                    item['MARK_BACKCOLOR'] = '255,255,255';
+                    item['MARK_BACKGROUND'] = "1";
+                    item['MARK_BOLD'] = "0";
+                    item['MARK_COMMENT'] = "";
+                    item['MARK_FONTNAME'] = "";
+                    item['MARK_FONTSIZE'] = "0";
+                    item['MARK_IRN'] = shape.id();
+                    item['MARK_ITALIC'] = "0";
+                    item['MARK_LINECOLOR'] = lineColor['r']+","+lineColor['g']+","+lineColor['b'];
+                    item['MARK_LINEWIDTH'] = shape.height();
+                    item['MARK_STYLE'] = "";
+                    item['MARK_TEXTCOLOR'] = "255,255,255";
+                    item['MARK_TYPE'] = module.SHAPE_TYPE.LIGHTPEN.KEY;
+                    break;
+                case module.SHAPE_TYPE.NOTEBOX :
+                    var lineColor = Konva.Util.getRGB(shape.find("#line")[0].stroke());
+                    var bgColor = Konva.Util.getRGB(shape.find("#background")[0].fill());
+                    item['MARK_ALPHA'] = $.Common.getRawOpacity(shape.find("#background")[0].opacity());
+                    item['MARK_BACKCOLOR'] = bgColor['r']+","+bgColor['g']+","+bgColor['b'];
+                    item['MARK_BACKGROUND'] = "1";
+                    item['MARK_BOLD'] = "0";
+                    item['MARK_COMMENT'] = shape.find("#text")[0].text();
+                    item['MARK_FONTNAME'] = module.SHAPE_TYPE.NOTEBOX.DEFAULT_VALUES.FONT.FAMILY;
+                    item['MARK_FONTSIZE'] = shape.find("#text")[0].fontSize();
+                    item['MARK_IRN'] = shape.id();
+                    item['MARK_ITALIC'] = "0";
+                    item['MARK_LINECOLOR'] = lineColor['r']+","+lineColor['g']+","+lineColor['b'];
+                    item['MARK_LINEWIDTH'] = shape.find("#line")[0].strokeWidth();
+                    item['MARK_STYLE'] = "";
+                    item['MARK_TEXTCOLOR'] = shape.find("#text")[0].fill();
+                    item['MARK_TYPE'] = module.SHAPE_TYPE.NOTEBOX.KEY;
+                    break;
+                case module.SHAPE_TYPE.RECTANGLE :
+                    var lineColor = Konva.Util.getRGB(shape.find("#line")[0].stroke());
+                    var bgColor = Konva.Util.getRGB(shape.find("#background")[0].fill());
+                    item['MARK_ALPHA'] = "0";
+                    item['MARK_BACKCOLOR'] = bgColor['r']+","+bgColor['g']+","+bgColor['b'];
+                    item['MARK_BACKGROUND'] = "0";
+                    item['MARK_BOLD'] = "0";
+                    item['MARK_COMMENT'] = "";
+                    item['MARK_FONTNAME'] = "";
+                    item['MARK_FONTSIZE'] = "0";
+                    item['MARK_IRN'] = shape.id();
+                    item['MARK_ITALIC'] = "0";
+                    item['MARK_LINECOLOR'] = lineColor['r']+","+lineColor['g']+","+lineColor['b'];
+                    item['MARK_LINEWIDTH'] = shape.find("#line")[0].strokeWidth();
+                    item['MARK_STYLE'] = "";
+                    item['MARK_TEXTCOLOR'] = "255,255,255";
+                    item['MARK_TYPE'] = module.SHAPE_TYPE.RECTANGLE.KEY;
+                    break;
+                case module.SHAPE_TYPE.ELLIPSE :
+                    var lineColor = Konva.Util.getRGB(shape.find("#line")[0].stroke());
+                    var bgColor = Konva.Util.getRGB(shape.find("#background")[0].fill());
+                    item['MARK_ALPHA'] = "0";
+                    item['MARK_BACKCOLOR'] = bgColor['r']+","+bgColor['g']+","+bgColor['b'];
+                    item['MARK_BACKGROUND'] = "0";
+                    item['MARK_BOLD'] = "0";
+                    item['MARK_COMMENT'] = "";
+                    item['MARK_FONTNAME'] = "";
+                    item['MARK_FONTSIZE'] = "0";
+                    item['MARK_IRN'] = shape.id();
+                    item['MARK_ITALIC'] = "0";
+                    item['MARK_LINECOLOR'] = lineColor['r']+","+lineColor['g']+","+lineColor['b'];
+                    item['MARK_LINEWIDTH'] = shape.find("#line")[0].strokeWidth();
+                    item['MARK_STYLE'] = "";
+                    item['MARK_TEXTCOLOR'] = "255,255,255";
+                    item['MARK_TYPE'] = module.SHAPE_TYPE.ELLIPSE.KEY;
+                    break;
+                default: return;
+            }
+            this.items.push(item);
+            return item;
         },
         draw : function (layer, item) {
             var rect = item.SLIP_RECT.split(",");
@@ -44,15 +365,16 @@ var Bookmark = function() {
             var imageWidth = parseInt(rect[2]);
             var imageHeight = parseInt(rect[3]);
 
-            var wRatio = bookmarkModule.stage.width() / imageWidth;
-            var hRatio = bookmarkModule.stage.height() / imageHeight;
+            var wRatio = module.stage.width() / imageWidth;
+            var hRatio = module.stage.height() / imageHeight;
 
             var ratio = wRatio > hRatio ? hRatio : wRatio;
 
-            this.ratio = ratio;
+            this.imageRatio = ratio;
 
             var shape = item.MARK_RECT.split(",");
 
+            //console.log(this.targetImage[0].offsetLeft)
             item.LEFT = parseInt(shape[0]) * ratio;
             item.TOP = parseInt(shape[1]) * ratio;
             item.RIGHT = parseInt(shape[2]) * ratio;
@@ -61,35 +383,55 @@ var Bookmark = function() {
             item.WIDTH = item.RIGHT - item.LEFT;
             item.HEIGHT = item.BOTTOM - item.TOP;
 
+            var oriImg = module.stage.find('#ORI_IMAGE')[0];
+            if(undefined !== oriImg) {
+                item.LEFT += oriImg.x();
+                item.TOP += oriImg.y();
+                item.RIGHT += oriImg.x();
+                item.BOTTOM += oriImg.y();
+            }
+            //
+            // var offsetLeft = ((( bookmarkModule.stage.getWidth() - (bookmarkModule.targetImage.width() * ratio)) / 2) - (bookmarkModule.padding / 2));
+            // var offsetTop = ((( bookmarkModule.stage.getHeight() - (bookmarkModule.targetImage.height()* ratio)) / 2) - (bookmarkModule.padding / 2));
+
+            // item.LEFT += offsetLeft;
+            // item.TOP += offsetTop;
+            // item.RIGHT += offsetLeft;
+            // item.BOTTOM += offsetTop;
+
             item.LINE_WIDTH = parseInt(item.MARK_LINEWIDTH) * ratio;
             if (item.LINE_WIDTH < 1) item.LINE_WIDTH = 1;
 
 
             switch (item.MARK_TYPE) {
-                case bookmarkModule.BOOKMARK_ENUM.NOTEBOX :
-                    bookmarkModule.drawNotebox(item, layer);
+                case module.SHAPE_TYPE.NOTEBOX.KEY :
+                    module.drawNotebox(item, layer);
                     break;
-                case bookmarkModule.BOOKMARK_ENUM.RECTANGLE :
-                    bookmarkModule.drawRectangle(item, layer);
+                case module.SHAPE_TYPE.RECTANGLE.KEY :
+                    module.drawRectangle(item, layer);
                     break;
-                case bookmarkModule.BOOKMARK_ENUM.ELLIPSE :
-                    bookmarkModule.drawEllipse(item, layer);
+                case module.SHAPE_TYPE.ELLIPSE.KEY :
+                   module.drawEllipse(item, layer);
                     break;
-                case bookmarkModule.BOOKMARK_ENUM.LIGHTPEN :
-                    bookmarkModule.drawLightPen(item, layer);
-                    // bookmarkModule.drawLightPen(element, ctx, item, $.Bookmark.degree);
-
+                case module.SHAPE_TYPE.LIGHTPEN.KEY :
+                    module.drawLightPen(item, layer);
                     break;
                 default:
                     return;
             }
         },
+        refreshThumbBookmark : function () {
+            if(null !== module.actorComponent) {
+                module.targetImageInfo.BOOKMARKS = module.items;
+                module.actorComponent.reloadBookmark(module.targetImageInfo);
+            }
+        },
         drawRectangle : function (item, layer) {
 
-            var fillColor = null;
+            var opacity = 0;
 
             if ("0" === item.MARK_BACKGROUND) {
-                fillColor = 'rgb(' + item.MARK_BACKCOLOR + ')';
+                opacity = module.SHAPE_TYPE.RECTANGLE.DEFAULT_VALUES.BACKGROUND.OPACITY;
             }
 
             var rectangle = new Konva.Group({
@@ -97,16 +439,18 @@ var Bookmark = function() {
                 y: item.TOP + (item.LINE_WIDTH / 2),
                 width: item.WIDTH,
                 height: item.HEIGHT,
-                rotation: bookmarkModule.degree,
-                draggable: true,
+                rotation: module.degree,
+                // draggable: true,
                 id : item.MARK_IRN,
+                shapeType : module.SHAPE_TYPE.RECTANGLE
             });
 
             rectangle.add(new Konva.Rect({
                 width: item.WIDTH,
                 height: item.HEIGHT,
-                fill: fillColor,
-                opacity : 0.7,
+                fill: 'rgb(' + item.MARK_BACKCOLOR + ')',
+                opacity : opacity,
+                id:"background"
 
             }));
 
@@ -115,16 +459,17 @@ var Bookmark = function() {
                 height: item.HEIGHT,
                 stroke: 'rgb(' + item.MARK_LINECOLOR + ')',
                 strokeWidth: item.LINE_WIDTH,
+                id:"line"
 
             }));
 
             layer.add(rectangle);
         },
         drawEllipse : function (item, layer) {
-            var fillColor = null;
+            var opacity = 0;
 
             if ("0" === item.MARK_BACKGROUND) {
-                fillColor = 'rgb(' + item.MARK_BACKCOLOR + ')';
+                opacity = module.SHAPE_TYPE.ELLIPSE.DEFAULT_VALUES.BACKGROUND.OPACITY;
             }
 
             var ellipse = new Konva.Group({
@@ -132,16 +477,18 @@ var Bookmark = function() {
                 y: item.TOP + (item.LINE_WIDTH / 2) + (item.HEIGHT / 2),
                 width: item.WIDTH,
                 height: item.HEIGHT,
-                rotation: bookmarkModule.degree,
-                draggable: true,
+                rotation: module.degree,
+                // draggable: true,
                 id : item.MARK_IRN,
+                shapeType : module.SHAPE_TYPE.ELLIPSE
             });
 
             ellipse.add(new Konva.Ellipse({
                  width: item.WIDTH,
                 height: item.HEIGHT,
-                fill: fillColor,
-                opacity : 0.7,
+                fill: 'rgb(' + item.MARK_BACKCOLOR + ')',
+                opacity : opacity,
+                id:"background"
             }));
 
             ellipse.add(new Konva.Ellipse({
@@ -149,6 +496,7 @@ var Bookmark = function() {
                 height: item.HEIGHT,
                 stroke: 'rgb(' + item.MARK_LINECOLOR + ')',
                 strokeWidth: item.LINE_WIDTH,
+                id:"line"
             }));
 
             layer.add(ellipse);
@@ -164,15 +512,17 @@ var Bookmark = function() {
                 fill: 'rgb(' + item.MARK_LINECOLOR + ')',
                 opacity : 0.75,
                 strokeWidth: item.LINE_WIDTH,
-                rotation: bookmarkModule.degree,
-                id : item.MARK_IRN
+                rotation: module.degree,
+                // draggable: true,
+                id : item.MARK_IRN,
+                shapeType : module.SHAPE_TYPE.LIGHTPEN
             }));
 
         },
 
         drawNotebox : function(item, layer) {
 
-            var fontSize = parseInt(item.MARK_FONTSIZE) * 0.2;
+            var fontSize = (parseInt(item.MARK_FONTSIZE) * this.fontZoom);
             var fontName = item.MARK_FONTNAME;
 
             var notebox = new Konva.Group({
@@ -180,21 +530,31 @@ var Bookmark = function() {
                 y: item.TOP + (item.LINE_WIDTH / 2),
                 width: item.WIDTH,
                 height: item.HEIGHT,
-                rotation: bookmarkModule.degree,
-                draggable: true,
+                rotation: module.degree,
+                // draggable: true,
                 id : item.MARK_IRN,
+                shapeType : module.SHAPE_TYPE.NOTEBOX,
+
             });
 
-            notebox.add(new Konva.Text({
+            var padding = 2;
+            var text = new Konva.Text({
                 fontFamily : fontName,
                 fontSize : fontSize,
-                width: item.WIDTH,
-                height: item.HEIGHT,
+                width: item.WIDTH + padding,
+                height: item.HEIGHT + padding,
                 fill: 'rgb(' + item.MARK_TEXTCOLOR + ')',
-                strokeWidth: item.LINE_WIDTH,
+                // strokeWidth: item.LINE_WIDTH,
                 text : item.MARK_COMMENT,
-                padding:2,
-                wrap: "word"}));
+                padding:padding,
+                id:"text",
+                wrap: "word",// set minimum width of text
+                boundBoxFunc: function (oldBox, newBox) {
+                    newBox.width = Math.max(30, newBox.width);
+                    return newBox;
+                },
+            });
+            notebox.add(text);
 
             var fillColor = null;
 
@@ -202,211 +562,30 @@ var Bookmark = function() {
                 fillColor = 'rgb(' + item.MARK_BACKCOLOR + ')';
             }
 
-            notebox.add(new Konva.Rect({
+            var bg = new Konva.Rect({
                 fill: fillColor,
-                opacity : (item.MARK_ALPHA / 255.0),
+                opacity : $.Common.getFloatOpacity(item.MARK_ALPHA),
                 width: item.WIDTH,
                 height: item.HEIGHT,
-            }));
+                id:"background",
+            });
+            notebox.add(bg);
 
-            notebox.add(new Konva.Rect({
+            var line = new Konva.Rect({
                 stroke: 'rgb(' + item.MARK_LINECOLOR + ')',
                 strokeWidth: item.LINE_WIDTH,
                 width: item.WIDTH,
                 height: item.HEIGHT,
-            }));
+                id:"line",
+            });
+            notebox.add(line);
+            text.zIndex(2);
+            bg.zIndex(0);
+            line.zIndex(0);
 
 
             layer.add(notebox);
         },
-
-        // drawNoteBox: function (element, ctx, rectInfo, degree) {
-        //
-        //     if ("1" === rectInfo.MARK_BACKGROUND) {
-        //
-        //         ctx.beginPath();
-        //
-        //         ctx.rect(rectInfo.LEFT + (rectInfo.LINE_WIDTH / 2),
-        //             rectInfo.TOP + (rectInfo.LINE_WIDTH / 2),
-        //             rectInfo.WIDTH - rectInfo.LINE_WIDTH,
-        //             rectInfo.HEIGHT - rectInfo.LINE_WIDTH);
-        //
-        //         ctx.fillStyle = 'rgb(' + rectInfo.MARK_BACKCOLOR + ')';
-        //         ctx.globalAlpha = (rectInfo.MARK_ALPHA / 255.0);
-        //         ctx.fill();
-        //         ctx.closePath();
-        //     }
-        //
-        //     if (!$.Common.isBlank(rectInfo.MARK_COMMENT)) {
-        //         ctx.beginPath();
-        //         ctx.globalAlpha = 0.7;
-        //         var sbFont = new StringBuffer();
-        //         if ("1" === rectInfo.MARK_BOLD) {
-        //             sbFont.append("bold");
-        //             sbFont.append(" ");
-        //         }
-        //
-        //         if ("1" === rectInfo.MARK_ITALIC) {
-        //             sbFont.append("italic");
-        //             sbFont.append(" ");
-        //         }
-        //
-        //         var fontSize = parseInt(rectInfo.MARK_FONTSIZE) * 0.4;
-        //         sbFont.append(fontSize);
-        //         sbFont.append("px");
-        //         sbFont.append(" ");
-        //         sbFont.append(rectInfo.MARK_FONTNAME);
-        //
-        //         ctx.font = sbFont.toString(); //+ parseInt(rectInfo.MARK_FontSize) * 0.1 + "pt " + rectInfo.MARK_FontName ;
-        //         ctx.fillStyle = 'rgb(' + rectInfo.MARK_TEXTCOLOR + ')';
-        //         ctx.textBaseline = "top";
-        //
-        //         var comment = rectInfo.MARK_COMMENT;
-        //         var rectWidth = rectInfo.WIDTH - rectInfo.LINE_WIDTH;
-        //
-        //         //Draw text
-        //         var tempComment = "";
-        //
-        //         var nLine = 0;
-        //         for (var i = 0; i < comment.length; i++) {
-        //             tempComment += comment.charAt(i);
-        //             if (ctx.measureText(tempComment).width >= rectWidth - fontSize) {
-        //                 ctx.fillText(tempComment, rectInfo.LEFT + (rectInfo.LINE_WIDTH / 2),
-        //                     (rectInfo.TOP + (rectInfo.LINE_WIDTH / 2)) + parseInt(rectInfo.MARK_FONTSIZE) * 0.1 * nLine);
-        //                 tempComment = "";
-        //                 nLine++;
-        //             }
-        //         }
-        //
-        //         //Draw left text
-        //         if (!$.Common.isBlank(tempComment)) {
-        //             ctx.fillText(tempComment, rectInfo.LEFT + (rectInfo.LINE_WIDTH / 2),
-        //                 (rectInfo.TOP + (rectInfo.LINE_WIDTH / 2)) + parseInt(rectInfo.MARK_FONTSIZE) * 0.1 * nLine);
-        //             tempComment = "";
-        //             nLine++;
-        //         }
-        //
-        //         ctx.closePath();
-        //
-        //     }
-        //
-        //     ctx.beginPath();
-        //     ctx.globalAlpha = 0.7;
-        //     ctx.lineWidth = rectInfo.LINE_WIDTH;
-        //     ctx.strokeStyle = 'rgb(' + rectInfo.MARK_LINECOLOR + ')';
-        //
-        //     ctx.rect(rectInfo.LEFT, rectInfo.TOP, rectInfo.WIDTH, rectInfo.HEIGHT);
-        //     ctx.stroke();
-        //
-        //
-        //     if (degree !== 0) {
-        //         this.Rotate_Shape(ctx, rectInfo.LEFT, rectInfo.TOP, rectInfo.WIDTH, rectInfo.HEIGHT, degree)
-        //     }
-        //
-        //     ctx.closePath();
-        // },
-        // drawLightPen: function (element, ctx, rectInfo, degree) {
-        //
-        //     ctx.beginPath();
-        //
-        //     ctx.rect(rectInfo.LEFT,
-        //         rectInfo.TOP,
-        //         rectInfo.WIDTH,
-        //         rectInfo.HEIGHT);
-        //
-        //     ctx.fillStyle = 'rgb(' + rectInfo.MARK_LINECOLOR + ')';
-        //     ctx.globalAlpha = 0.7;
-        //     ctx.fill();
-        //     ctx.closePath();
-        //
-        //
-        //     if (degree !== 0) {
-        //         this.Rotate_Shape(ctx, rectInfo.LEFT, rectInfo.TOP, rectInfo.WIDTH, rectInfo.HEIGHT, degree)
-        //     }
-        //
-        //     // ctx.closePath();
-        // },
-        // drawRectangle: function (element, ctx, rectInfo, degree) {
-        //
-        //
-        //     if ("0" === rectInfo.MARK_BACKGROUND) {
-        //
-        //         ctx.beginPath();
-        //
-        //         ctx.rect(rectInfo.LEFT + (rectInfo.LINE_WIDTH / 2),
-        //             rectInfo.TOP + (rectInfo.LINE_WIDTH / 2),
-        //             rectInfo.WIDTH - rectInfo.LINE_WIDTH,
-        //             rectInfo.HEIGHT - rectInfo.LINE_WIDTH);
-        //
-        //         ctx.fillStyle = 'rgb(' + rectInfo.MARK_BACKCOLOR + ')';
-        //         ctx.globalAlpha = 0.7;
-        //         ctx.fill();
-        //         ctx.closePath();
-        //     }
-        //
-        //     ctx.beginPath();
-        //     ctx.lineWidth = rectInfo.LINE_WIDTH;
-        //     ctx.strokeStyle = 'rgb(' + rectInfo.MARK_LINECOLOR + ')';
-        //
-        //     ctx.rect(rectInfo.LEFT, rectInfo.TOP, rectInfo.WIDTH, rectInfo.HEIGHT);
-        //     ctx.stroke();
-        //
-        //     if (degree !== 0) {
-        //         this.Rotate_Shape(ctx, rectInfo.LEFT, rectInfo.TOP, rectInfo.WIDTH, rectInfo.HEIGHT, degree)
-        //     }
-        //
-        //     ctx.closePath();
-        // },
-        // drawEllipse: function (element, ctx, rectInfo, degree) {
-        //
-        //
-        //     if ("0" === rectInfo.MARK_BACKGROUND) {
-        //
-        //         ctx.beginPath();
-        //
-        //         ctx.ellipse(rectInfo.LEFT + (rectInfo.WIDTH / 2),
-        //             rectInfo.TOP + (rectInfo.HEIGHT / 2),
-        //             (rectInfo.WIDTH - rectInfo.LINE_WIDTH) / 2,
-        //             (rectInfo.HEIGHT - rectInfo.LINE_WIDTH) / 2,
-        //             0,
-        //             0,
-        //             2 * Math.PI);
-        //
-        //         ctx.fillStyle = 'rgb(' + rectInfo.MARK_BACKCOLOR + ')';
-        //         ctx.globalAlpha = 0.7;
-        //         ctx.fill();
-        //         ctx.closePath();
-        //     }
-        //
-        //     ctx.beginPath();
-        //     ctx.lineWidth = rectInfo.LINE_WIDTH;
-        //     ctx.strokeStyle = 'rgb(' + rectInfo.MARK_LINECOLOR + ')';
-        //
-        //     ctx.ellipse(rectInfo.LEFT + (rectInfo.WIDTH / 2),
-        //         rectInfo.TOP + (rectInfo.HEIGHT / 2),
-        //         rectInfo.WIDTH / 2,
-        //         rectInfo.HEIGHT / 2,
-        //         0,
-        //         0,
-        //         2 * Math.PI);
-        //     ctx.stroke();
-        //
-        //     if (degree !== 0) {
-        //         this.Rotate_Shape(ctx, rectInfo.LEFT, rectInfo.TOP, rectInfo.WIDTH, rectInfo.HEIGHT, degree)
-        //     }
-        //
-        //     ctx.closePath();
-        // },
-        Rotate_Shape: function (ctx, x, y, width, height, degree) {
-
-            var cx = x + 0.5 * width;
-            var cy = y + 0.5 * height;
-
-            ctx.translate(cx, cy);              //translate to center of shape
-            ctx.rotate((Math.PI / 180) * degree);  //rotate 25 degrees.
-            ctx.translate(-cx, -cy);            //translate center back to 0,0
-
-        }
     }
-    return bookmarkModule;
+    return module;
 };

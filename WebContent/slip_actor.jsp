@@ -59,6 +59,7 @@
 			pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
 			pageContext.setAttribute("USE_MAGNIFIER", g_profile.getString("WAS_INFO", "USE_MAGNIFIER", "F"));
 			pageContext.setAttribute("USE_BOOKMARK", g_profile.getString("WAS_INFO","USE_BOOKMARK","F"));
+			pageContext.setAttribute("IMG_DPI", g_profile.getString("WAS_INFO","IMG_DPI","200"));
 		}
 	}
 	catch(Exception e) {
@@ -96,6 +97,7 @@
 				USE_MAGNIFIER			:  "<c:out value="${USE_MAGNIFIER}" />",
 				USE_BOOKMARK			:  "<c:out value="${USE_BOOKMARK}" />",
 				TOKEN					: "<c:out value="${sessionScope.TOKEN}" />",
+				IMG_DPI					:  "<c:out value="${IMG_DPI}" />",
 
 			}
 
@@ -263,6 +265,7 @@
 </div>
 
 <script src="<c:url value='js/localWAS/OfficeXPI.js' />"></script>
+<script src="<c:url value='js/polyfill/Map.min.js' />"></script>
 <script src="<c:url value='js/view/actor.js' />"></script>
 <script src="<c:url value='js/bookmark/bookmark.js' />"></script>
 <script src="<c:url value='js/bookmark/konva.min.js' />"></script>
@@ -272,5 +275,5 @@
 <script src="<c:url value='js/menu/context-menu.js' />"></script>
 <script src="<c:url value='js/operation.js' />"></script>
 <script src="<c:url value='js/jquery.nicescroll.min.js' />"></script>
-<script src="<c:url value='/js/zoom/jquery.elevatezoom.js' />"></script>
+<script src="<c:url value='js/zoom/jquery.ez-plus.js' />"></script>
 </body>

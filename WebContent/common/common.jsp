@@ -91,8 +91,9 @@
 
 
 <body>
-<script src='<c:url value="/js/jquery-1.11.3.min.js" />'></script>  
-<script src="<c:url value='/js/common.js' />"></script> 
+<script src='<c:url value="/js/jquery-1.11.3.min.js" />'></script>
+<script src="<c:url value='/js/polyfill.js' />"></script>
+<script src="<c:url value='/js/common.js' />"></script>
 <script src="<c:url value='/js/progress.js' />"></script>
 <script src="<c:url value='/js/properties.js' />"></script>
 <script>
@@ -103,6 +104,7 @@ var g_CommentCommand		= "${pageContext.request.contextPath}/CommentCommand.do";
 var g_RelatedCommand		= "${pageContext.request.contextPath}/RelatedCommand.do";
 var g_HistoryCommand		= "${pageContext.request.contextPath}/HistoryCommand.do";
 var g_CoCardCommand			= "${pageContext.request.contextPath}/CoCardCommand.do";
+var g_BookmarkCommand		= "${pageContext.request.contextPath}/BookmarkCommand.do";
 var g_RootURL				= "${pageContext.request.contextPath}/";
 var g_XPI_URL				= "${pageContext.request.contextPath}/js/localWAS/OfficeXPI.js";
 var g_DRAW_BOOKMARK_WEB		= "${pageContext.request.contextPath}/js/bookmark/draw.js";

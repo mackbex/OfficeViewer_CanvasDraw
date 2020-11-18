@@ -6,6 +6,7 @@
 <head>
 	<title>Slip Viewer</title>
 	<link rel="stylesheet" type="text/css" href="<c:url value='css/style.css' />" >
+<%--	<link rel="stylesheet" type="text/css" href="<c:url value='css/colorpicker/spectrum.css' />" >--%>
 	<link rel="stylesheet" type="text/css" href="<c:url value='css/menu/context-menu.css' />" >
 	<%
 		//Generate system id
@@ -35,6 +36,7 @@
 				pageContext.setAttribute("MAXIMIZED", g_profile.getString("WAS_INFO", "MAXIMIZED", "F"));
 				pageContext.setAttribute("USE_BOOKMARK_DRAW", g_profile.getString("WAS_INFO","USE_BOOKMARK_DRAW","F"));
 				pageContext.setAttribute("USE_BOOKMARK", g_profile.getString("WAS_INFO","USE_BOOKMARK","F"));
+				pageContext.setAttribute("IMG_DPI", g_profile.getString("WAS_INFO","IMG_DPI","200"));
 			}
 		}
 		catch(Exception e) {
@@ -71,6 +73,7 @@
 				CLICKED_SLIP_IRN		:  "<c:out value="${mParams['CLICKED_SLIP_IRN'][0]}" />",
 				USE_BOOKMARK_DRAW		:  "<c:out value="${USE_BOOKMARK_DRAW}" />",
 				USE_BOOKMARK			:  "<c:out value="${USE_BOOKMARK}" />",
+				IMG_DPI					:  "<c:out value="${IMG_DPI}" />",
 			}
 
 			$.Viewer.init(ViewerParams);
@@ -149,10 +152,23 @@
 			</div>
 		</div>
 		<div class="area_viewer_content">
-			<div class="viewer_left" id="viewer_left" min-width="300">
-				<div id="drawToolbox" class="draw_toolbox"></div>
+			<div class="viewer_left" id="viewer_left">
+
 				<div id="viewerContainer" class="viewer_container">
-					<div class="viewer_info">
+					<div id="drawPanel" class="draw_panel">
+						<div class="title_container">
+							<div id="panelTitle" class="panel_title">Title</div>
+							<div id="panelClose" class="panel_close">
+								<img src="<c:url value="/image/pc/viewer/btn_close.png" />" />
+							</div>
+						</div>
+						<div id="tabTitle" class="tab_title_container"></div>
+						<div id="panelColorPicker">
+							<input id="colorPicker" class="panel_colorpicker"  />
+						</div>
+						<div id="options" class="options"></div>
+					</div>
+					<div class="viewer_info" id="viewerInfo">
 						<div class="info_title"><span class="title" data-i18n="INFO_TITLE"></span></div>
 						<div class="info" id="slip_info">
 							<div id="info_progress" class="info_progress"></div>
@@ -193,7 +209,7 @@
 				</div>
 			</div>
 			<div id="dragBar_viewer" dragging="0" tag="drag"></div>
-			<div class="viewer_right" id="viewer_right"  min-width="300">
+			<div class="viewer_right" id="viewer_right" >
 				<div>
 					<div id="original_progress" class="original_progress"></div>
 					<div class="title">
@@ -216,14 +232,15 @@
 						</div>
 					</div>
 					<div class="area_original">
+						<div id="bookmarkProgress" class="bookmark_progress" ></div>
 						<div id="originalImage" >
 							<%--						<span class="helper"></span>--%>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div id="dragBar_extra" dragging="0" tag="drag"></div>
-			<div id="viewer_right_extra" class="viewer_right_extra" show="0"  min-width="150" align="last">
+<%--			<div id="dragBar_extra" dragging="0" tag="drag"></div>--%>
+			<div id="viewer_right_extra" class="viewer_right_extra" visible="0">
 				<div>
 					<div id="attach_progress" class="attach_progress"></div>
 					<div id="attach_list" class="attach_list">
@@ -240,6 +257,7 @@
 
 
 <script src="<c:url value='js/localWAS/OfficeXPI.js' />"></script>
+<script src="<c:url value='js/polyfill/Map.min.js' />"></script>
 <script src="<c:url value='js/view/actor.js' />"></script>
 <script src="<c:url value='js/view/viewer.js' />"></script>
 <script src="<c:url value='js/effect/ripple.js' />"></script>
@@ -252,6 +270,8 @@
 <script src="<c:url value='js/zoom/rotate.js' />"></script>
 <script src="<c:url value='/js/jquery.nicescroll.min.js' />"></script>
 <script src="<c:url value='js/bookmark/bookmark.js' />"></script>
+<script src="<c:url value='js/bookmark/draw.js' />"></script>
 <script src="<c:url value='js/bookmark/konva.min.js' />"></script>
+<%--<script src="<c:url value='js/colorpicker/spectrum.js' />"></script>--%>
 </body>
 </html>

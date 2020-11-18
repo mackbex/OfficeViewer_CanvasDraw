@@ -192,6 +192,23 @@ $.Lang = {
 				"ROTATE_CCW" : "좌측으로 회전",
 				"OPEN_RELATED_POPUP" : "관련문서 조회"
 			},
+			Draw : {
+				"TITLE_LIGHTPEN_SETTING" : "형광펜 설정",
+				"TITLE_NOTEBOX_SETTING" : "메모 설정",
+				"TITLE_RECTANGLE_SETTING" : "사각형 설정",
+				"TITLE_ELLIPSE_SETTING" : "원 설정",
+				"TAB_BG" : "배경색",
+				"TAB_FONT" : "글자색",
+				"TAB_LINE" : "라인색",
+				"LINE_WIDTH" : "라인 굵기",
+				"PEN_HEIGHT" : "펜 굵기",
+				"OPACITY" : "투명도",
+				"FONT_SIZE" : "글씨 크기",
+				"REMOVE_SHAPE" : "삭제",
+				"NO_BACKGROUND" : "배경 없음",
+				"FAILED_REMOVE_BOOKMARK" : "삭제에 실패했습니다.",
+				"ERR_TOO_SMALL" : "크기가 너무 작습니다.",
+			},
 			LocalWAS : {
 			
 			},

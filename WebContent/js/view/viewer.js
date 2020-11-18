@@ -17,6 +17,8 @@ $.Viewer = {
 		IS_FOLD : true,
 		Cur_Slip : null,
 		isBookmarkLoaded : false,
+		drawContext : null,
+
 		init : function(params) {
 			
 			this.params 			= params;
@@ -85,8 +87,14 @@ $.Viewer = {
 			}
 			else {
 				$(".viewer_left").hide();
+				$("#dragBar_viewer").hide();
 				$(".viewer_right_extra").hide();
-				$(".viewer_right").css("width","100%");
+				$(".viewer_right").css({
+					left:"0",
+					right:"0",
+					top:"0",
+					bottom:"0"
+				});
 				$(".area_attach_list").hide();
 			}
 
@@ -101,8 +109,10 @@ $.Viewer = {
 			//
 			//
 			// }
-			$.Viewer.viewer = $.Viewer.setImageViewer();
-
+			var version = $.Common.GetBrowserVersion().ActingVersion;
+			if(version <= 9) {
+				$.Viewer.viewer = $.Viewer.setImageViewer();
+			}
 			
 		},
 
@@ -325,11 +335,6 @@ $.Viewer = {
 			if(!$.Common.isBlank($.Viewer.currentKey) && $.Viewer.currentKey.indexOf(",") <= -1) {
 				$.Viewer.getCommentCnt();
 			}
-
-
-
-
-
 		},
 		pageSubmit : function() {
 			//	$.Common.postSubmit(g_RootURL + "/slip_actor.jsp", $.Actor.params, "post");
@@ -441,7 +446,7 @@ $.Viewer = {
 				
 				var elAttach = $.Viewer.getAttachElement(this);
 				elAttach.appendTo(elDest);
-				
+				$("[class=area_name]").niceScroll({horizrailenabled: true, cursorcolor:"#"+$.Viewer.colorSet.NAVIGATION});
 				$.Viewer.setAttachMouseEvent(elAttach);
 			});
 		},
@@ -506,7 +511,7 @@ $.Viewer = {
 			elAttachBtnArea.append($(document.createElement('img')).attr("src", g_RootURL+"image/common/context/download_cs.png"));
 			elAttachBtnArea.unbind("click").bind("click",function(e){e.stopPropagation(); $.Operation.execute($.Viewer, elAttachBtnArea, objData)});
 			elAttachBtnArea.appendTo(elAttach);
-			
+
 			return elAttach;
 		},
 		setUIColor : function()
@@ -522,6 +527,7 @@ $.Viewer = {
 				$("#area_slip").niceScroll({horizrailenabled: false, cursorcolor:"#"+objColor.NAVIGATION});
 				$(".viewer_right .title").css({"border-top":"2px solid #"+objColor.BORDER});
 				$(".viewer_right .area_original").css({"border-bottom":"2px solid #"+objColor.BORDER});
+
 				$.Viewer.colorSet = objColor;
 			}
 		},
@@ -746,7 +752,73 @@ $.Viewer = {
 			
 			return elInfoBlock;
 		},
-		
+		displayCanvasOriginal : function(objData) {
+
+			$.Common.ShowProgress("#original_progress","Waiting..","000000","0.7");
+			objData['IMG_DPI'] = $.Viewer.params.IMG_DPI;
+			var canvas = null;
+
+			// if($.Viewer.isBookmarkLoaded) {
+			var bookmarkContext = Bookmark();
+			var bookmarkItem = objData["BOOKMARKS"];
+			if(bookmarkItem != null && bookmarkItem.length > 0) {
+
+				//var zoomRatio = $.Viewer.viewer.panzoom('getScale',$.Viewer.viewer.panzoom('getMatrix'));
+
+				$("#bookmark").remove();
+				canvas = $(document.createElement('div'));
+				canvas.attr({
+					"id": "bookmark",
+					"class": "bookmark",
+				})
+
+				canvas.appendTo($("#originalImage"));
+
+				var elImage = new Image();
+
+				var sbImgURL = new StringBuffer();
+				sbImgURL.append(this.rootURL);
+				sbImgURL.append("DownloadImage.do?");
+				sbImgURL.append("&DocIRN="+objData.DOC_IRN);
+				sbImgURL.append("&Idx="+objData.DOC_NO);
+				sbImgURL.append("&degree="+objData.SLIP_ROTATE);
+				sbImgURL.append("&UserID="+$.Viewer.params.USER_ID);
+				sbImgURL.append("&CorpNo="+$.Viewer.params.CORP_NO);
+
+				elImage.src = sbImgURL.toString();
+
+				bookmarkContext.init(canvas, $(elImage), objData, $.Viewer.params, $.Actor);
+				$.when(bookmarkContext.drawTargetImage("#original_progress")).then(function(){
+					bookmarkContext.drawItems(bookmarkItem, objData["SLIP_ROTATE"]);
+				}).always(function(){
+					$("#zoomIn").on("click", function(e){
+						e.preventDefault();
+						bookmarkContext.zoomIn();
+					})
+					$("#zoomOut").on("click", function(e){
+						e.preventDefault();
+						bookmarkContext.zoomOut();
+					})
+					
+					if("T" === $.Viewer.params.USE_BOOKMARK_DRAW) {
+						if($.Viewer.drawContext === null) {
+							$.Viewer.drawContext = Draw();
+							var i18nMsgProps = $.Common.Localize($.Lang, "data-i18n", $.Viewer.params.LANG,"Draw");
+							$.Viewer.drawContext.init(bookmarkContext, i18nMsgProps, "#colorPicker");
+						}
+						else {
+							$.Viewer.drawContext.reset(bookmarkContext);
+						}
+					}
+				});
+
+
+				// $.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
+			}
+
+
+
+		},
 		/**
 		 * Display original image
 		 */
@@ -754,7 +826,7 @@ $.Viewer = {
 
 			$("#originalImage").empty();
 			$.Common.ShowProgress("#original_progress","Waiting..","000000","0.7");
-			
+
 			var sbImgURL = new StringBuffer();
 			sbImgURL.append(this.rootURL);
 			sbImgURL.append("DownloadImage.do?");
@@ -774,71 +846,8 @@ $.Viewer = {
 			});
 			elImage.appendTo($("#originalImage"));
 			elImage.load(function() {
-
-				var version = $.Common.GetBrowserVersion().ActingVersion;
-				if(version >= 9) {
-
-
-					var canvas = null;
-
-					// if($.Viewer.isBookmarkLoaded) {
-						var bookmarkItem = objData["BOOKMARKS"];
-							if(bookmarkItem != null && bookmarkItem.length > 0) {
-								var width = elImage.width();
-								var height = elImage.height();
-								canvas = $(document.createElement('div'));
-								canvas.attr({
-								"id": "bookmark",
-								"class": "bookmark",
-								}).css({
-									"width": elImage.width(),
-									"height": elImage.height(),
-								});
-								canvas.appendTo($("#originalImage"));
-
-
-							var bookmarkContext = Bookmark();
-							bookmarkContext.init(canvas, bookmarkItem);
-							bookmarkContext.drawItems(objData["SLIP_ROTATE"]);
-							// $.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
-						}
-					// }
-
-					//
-					// var bookmarkItem = objData["BOOKMARKS"];
-					// 	if(bookmarkItem != null && bookmarkItem.length > 0) {
-					// 	bookmark = $(document.createElement('canvas'));
-					// 	bookmark.attr({
-					// 		"width": elImage.width(),
-					// 		"height": elImage.height(),
-					// 		"id": "bookmark",
-					// 		"class": "bookmark",
-					// 	});
-					// 	bookmark.appendTo($("#originalImage"));
-					//
-					// 	$.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
-					// }
-				}
-
-				// if(version >= 11 && "T" === $.Viewer.params.USE_BOOKMARK_DRAW) {
-				//
-				// 	// $.getScript(g_DRAW_BOOKMARK_WEB_URL, function() {
-				// 	var canvas = bookmark[0];
-				// 	$.Draw.init($.Bookmark, canvas);
-				//
-				// 	// }).fail(function(){
-				// 	//
-				// 	// 	$.Common.simpleToast($.Viewer.localeMsg.FAILED_LOAD_DRAW_BOOKMARK_TOOL);
-				// 	//
-				// 	// });
-				//
-				//
-				//
-				// }
-
 				$.Common.HideProgress("#original_progress");
 			});
-
 
 			
 			$.Viewer.resetViewer();
@@ -849,12 +858,7 @@ $.Viewer = {
 			}
 			
 		},
-		// ZoomIn_Viewer : function() {
-		// 	$.Viewer.viewer.panzoom.zoomIn;
-		// },
-		// ZoomOut_Viewer : function() {
-		// 	$.Viewer.viewer.panzoom.zoomOut;
-		// },
+
 		
 		resetViewer : function() {
 			if($.Viewer.viewer != null)
@@ -901,7 +905,13 @@ $.Viewer = {
 					$.Viewer.displaySlipInfo(objSelelctedItem);
 
 					//Show original image
-					$.Viewer.displayOriginal(objSelelctedItem);
+					if(version > 9) {
+						$.Viewer.displayCanvasOriginal(objSelelctedItem);
+					}
+					else {
+						$.Viewer.displayOriginal(objSelelctedItem);
+					}
+
 				}
 				var cb = elThumb.closest("#slip_item").find("#chk")[0];
 				cb.checked = !cb.checked;
@@ -988,45 +998,29 @@ $.Viewer = {
 			window.close();
 		},
 		showAttachList : function() {
-			var widthLeft = $.Common.getWidthPercent($(".viewer_left"));
-			$(".viewer_right").css("width",100 - widthLeft + "%");
-			$("#viewer_right_extra").hide();
-			$("#viewer_right_extra").attr("show","0");
-			$.Viewer.toggleAttachList();
+			$(".viewer_right").addClass("attach_visible");
+			$("#viewer_right_extra").addClass("attach_visible");
+			// var widthLeft = $.Common.getWidthPercent($(".viewer_left"));
+			// $(".viewer_right").css("width",100 - widthLeft + "%");
+			// $("#viewer_right_extra").hide();
+			$("#viewer_right_extra").attr("visible","1");
+			// $.Viewer.toggleAttachList();
 		},
 		//Toggle attach list
 		toggleAttachList : function() {
-			
+
+
 			var elAttachArea = $("#viewer_right_extra");
-			var isShown = elAttachArea.attr("show");
-			if("0" == isShown) 
+			var isVisible = elAttachArea.attr("visible");
+			if("0" === isVisible)
 			{
-				var widthLeft = $.Common.getWidthPercent($(".viewer_left"));
-				var widthViewer = $.Common.getWidthPercent($(".viewer_right"));
-				var widthAttach = $.Common.getWidthPercent(elAttachArea);
+				$(".viewer_right").addClass("attach_visible");
+				$("#viewer_right_extra").addClass("attach_visible");
 
-				var viewerMin =  $.Common.round(parseInt($(".viewer_right").attr("min-width")) / $(document).outerWidth() * 100, 1);
-
-				var expectedWidth = widthViewer - widthAttach;
-
-				if(expectedWidth < viewerMin)
-				{
-					$(".viewer_left").css("width",(widthLeft - widthAttach) + "%");
 //
-					$('#slip_masonry').masonry('layout');
-
-					if($("#area_slip").is(":visible")) {
-						$("#area_slip").getNiceScroll().resize();
-					}
-				}
-				else
-				{
-					$(".viewer_right").css("width",(widthViewer - widthAttach) + "%");
-				}
-
-				elAttachArea.show();
-				elAttachArea.attr("show","1");
-				
+// 				elAttachArea.show();
+				elAttachArea.attr("visible","1");
+//
 				//Get attach list on first show
 				if($.Viewer.objAttachItem == null) {
 					$.Viewer.getAttachList($.Viewer.params);
@@ -1034,10 +1028,9 @@ $.Viewer = {
 			}
 			else
 			{
-				var widthLeft = $.Common.getWidthPercent($(".viewer_left"));
-				$(".viewer_right").css("width",100 - widthLeft + "%");
-				elAttachArea.hide();
-				elAttachArea.attr("show","0");
+				$(".viewer_right").removeClass("attach_visible");
+				$("#viewer_right_extra").removeClass("attach_visible");
+				elAttachArea.attr("visible","0");
 			}
 			
 			$.Viewer.resetViewer();
@@ -1053,10 +1046,12 @@ $.Viewer = {
 				  $zoomOut:$("#zoomOut"), 
 				animate:true,
 				cursor:'inherit'
-			});
+			})
+
 			
 			panzoom.parent().on('mousewheel.focal', function(e) {
 				e.preventDefault();
+
 	            var delta = e.delta || e.originalEvent.wheelDelta;
 	            var zoomOut = delta ? delta < 0 : e.originalEvent.deltaY > 0;
 	            panzoom.panzoom('zoom', zoomOut, {

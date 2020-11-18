@@ -243,6 +243,7 @@ $.Actor = {
 			$.Common.HideProgress("#attach_progress");
 
 		},
+
 		resize_Scroll : function() {
 			//$(".slip_wrapper").css("height",$.Actor.original_scrollHeight);
 			//$(".attach_wrapper").css({"top":$.Actor.original_scrollHeight, "height": $(".wrapper").outerHeight() - $.Actor.original_scrollHeight});
@@ -1034,38 +1035,49 @@ $.Actor = {
 
 					//Draw option icon
 
-					// if(parent.isBookmarkLoaded) {
+					if(version > 9) {
+						// if(parent.isBookmarkLoaded) {
 
-						var curObj 			= parent.objSlipItem[idx];
-
+						var curObj = parent.objSlipItem[idx];
 						var bookmarkItem = curObj["BOOKMARKS"];
-						//
-						// $.each(bookmarkItem, function(){
 
-						var canvas = $(document.createElement('div'));
-						$(canvas).attr({
-							"class":"bookmark",
-							"id": curObj["SLIP_IRN"],
-						}).css({
-							"width": $(this).find(".area_thumb").width(),
-							"height": $(this).find(".area_thumb").height(),
-						});
+						if (bookmarkItem != null && bookmarkItem.length > 0) {
 
-						$(canvas).insertAfter($(this).find(".link"));
+							var imgContainer = $(this).find(".area_thumb");
 
 
-						var bookmarkContext = Bookmark();
-						bookmarkContext.init(canvas, bookmarkItem);
-						bookmarkContext.drawItems(curObj["SLIP_ROTATE"]);
-						// var canvas = Bookmark();
-						// canvas.Draw_BookmarkItem(bookmark, bookmarkItem, curObj["SLIP_ROTATE"]);
-					// }
+							var bookmarkContainer = $(document.createElement('div'));
 
+							$(bookmarkContainer).attr({
+								"class": "bookmark",
+								"id": curObj["SLIP_IRN"],
+							}).css({
+								"width": imgContainer.width(),
+								"height": imgContainer.height(),
+							});
 
+							$(bookmarkContainer).insertAfter($(this).find(".link"));
+							curObj['IMG_DPI'] = parent.params.IMG_DPI;
+
+							var img = $(this).find(".thumb_img");
+							var bookmarkContext = Bookmark();
+							bookmarkContext.init(bookmarkContainer, img, curObj, parent.params);
+							bookmarkContext.drawItems(bookmarkItem, curObj["SLIP_ROTATE"]);
+							this.data("bookmarkContext", bookmarkContext);
+							// $(this).bookmarkContext = bookmarkContext;
+							// var canvas = Bookmark();
+							// canvas.Draw_BookmarkItem(bookmark, bookmarkItem, curObj["SLIP_ROTATE"]);
+							// }
+						}
+					}
 				});
 			});
 		},
-
+		reloadBookmark:function(slipInfo) {
+			var elImg = $("#slip_masonry").find("[idx='"+slipInfo.SLIP_IRN+"']");
+			var bookmarkContext = elImg.data("bookmarkContext");
+			bookmarkContext.drawItems(slipInfo.BOOKMARKS, slipInfo.SLIP_ROTATE);
+		},
 		/**
 		 * Set mouse events on target thumb.
 		 */
@@ -1217,9 +1229,9 @@ $.Actor = {
 			var titleName = objData.SDOC_NAME;
 			//if("AFTER" == $.Actor.params.VIEW_MODE) {
 				
-				if("1" == objData.SDOC_AFTER) {
-					titleName = "★) "+objData.SDOC_NAME;
-				}
+			if("1" === objData.SDOC_AFTER) {
+				titleName = "★) "+objData.SDOC_NAME;
+			}
 			//}
 			
 			//Draw thumb title
@@ -1443,7 +1455,7 @@ $.Actor = {
 			var sbImgURL = new StringBuffer();
 			sbImgURL.append(this.rootURL);
 			sbImgURL.append("DownloadImage.do?");
-			// sbImgURL.append("ImgType=thumb");
+			sbImgURL.append("ImgType=thumb");
 			sbImgURL.append("&DocIRN="+objData.DOC_IRN);
 			sbImgURL.append("&Idx="+objData.DOC_NO);
 			sbImgURL.append("&degree="+objData.SLIP_ROTATE);
@@ -1456,7 +1468,9 @@ $.Actor = {
 			vElImage.attr("class","thumb_img");
 
 			if($.Actor.USE_MAGNIFIER) {
-				vElImage.attr("data-zoom-image",sbImgURL);
+				var oriImgUrl = sbImgURL.toString();
+				oriImgUrl = oriImgUrl.replaceAll("ImgType=thumb","");
+				vElImage.attr("data-zoom-image",oriImgUrl);
 
 				//Bind magnifier event
 				elMagnifier.unbind("click").on("click", function(){
@@ -1493,34 +1507,37 @@ $.Actor = {
 		closeMagnifier : function(elIcon, el, objData) {
 			objData.MAGNIFIER_ON = false;
 
-			var elMagnifier = el.data().elevateZoom;
+			var elMagnifier = el.data().ezPlus;
 			if(elMagnifier !==  undefined) {
-				el.data().elevateZoom.zoomContainer.remove(); //remove specific .zoomContainer
-				$.removeData(el, 'elevateZoom');
+				el.data().ezPlus.zoomContainer.remove(); //remove specific .zoomContainer
+				$.removeData(el, 'ezPlus');
 			}
 			elIcon.find("img").attr("src", g_RootURL+"image/common/context/magnifier.png");
 		},
 		openMagnifier : function(elIcon, el, objData) {
 			objData.MAGNIFIER_ON = true;
 			elIcon.find("img").attr("src", g_RootURL+"image/common/context/close.png");
-			if($.Common.GetBrowserVersion().ActingVersion <= 8) {
-				el.elevateZoom({
-					zoomType: "inner",
-					cursor: "crosshair"
-				});
-			}
-			else {
-				var width = el.width();
-				var height = el.height();
+			// if($.Common.GetBrowserVersion().ActingVersion <= 8) {
+			// 	el.elevateZoom({
+			// 		zoomType: "inner",
+			// 		cursor: "crosshair"
+			// 	});
+			// }
+			// else {
+			var width = el[0].naturalWidth;
+			var height = el[0].naturalHeight;
 
 
-				el.elevateZoom({
-					scrollZoom: true,
-					zoomLevel : 1.6,
-					zoomWindowWidth : width,
-					zoomWindowHeight : height,
-				});
-			}
+			el.ezPlus({
+				zoomType: 'inner',
+				cursor: 'crosshair',
+				borderSize:1,
+				scrollZoom: true,
+				zoomLevel : 1,
+				zoomWindowWidth : width,
+				zoomWindowHeight : height,
+			});
+			// }
 		},
 		toggleMagnifier : function(elIcon, el, objData) {
 			if($.Actor.USE_MAGNIFIER) {

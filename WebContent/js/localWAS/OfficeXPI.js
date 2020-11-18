@@ -135,16 +135,21 @@ $.OfficeXPI = {
 								deferred.reject();
 							});
 						}
+						else {
+							$.OfficeXPI.isDetected = $.OfficeXPI.XPI_ENUM.DETECTED;
+							$.OfficeXPI.setCSOperation();
+							deferred.resolve();
+						}
 					}
 					
 					request.ontimeout = function() 
 					{ 
-						$.OfficeXPI.isDetected = $.OfficeXPI.XPI_ENUM.DETECTED;
+						$.OfficeXPI.isDetected = $.OfficeXPI.XPI_ENUM.NO_DETECTED;
 						deferred.reject();
 					}
 					request.onerror = function() 
 					{ 
-						$.OfficeXPI.isDetected = $.OfficeXPI.XPI_ENUM.DETECTED;
+						$.OfficeXPI.isDetected = $.OfficeXPI.XPI_ENUM.NO_DETECTED;
 						deferred.reject();
 					}
 				

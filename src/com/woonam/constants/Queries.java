@@ -59,6 +59,7 @@ public class Queries {
 	public final static String COPY_SLIP_JDOC_NO = " EXEC ProcImg_Copy ?, ?, ?, ? ";
 	public final static String COPY_SLIP_COCARD = " EXEC ProcImg_Copy_COCARD ?, ?, ?, ? ";
 	public final static String GET_SLIP_INFO = " EXEC ProcImg_SlipDOC ?, ?, ? ";
+	public final static String ADD_BOOKMARK = " EXEC ProcImg_BookMark_Add ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? ";
 	public final static String ADD_BOOKMARK_FOR_CARD = " Insert Into IMG_BOOKMARK_T (MARK_IRN, DEVICE, SDOC_NO, SLIP_IRN, MARK_TYPE,  MARK_RECT," +
 			"\"MARK_LineWidth\", \"MARK_LineColor\", \"MARK_BackColor\", \"MARK_Alpha\", \"MARK_Comment\", \"MARK_TextColor\", \"MARK_FontName\", \"MARK_FontSize\"," +
 			"\"MARK_BackGround\", \"MARK_Italic\", \"MARK_Bold\", ENABLE, CORP_NO, REG_USER, REG_TIME, SDOC_SYSTEM ) Values (" +

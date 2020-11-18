@@ -701,7 +701,7 @@ $.Related = {
             url.append("approve/repository/doc");
             url.append($.Related.curOrg.code);
             url.append("_");
-            url.append(optionSelected);
+            url.append(params.SELECT_DATE.substring(0, 4));
             url.append(".nsf/web_by_aprv_all_link?readviewentries&view=web_by_aprv_all_link&start=1&count=10000&page_no=1&all_view=0&flat_view=0&RestrictToCategory=");
             url.append(params.SELECT_DATE);
             url.append("&category=");
@@ -719,6 +719,7 @@ $.Related = {
                 {
                     try {
                         // var res = $.parseXML(objRes.MSG);
+                        objRes.MSG = objRes.MSG.replace("\\","");
                         var res = $.parseJSON(objRes.MSG);
                         $.Related.Push_SearchResultItem(res);
                     }

@@ -1030,6 +1030,55 @@ public boolean Copy_Replace(String jdocNo, String sdocNo, String corpNo, String 
 	}
 
 
+	public boolean addBookmark(Map mapParams)
+	{
+		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
+		boolean res	 = false;
+		if (m_AC == null)	return false;
+
+		try
+		{
+			String corpNo		= m_C.getParamValue(session, "CORP_NO", null);
+			String partNo		= m_C.getParamValue(session, "PART_NO", null);
+			String userID		= m_C.getParamValue(session, "USER_ID", null);
+
+			String comment 		= this.m_C.getParamValue(mapParams, "MARK_COMMENT", "");
+			pStmt.setQuery(Queries.ADD_BOOKMARK);
+
+			pStmt.setString(0, this.m_C.getParamValue(mapParams, "MARK_IRN", ""));
+			pStmt.setString(1, this.m_C.getParamValue(mapParams, "DEVICE", ""));
+			pStmt.setString(2, this.m_C.getParamValue(mapParams, "SDOC_NO", ""));
+			pStmt.setString(3, this.m_C.getParamValue(mapParams, "SLIP_IRN", ""));
+			pStmt.setString(4, this.m_C.getParamValue(mapParams, "MARK_TYPE", ""));
+			pStmt.setString(5, ""); //MARK_STYLE
+			pStmt.setString(6, this.m_C.getParamValue(mapParams, "MARK_RECT", ""));
+			pStmt.setString(7, this.m_C.getParamValue(mapParams, "MARK_LINEWIDTH", ""));
+			pStmt.setString(8, this.m_C.getParamValue(mapParams, "MARK_LINECOLOR", ""));
+			pStmt.setString(9, this.m_C.getParamValue(mapParams, "MARK_BACKCOLOR", ""));
+			pStmt.setString(10, this.m_C.getParamValue(mapParams, "MARK_ALPHA", ""));
+			pStmt.setString(11, URLDecoder.decode(comment, m_Profile.getString("AGENT_INFO","CHARSET","UTF-8")));
+			pStmt.setString(12, this.m_C.getParamValue(mapParams, "MARK_TEXTCOLOR", ""));
+			pStmt.setString(13, this.m_C.getParamValue(mapParams, "MARK_FONTNAME", ""));
+			pStmt.setString(14, this.m_C.getParamValue(mapParams, "MARK_FONTSIZE", ""));
+			pStmt.setString(15, this.m_C.getParamValue(mapParams, "MARK_BACKGROUND", ""));
+			pStmt.setString(16, "");
+			pStmt.setString(17, "");
+			pStmt.setString(18, corpNo);
+			pStmt.setString(19, userID);
+
+			String queryRes 	= m_AC.SetData(pStmt.getQuery(), strFuncName);
+			String resFlag		= queryRes.substring(0,1);
+			res					= m_C.getResCnt(queryRes) > 0;
+
+		}
+		catch(Exception e)
+		{
+			logger.error(strFuncName, e);
+		}
+
+		return res;
+	}
+
 
 	public int addBookmarkCard(JsonObject userInfo, JsonObject slipInfo)
 	{

@@ -1,176 +1,4 @@
-var StringBuffer = function() 
-{
-			    this.buffer = new Array();
-};
-StringBuffer.prototype.append = function(str) 
-{
-    this.buffer[this.buffer.length] = str;
-};
-StringBuffer.prototype.toString = function() 
-{
-    return this.buffer.join("");
-};
-jQuery.reduce = function(arr, func, initial){
-	initial =  typeof initial === 'undefined' ? 0 : initial;
-	$.each(arr,function(i,v){
-		initial = func(initial,v,i);
-	});
-	return initial;
-};
-jQuery.fn.reduce = function(func,initial){
-	return jQuery.reduce(this,func,initial);
-};
 
-Array.prototype.inArray = function(comparer) {
-	for(var i=0; i < this.length; i++) {
-		if(comparer(this[i])) return true;
-	}
-	return false;
-};
-
-// adds an element to the array if it does not already exist using a comparer
-// function
-Array.prototype.pushIfNotExist = function(element, comparer) {
-	if (!this.inArray(comparer)) {
-		this.push(element);
-	}
-};
-
-$.getMultiScripts = function(arr) {
-	var _arr = $.map(arr, function(scr) {
-		return $.getScript(scr );
-	});
-
-	_arr.push($.Deferred(function( deferred ){
-		$( deferred.resolve );
-	}));
-
-	return $.when.apply($, _arr);
-}
-
-String.prototype.insert = function(index, string) {
-	if (index > 0)
-	{
-		return this.substring(0, index) + string + this.substring(index, this.length);
-	}
-
-	return string + this;
-};
-if (typeof Array.prototype.forEach != 'function') {
-	Array.prototype.forEach = function(callback){
-		for (var i = 0; i < this.length; i++){
-			callback.apply(this, [this[i], i, this]);
-		}
-	};
-}
-
-if (!('map' in Array.prototype)) {
-	Array.prototype.map = function (mapper, that /*opt*/) {
-		var other = new Array(this.length);
-		for (var i = 0, n = this.length; i < n; i++) {
-			if (i in this) { other[i] = mapper.call(that, this[i], i, this); }
-		}
-		return other;
-	};
-}
-
-
-$.fn.insertAt = function(index, $parent) {
-    return this.each(function() {
-        if (index === 0) {
-            $parent.prepend(this);
-        } else {
-            $parent.children().eq(index - 1).after(this);
-        }
-    });
-}
-$.fn.inputFilter = function(inputFilter) {
-	return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-		if (inputFilter(this.value)) {
-			this.oldValue = this.value;
-			this.oldSelectionStart = this.selectionStart;
-			this.oldSelectionEnd = this.selectionEnd;
-		} else if (this.hasOwnProperty("oldValue")) {
-			this.value = this.oldValue;
-			this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-		} else {
-			this.value = "";
-		}
-	});
-};
-
-if (!('remove' in Element.prototype)) {
-    Element.prototype.remove = function() {
-        if (this.parentNode) {
-            this.parentNode.removeChild(this);
-        }
-    };
-}
-//From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
-if (!Object.keys) {
-  Object.keys = (function () {
-    'use strict';
-    var hasOwnProperty = Object.prototype.hasOwnProperty,
-        hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
-        dontEnums = [
-          'toString',
-          'toLocaleString',
-          'valueOf',
-          'hasOwnProperty',
-          'isPrototypeOf',
-          'propertyIsEnumerable',
-          'constructor'
-        ],
-        dontEnumsLength = dontEnums.length;
-
-    return function (obj) {
-      if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
-        throw new TypeError('Object.keys called on non-object');
-      }
-
-      var result = [], prop, i;
-
-      for (prop in obj) {
-        if (hasOwnProperty.call(obj, prop)) {
-          result.push(prop);
-        }
-      }
-
-      if (hasDontEnumBug) {
-        for (i = 0; i < dontEnumsLength; i++) {
-          if (hasOwnProperty.call(obj, dontEnums[i])) {
-            result.push(dontEnums[i]);
-          }
-        }
-      }
-      return result;
-    };
-  }());
-}
-
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.replace(new RegExp(search, 'g'), replacement);
-};
-$.ajaxSetup({
-    cache: false
-});
-Array.prototype.move = function (old_index, new_index) {
-    while (old_index < 0) {
-        old_index += this.length;
-    }
-    while (new_index < 0) {
-        new_index += this.length;
-    }
-    if (new_index >= this.length) {
-        var k = new_index - this.length;
-        while ((k--) + 1) {
-            this.push(undefined);
-        }
-    }
-    this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-    return this; // for testing purposes
-};
 
 
 $.Common = {
@@ -377,6 +205,10 @@ $.Common = {
 			return elBtn;
 		},
 		isBlank: function(str) {
+			if(str === parseInt(str, 10)) {
+				return false;
+			}
+
 			var res = false;
 			var blank_pattern = /^\s+|\s+$/g;
 			if (str == null || str == "undefined" || str.replace(blank_pattern, "") == "") {
@@ -407,7 +239,45 @@ $.Common = {
 			}
 			return obj_Key;
 		},
-		// removeItem : function(arObjTarget, value, field) {
+		getFloatOpacity:function(val) {
+			return parseFloat(val) / 255.0;
+		},
+		getRawOpacity:function(val) {
+			return Math.abs(Math.round(val * 255.0));
+		},
+		getUUID:function() {
+			return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+				(c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+			);
+		},
+		getIRN:function (flag) {
+
+			var uuid = $.Common.getUUID();
+			var sbRes = new StringBuffer();
+			var today = new Date();
+
+			var yyyyMMdd = today.getFullYear() + ("0"+(today.getMonth()+1)).slice(-2) + ("0" + today.getDate()).slice(-2);
+			var HHmmssSSS = ("0" + today.getHours()).slice(-2) + ("0" + today.getMinutes()).slice(-2) + ("0" + today.getSeconds()).slice(-2) + + ("0" + today.getMilliseconds()).slice(-3);
+
+			if($.Common.isBlank(flag)) flag = "";
+			sbRes.append(flag);
+			sbRes.append(yyyyMMdd);
+			sbRes.append(uuid.substring(uuid.length - 5, uuid.length));
+			sbRes.append(HHmmssSSS);
+
+			return sbRes.toString();
+
+		},
+		removeKey : function(arr, str) {
+			var idx = arr.indexOf(str);
+			if(idx > -1) {
+				arr.splice(idx, 1);
+			}
+
+			return arr;
+		},
+
+// removeItem : function(arObjTarget, value, field) {
 		// 	var i, cur;
 		//
 		// 	Object.keys(arObjTarget).forEach(function(key) {
@@ -547,7 +417,6 @@ $.Common = {
 			return deferred.promise();
 		},
 		windowCallback : function(func) {
-			
 			  var timer;
 			  	return function(event){
 			  		if(timer) clearTimeout(timer);
@@ -895,19 +764,28 @@ $.Common = {
 		    }
 		    return value;
 		},
-		ShowProgress : function(strTagID, strMsg, strColor, nOpacity)
+		ShowProgress : function(strTagID, strMsg, strColor, nOpacity, effect,maxSize)
 		{
 			if(nOpacity == null)
 			{
 				nOpacity = 0.7;
+			}
+
+			if(null === effect || undefined === effect) {
+				effect = 'bounce';
+			}
+
+			if(null === maxSize || undefined === maxSize) {
+				maxSize = '';
 			}
 			
 			if(this.m_vBrowserInfo == null || this.m_vBrowserInfo.ActingVersion > 9)
 			{
 				$(strTagID).css("display","block");
 				$(strTagID).waitMe({
-					effect : 'bounce',
-					text : strMsg, 
+					effect : effect,
+					text : strMsg,
+					maxSize:maxSize,
 					bg : 'rgba(255,255,255,'+nOpacity+')', 
 					color : '#'+strColor,
 					sizeW : '',
