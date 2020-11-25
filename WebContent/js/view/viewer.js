@@ -31,15 +31,17 @@ $.Viewer = {
 			$.Common.ShowProgress("#info_progress","Waiting..","000000","0.7");
 			$.Common.ShowProgress("#original_progress","Waiting..","000000","0.7");
 
-			// if($.Viewer.params.USE_BOOKMARK) {
-			// 	$.getMultiScripts([g_VIEW_BOOKMARK_URL, g_CANVAS_LIB])
-			// 		.fail(function(err) {
-			// 			$.Common.simpleToast("Failed to load Bookmark.");
-			// 		})
-			// 		.done(function(){
-			// 			$.Viewer.isBookmarkLoaded = true;
-			// 		});
-			// }
+			if($.Viewer.params.USE_BOOKMARK) {
+				if($.Common.GetBrowserVersion().ActingVersion > 9) {
+					$.getMultiScripts([g_VIEW_BOOKMARK_URL, g_CANVAS_LIB, g_DRAW_BOOKMARK_WEB])
+						.fail(function (err) {
+							$.Common.simpleToast("Failed to load Bookmark.");
+						})
+						.done(function () {
+							$.Viewer.isBookmarkLoaded = true;
+						});
+				}
+			}
 
 			$(window).on('resize', function() {
 				// $.each($("[tag=drag]"), function(){
@@ -770,6 +772,7 @@ $.Viewer = {
 				canvas.attr({
 					"id": "bookmark",
 					"class": "bookmark",
+					"parent" : "viewer"
 				})
 
 				canvas.appendTo($("#originalImage"));
@@ -799,7 +802,7 @@ $.Viewer = {
 						e.preventDefault();
 						bookmarkContext.zoomOut();
 					})
-					
+
 					if("T" === $.Viewer.params.USE_BOOKMARK_DRAW) {
 						if($.Viewer.drawContext === null) {
 							$.Viewer.drawContext = Draw();
@@ -905,7 +908,7 @@ $.Viewer = {
 					$.Viewer.displaySlipInfo(objSelelctedItem);
 
 					//Show original image
-					if(version > 9) {
+					if(version > 9 && $.Viewer.isBookmarkLoaded) {
 						$.Viewer.displayCanvasOriginal(objSelelctedItem);
 					}
 					else {

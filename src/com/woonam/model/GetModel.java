@@ -24,7 +24,7 @@ public class GetModel {
 	private Common m_C				 	= null;
 	private HttpSession session		= null;
 	private Logger logger = null;
-	private PreparedStatement pStmt = null;
+//	private PreparedStatement pStmt = null;
 	
 	public GetModel(AgentConnect AC, HttpSession session)
 	{
@@ -33,7 +33,7 @@ public class GetModel {
 		this.m_Profile 	= AC.getProfile();
 		this.m_C 		= new Common();
 		this.session 	= session;
-		this.pStmt		= new PreparedStatement(m_Profile);
+//		this.pStmt		= new PreparedStatement(m_Profile);
 	}
 	
 	public GetModel(AgentConnect AC)
@@ -43,7 +43,7 @@ public class GetModel {
 		this.m_Profile 	= AC.getProfile();
 		this.m_C 		= new Common();
 		this.session 	= null;
-		this.pStmt		= new PreparedStatement(m_Profile);
+//		this.pStmt		= new PreparedStatement(m_Profile);
 	}
 	
 	
@@ -60,6 +60,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_USER_INFO);
 			pStmt.setString(0, strUserID);
 			pStmt.setString(1, strCoCD);
@@ -94,6 +95,7 @@ public class GetModel {
 	
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_ORIGINAL_INFO);
 			pStmt.setString(0, orgIRN);
 					
@@ -123,6 +125,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_NEXT_JDOC_INDEX);
 			pStmt.setString(0, jdocNo);
 
@@ -156,6 +159,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.COPY_SLIP_COCARD);
 			pStmt.setString(0, from);
 			pStmt.setString(1, to);
@@ -188,6 +192,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_SDOC_NO);
 			pStmt.setString(0, key);
 			pStmt.setString(1, sdocNo);
@@ -220,6 +225,7 @@ public class GetModel {
 	
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_ADDFILE_NAME);
 			pStmt.setString(0, docIRN);
 					
@@ -252,6 +258,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_API_SLIP_CNT);
 			pStmt.setProcArray(0, new ArrayList<Object>(Arrays.asList(arKey)));
 			pStmt.setString(1, type);
@@ -283,6 +290,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_RECYCLE_LIST);
 			m_AC.GetData(pStmt.getQuery(), strFuncName);
 				
@@ -315,6 +323,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_SLIP_LIST);
 			pStmt.setProcArray(0, new ArrayList<Object>(Arrays.asList(arValue)));
 			pStmt.setString(1, "SDOC_NO");
@@ -356,6 +365,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.VERIFY_SLIP_CNT);
 			pStmt.setArray(0, list);
 			m_AC.GetData(pStmt.getQuery(), strFuncName);
@@ -386,6 +396,7 @@ public class GetModel {
 	
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_JDOCNO_INDEX);
 			pStmt.setString(0, key);
 			m_AC.GetData(pStmt.getQuery(), strFuncName);
@@ -425,6 +436,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.VERIFY_THUMB_CNT);
 			pStmt.setArray(0, list);
 			m_AC.GetData(pStmt.getQuery(), strFuncName);
@@ -457,6 +469,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_ATTACH_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(arValue)));
 			pStmt.setString(1, "SDOC_NO");
@@ -496,6 +509,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_API_SLIP_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(arKey)));
 			pStmt.setString(1, type);
@@ -534,6 +548,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_API_SLIP_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(arKey)));
 			pStmt.setString(1, type);
@@ -573,6 +588,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_CARD_CONVERT_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(strApprNo)));
 			pStmt.setString(1, strPTIstat);
@@ -618,6 +634,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_CASH_CONVERT_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(strApprNo)));
 			pStmt.setString(1, strPTIstat);
@@ -666,6 +683,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_REPORT_CONVERT_LIST);
 			pStmt.setString(0, strType);
 			pStmt.setString(1, strApprNo);
@@ -713,6 +731,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_ORDER_CONVERT_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(strApprNo)));
 			pStmt.setString(1, strPTIstat);
@@ -759,6 +778,7 @@ public class GetModel {
 		
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_TAX_CONVERT_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(strApprNo)));
 			pStmt.setString(1, strPTIstat);
@@ -798,7 +818,8 @@ public class GetModel {
 		//String[] strApprNo	= m_C.getParamValue(mapParams, "ITEM_KEY");
 		String[] strItemKey			= m_C.getParamValue(mapParams, "ITEM_KEY");
 		try {
-			
+
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_TAXITEM_CONVERT_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(strItemKey)));
 			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
@@ -828,7 +849,8 @@ public class GetModel {
 		//String[] strApprNo	= m_C.getParamValue(mapParams, "ITEM_KEY");
 		String[] strItemKey			= m_C.getParamValue(mapParams, "ITEM_KEY");
 		try {
-			
+
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_ORDERITEM_CONVERT_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(strItemKey)));
 			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
@@ -933,6 +955,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_COCARD_LIST);
 			pStmt.setString(0, strKey);
 			pStmt.setString(1, regUser);
@@ -977,6 +1000,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.MAPPING_CARD_MULTI);
 
 			//	pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(key)));
@@ -1028,7 +1052,8 @@ public class GetModel {
 
 		try
     	{
-    		pStmt.setQuery(Queries.GET_ATTACH_LIST);
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
+			pStmt.setQuery(Queries.GET_ATTACH_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(arKey)));
 			pStmt.setString(1, keyType);		
 			pStmt.setString(2, strLang);
@@ -1074,6 +1099,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_SLIP_LIST);
 			pStmt.setString(0, key);
 			pStmt.setString(1, "SDOC_NO");
@@ -1118,7 +1144,8 @@ public class GetModel {
 		
 		try
     	{
-    		pStmt.setQuery(Queries.GET_SLIP_LIST);
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
+			pStmt.setQuery(Queries.GET_SLIP_LIST);
 			pStmt.setArray(0, new ArrayList<Object>(Arrays.asList(arKey)));
 			pStmt.setString(1, keyType);
 			pStmt.setString(2,strLang);
@@ -1164,6 +1191,7 @@ public class GetModel {
 
 		try
 		{
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_BOOKMARK_LIST);
 			pStmt.setString(0, sdocNo);
 			pStmt.setString(1, slipIrn);
@@ -1203,7 +1231,8 @@ public class GetModel {
 		
     	try
     	{
-    		pStmt.setQuery(Queries.GET_COMMENT_COUNT);
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
+			pStmt.setQuery(Queries.GET_COMMENT_COUNT);
     		pStmt.setString(0, strJDocNo);
     	
     		m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
@@ -1238,7 +1267,8 @@ public class GetModel {
 		
     	try
     	{
-    		pStmt.setQuery(Queries.GET_COMMENT_LIST);
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
+			pStmt.setQuery(Queries.GET_COMMENT_LIST);
     		pStmt.setString(0, strJDocNo);
     		pStmt.setString(1, strLang);
     	
@@ -1286,7 +1316,8 @@ public class GetModel {
 		String strJDocNo			= m_C.getParamValue(mapParams, "KEY", null);
     	try
     	{
-    		pStmt.setQuery(Queries.GET_HISTORY_LIST);
+			PreparedStatement pStmt = new PreparedStatement(m_Profile);
+			pStmt.setQuery(Queries.GET_HISTORY_LIST);
     		pStmt.setString(0, strJDocNo);
     		pStmt.setString(1, "JDOC_NO");
     		pStmt.setString(2, strLang);

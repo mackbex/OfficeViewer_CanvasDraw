@@ -73,6 +73,7 @@ public class PreparedStatement {
 
 	public void setQuery(String query) {
 		this.strQuery = query;
+		nQMCnt = 0;
 
 		String regEx = "[?]";
 
@@ -84,6 +85,7 @@ public class PreparedStatement {
 		}
 
 		matcher.reset();
+		listVal.clear();
 	}
 
 	

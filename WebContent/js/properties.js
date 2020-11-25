@@ -10,7 +10,7 @@ $.Lang = {
 			Actor : {
 				"E-EVIDENCE" : "전자증빙",
 				"EVIDENCE_KEY" : "승인번호",
-				"ATTACH" : "관련근거 및 첨부파일",
+				"ATTACH" : "첨부파일",
 				"SDOC_NAME" : "증빙서 명",
 				"REG_USER" : "등록자",
 				"CHECKING_XPI" : "전자증빙 설치여부를 확인중입니다.",
@@ -207,6 +207,7 @@ $.Lang = {
 				"REMOVE_SHAPE" : "삭제",
 				"NO_BACKGROUND" : "배경 없음",
 				"FAILED_REMOVE_BOOKMARK" : "삭제에 실패했습니다.",
+				"FAILED_MODIFY_BOOKMARK" : "수정에 실패했습니다.",
 				"ERR_TOO_SMALL" : "크기가 너무 작습니다.",
 			},
 			LocalWAS : {
@@ -354,12 +355,12 @@ $.Menu = {
 				// 	"CS_OPERATION" :"1",
 				// 	"MODE" : "EDIT"
 				// },
-				// {
-				// 	"ID" : "ADD_SCAN",
-				// 	"ICON" : "image/common/context/scanner.png",
-				// 	"CS_OPERATION" :"1",
-				// 	"MODE" : "EDIT"
-				// },
+				{
+					"ID" : "ADD_SCAN",
+					"ICON" : "image/common/context/scanner.png",
+					"CS_OPERATION" :"1",
+					"MODE" : "EDIT"
+				},
 				// {
 				// 	"ID" : "ADD_AFTER",
 				// 	"ICON" : "image/common/context/add_after.png",
@@ -386,11 +387,6 @@ $.Menu = {
 					"ID" : "ADD_ATTACH",
 					"ICON" : "image/common/context/add_attach.png",
 					"CS_OPERATION" :"1",
-					"MODE" : "EDIT"
-				},
-				{
-					"ID" : "OPEN_RELATED_POPUP",
-					"ICON" : "image/common/context/payment.png",
 					"MODE" : "EDIT"
 				},
 				{
@@ -546,12 +542,12 @@ $.Menu = {
 				// 	"CS_OPERATION" :"1",
 				// 	"MODE" : "EDIT"
 				// },
-				// {
-				// 	"ID" : "ADD_SCAN",
-				// 	"ICON" : "image/common/context/scanner.png",
-				// 	"CS_OPERATION" :"1",
-				// 	"MODE" : "EDIT"
-				// },
+				{
+					"ID" : "ADD_SCAN",
+					"ICON" : "image/common/context/scanner.png",
+					"CS_OPERATION" :"1",
+					"MODE" : "EDIT"
+				},
 				// {
 				// 	"ID" : "ADD_AFTER",
 				// 	"ICON" : "image/common/context/add_after.png",

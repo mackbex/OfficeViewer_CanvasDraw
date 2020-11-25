@@ -263,89 +263,7 @@ $.Operation  = {
 			$.OfficeXPI.CallLocalWAS(sbParam.toString(), target.pageSubmit);
 
 		},
-		Open_Related : function(target, objData) {
 
-			// if(!$.Operation.detectCS(target, objData, true)) {
-			// 	return;
-			// }
-
-			var popupTitle = "Related";
-			var sbURL = new StringBuffer();
-			sbURL.append(g_RootURL);
-			sbURL.append("related.jsp");
-			sbURL.append("?KEY="+target.params.KEY);
-			sbURL.append("&KEY_TYPE="+target.params.KEY_TYPE);
-			sbURL.append("&LANG="+target.params.LANG);
-			sbURL.append("&VIEW_MODE="+target.params.VIEW_MODE);
-			sbURL.append("&SVR_MODE="+target.params.SVR_MODE);
-			sbURL.append("&XPI_PORT_HTTPS="+target.params.XPI_PORT_HTTPS);
-			sbURL.append("&XPI_PORT_HTTP="+target.params.XPI_PORT_HTTP);
-
-			// objParams["KEY"] 			= target.params.KEY;
-			// objParams["KEY_TYPE"] 		= target.params.KEY_TYPE;
-			// objParams["LANG"] 				= target.params.LANG;
-			// objParams["VIEW_MODE"] 		= target.params.VIEW_MODE;
-			// objParams["SVR_MODE"]		= target.params.SVR_MODE;
-			// objParams["XPI_PORT"]		= target.params.XPI_PORT;
-
-			var nWidth 	= 900;
-			var nHeight 	= 785;
-			var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
-
-			var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0');
-
-
-			//
-			// var popupTitle = "Payment";
-			// var sbURL = new StringBuffer();
-			// sbURL.append(g_RootURL+"payment.jsp");
-			//
-			// var nWidth 	= 900;
-			// var nHeight 	= 700;
-			// var vPopupCenterPosition = $.Common.getDisplayCenterPosition(nWidth, nHeight);
-			//
-			// var elPopup = window.open(sbURL.toString(), popupTitle, vPopupCenterPosition+', toolbar=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0');
-			//
-			// //Post submit to popup
-			// var objParams = {};
-			// objParams["KEY"] 			= target.params.KEY;
-			// objParams["KEY_TYPE"] 		= target.params.KEY_TYPE;
-			// objParams["LANG"] 				= target.params.LANG;
-			// objParams["VIEW_MODE"] 		= target.params.VIEW_MODE;
-			// objParams["SVR_MODE"]		= target.params.SVR_MODE;
-			// objParams["XPI_PORT"]		= target.params.XPI_PORT;
-			//
-			//
-			// $.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
-		},
-		Add_Payment : function(target, objData) {
-
-			var sbParam 	= new StringBuffer();
-
-			sbParam.append("/RUN");
-			sbParam.append("/CMD'PTI'");
-			sbParam.append(" /PROJ'"+target.params.SERVER_KEY+"'");
-			sbParam.append(" /SVR'"+target.params.SVR_MODE+"'");
-			sbParam.append(" /CALL'WAS'");
-			sbParam.append(" /WORK'"+objData.WORK_GROUP+"'");
-			sbParam.append(" /LANG'"+target.params.LANG.toUpperCase()+"'");
-			sbParam.append(" /CORP'"+target.params.CORP_NO+"'");
-			sbParam.append(" /USER'"+target.params.USER_ID+"'");
-			sbParam.append(" /AUTORUN'WEB(APPR)'");
-			sbParam.append(" /KEYTYPE'JDOC_NO'");
-			sbParam.append(" /VIEW_URL'"+objData.VIEW_URL.replace("?","？")+"'");
-			sbParam.append(" /PRINT_URL'"+objData.PRINT_URL.replace("?","？")+"'");
-			sbParam.append(" /TITLE'"+encodeURIComponent(encodeURIComponent(objData.TITLE))+"'");
-			sbParam.append(" /KEY'"+target.params.KEY+"'");
-			sbParam.append(" /SLIP_TYPE''");
-			//sbParam.append(" /AFTER'"+objData.SDOC_AFTER+"'");
-			sbParam.append(" /MODE'"+target.params.VIEW_MODE+"'");
-
-			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
-			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
-
-			$.OfficeXPI.CallLocalWAS(sbParam.toString(), target.pageSubmit);
-		} ,
 		//Rotate Slip 
 		Rotate_Slip : function(target,objData, degrees) {
 				
@@ -922,6 +840,9 @@ $.Operation  = {
 			// }
 			
 			$.Common.postSubmit(sbURL.toString(), objParams, "post", popupTitle);
+			$(elPopup).unload(function(){
+				target.pageSubmit();
+			});
 			
 		},
 	//Open comment

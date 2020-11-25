@@ -35,6 +35,8 @@ public class BookmarkController extends HttpServlet{
 
 	enum ENUM_COMMAND {
 		ADD_BOOKMARK,
+		REMOVE_BOOKMARK,
+		MODIFY_BOOKMARK
 	}
 
 	public BookmarkController() {
@@ -118,6 +120,56 @@ public class BookmarkController extends HttpServlet{
 					}
 					else {
 						out.print(m_C.writeResultMsg("F", "FAILED_ADD_BOOKMARK"));
+					}
+				}
+				break;
+				case REMOVE_BOOKMARK : {
+
+					String[] arrParam = {"MARK_IRN"};
+					if(m_C.IsNullParam(arrParam, mapParams))
+					{
+						logger.error("Parameter of "+strCommand+" is NULL.");
+						out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
+						return;
+					}
+
+					if(!m_C.chk_UserPermission(m_GM, session))
+					{
+						logger.error("Permission denied.");
+						out.print(m_C.writeResultMsg("F", "PERMISSION_DENIED"));
+						return;
+					}
+//					out.print(m_C.writeResultMsg("F", "FAILED_REMOVE_BOOKMARK"));
+					if(m_SM.removeBookmark(mapParams)) {
+						out.print(m_C.writeResultMsg("T", ""));
+					}
+					else {
+						out.print(m_C.writeResultMsg("F", "FAILED_REMOVE_BOOKMARK"));
+					}
+				}
+				break;
+				case MODIFY_BOOKMARK : {
+
+					String[] arrParam = {"MARK_IRN", "FIELD"};
+					if(m_C.IsNullParam(arrParam, mapParams))
+					{
+						logger.error("Parameter of "+strCommand+" is NULL.");
+						out.print(m_C.writeResultMsg("F", "PARAMETER_IS_NULL"));
+						return;
+					}
+
+					if(!m_C.chk_UserPermission(m_GM, session))
+					{
+						logger.error("Permission denied.");
+						out.print(m_C.writeResultMsg("F", "PERMISSION_DENIED"));
+						return;
+					}
+//					out.print(m_C.writeResultMsg("F", "FAILED_REMOVE_BOOKMARK"));
+					if(m_SM.modifyBookmark(mapParams)) {
+						out.print(m_C.writeResultMsg("T", ""));
+					}
+					else {
+						out.print(m_C.writeResultMsg("F", "FAILED_REMOVE_BOOKMARK"));
 					}
 				}
 				break;

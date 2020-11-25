@@ -27,8 +27,6 @@ $.Actor = {
 			$.Common.ShowProgress("#slip_progress","Waiting..","000000","0.7");
 			$.Common.ShowProgress("#attach_progress","Waiting..","000000","0.7");
 
-
-
 			/**
 			 * resize scroll window on resize browser
 			 */
@@ -62,15 +60,17 @@ $.Actor = {
 			$.Actor.currentKey = $.Actor.params.KEY;
 			//}
 
-			// if($.Actor.params.USE_BOOKMARK) {
-			// 	$.getMultiScripts([g_VIEW_BOOKMARK_URL, g_CANVAS_LIB])
-			// 		.fail(function(err) {
-			// 			$.Common.simpleToast("Failed to load Bookmark.");
-			// 		})
-			// 		.done(function(){
-			// 			$.Actor.isBookmarkLoaded = true;
-			// 		});
-			// }
+			if($.Actor.params.USE_BOOKMARK) {
+				if($.Common.GetBrowserVersion().ActingVersion > 9) {
+					$.getMultiScripts([g_VIEW_BOOKMARK_URL, g_CANVAS_LIB])
+					.fail(function(err) {
+						$.Common.simpleToast("Failed to load Bookmark.");
+					})
+					.done(function(){
+						$.Actor.isBookmarkLoaded = true;
+					});
+				}
+			}
 			
 			$.Actor.initButtons();
 			//Set globalization.
@@ -271,30 +271,34 @@ $.Actor = {
 				}, 400);
 
 
-				var version = $.Common.GetBrowserVersion().ActingVersion;
-				if(version >= 9) {
+				// var version = $.Common.GetBrowserVersion().ActingVersion;
+				// if(version > 9) {
 
-
-					$.each($(".slip_item"), function(i){
-						var curObj 			= $.Actor.objSlipItem[$(this).attr("idx")];
-						var bookmarkItem = curObj["BOOKMARKS"];
-
-						var elBookmark = $(this).find(".bookmark");
-
-						var ctx = elBookmark[0].getContext("2d");
-
-						ctx.clearRect (0, 0, ctx.canvas.width, ctx.canvas.height);
-						
-						elBookmark.attr({
-							"width": $(this).find(".area_thumb").width(),
-							"height": $(this).find(".area_thumb").height(),
+					if($.Actor.isBookmarkLoaded) {
+						$.each($.Actor.objSlipItem, function (){
+							$.Actor.reloadBookmark(this);
 						});
-
-						
-						$.Bookmark.Draw_BookmarkItem(elBookmark[0], bookmarkItem, curObj["SLIP_ROTATE"]);
-
-					});
-				}
+					}
+					// $.each($(".slip_item"), function(i){
+					// 	var curObj 			= $.Actor.objSlipItem[$(this).attr("idx")];
+					// 	var bookmarkItem = curObj["BOOKMARKS"];
+					//
+					// 	var elBookmark = $(this).find(".bookmark");
+					//
+					// 	var ctx = elBookmark[0].getContext("2d");
+					//
+					// 	ctx.clearRect (0, 0, ctx.canvas.width, ctx.canvas.height);
+					//
+					// 	elBookmark.attr({
+					// 		"width": $(this).find(".area_thumb").width(),
+					// 		"height": $(this).find(".area_thumb").height(),
+					// 	});
+					//
+					//
+					// 	$.Bookmark.Draw_BookmarkItem(elBookmark[0], bookmarkItem, curObj["SLIP_ROTATE"]);
+					//
+					// });
+				// }
 
 				$.Actor.is_Maximized = true;
 			}
@@ -321,34 +325,39 @@ $.Actor = {
 				}, 400);
 				$.Actor.is_Maximized = false;
 
-				var version = $.Common.GetBrowserVersion().ActingVersion;
-				if(version >= 9) {
-
-					// $("[class=bookmark]").css({
-					// 	"width":$(".area_thumb").width(),
-					// 	"height":$(".area_thumb").height()
-					// });
-
-					$.each($(".slip_item"), function(i){
-						var curObj 			= $.Actor.objSlipItem[$(this).attr("idx")];
-						var bookmarkItem = curObj["BOOKMARKS"];
-
-						var elBookmark = $(this).find(".bookmark");
-
-						var ctx = elBookmark[0].getContext("2d");
-
-						ctx.clearRect (0, 0, ctx.canvas.width, ctx.canvas.height);
-
-						elBookmark.attr({
-							"width": $(this).find(".area_thumb").width(),
-							"height": $(this).find(".area_thumb").height(),
-						});
-
-
-						$.Bookmark.Draw_BookmarkItem(elBookmark[0], bookmarkItem, curObj["SLIP_ROTATE"]);
-
+				// var version = $.Common.GetBrowserVersion().ActingVersion;
+				if($.Actor.isBookmarkLoaded) {
+					$.each($.Actor.objSlipItem, function (){
+						$.Actor.reloadBookmark(this);
 					});
 				}
+				// if(version >= 9) {
+				//
+				// 	// $("[class=bookmark]").css({
+				// 	// 	"width":$(".area_thumb").width(),
+				// 	// 	"height":$(".area_thumb").height()
+				// 	// });
+				//
+				// 	$.each($(".slip_item"), function(i){
+				// 		var curObj 			= $.Actor.objSlipItem[$(this).attr("idx")];
+				// 		var bookmarkItem = curObj["BOOKMARKS"];
+				//
+				// 		var elBookmark = $(this).find(".bookmark");
+				//
+				// 		var ctx = elBookmark[0].getContext("2d");
+				//
+				// 		ctx.clearRect (0, 0, ctx.canvas.width, ctx.canvas.height);
+				//
+				// 		elBookmark.attr({
+				// 			"width": $(this).find(".area_thumb").width(),
+				// 			"height": $(this).find(".area_thumb").height(),
+				// 		});
+				//
+				//
+				// 		$.Bookmark.Draw_BookmarkItem(elBookmark[0], bookmarkItem, curObj["SLIP_ROTATE"]);
+				//
+				// 	});
+				// }
 			}
 		},
 
@@ -1033,41 +1042,40 @@ $.Actor = {
 
 					}
 
-					//Draw option icon
-
 					if(version > 9) {
-						// if(parent.isBookmarkLoaded) {
+						if (parent.isBookmarkLoaded) {
 
-						var curObj = parent.objSlipItem[idx];
-						var bookmarkItem = curObj["BOOKMARKS"];
+							var curObj = parent.objSlipItem[idx];
+							var bookmarkItem = curObj["BOOKMARKS"];
 
-						if (bookmarkItem != null && bookmarkItem.length > 0) {
+							if (bookmarkItem != null && bookmarkItem.length > 0) {
 
-							var imgContainer = $(this).find(".area_thumb");
+								var imgContainer = $(this).find(".area_thumb");
 
 
-							var bookmarkContainer = $(document.createElement('div'));
+								var bookmarkContainer = $(document.createElement('div'));
 
-							$(bookmarkContainer).attr({
-								"class": "bookmark",
-								"id": curObj["SLIP_IRN"],
-							}).css({
-								"width": imgContainer.width(),
-								"height": imgContainer.height(),
-							});
+								$(bookmarkContainer).attr({
+									"class": "bookmark",
+									"id": curObj["SLIP_IRN"],
+									"parent": "actor"
+								}).css({
+									"width": imgContainer.width(),
+									"height": imgContainer.height(),
+								});
 
-							$(bookmarkContainer).insertAfter($(this).find(".link"));
-							curObj['IMG_DPI'] = parent.params.IMG_DPI;
+								$(bookmarkContainer).insertAfter($(this).find(".link"));
+								curObj['IMG_DPI'] = parent.params.IMG_DPI;
 
-							var img = $(this).find(".thumb_img");
-							var bookmarkContext = Bookmark();
-							bookmarkContext.init(bookmarkContainer, img, curObj, parent.params);
-							bookmarkContext.drawItems(bookmarkItem, curObj["SLIP_ROTATE"]);
-							this.data("bookmarkContext", bookmarkContext);
-							// $(this).bookmarkContext = bookmarkContext;
-							// var canvas = Bookmark();
-							// canvas.Draw_BookmarkItem(bookmark, bookmarkItem, curObj["SLIP_ROTATE"]);
-							// }
+								var img = $(this).find(".thumb_img");
+								var bookmarkContext = Bookmark();
+								bookmarkContext.init(bookmarkContainer, img, curObj, parent.params);
+								bookmarkContext.drawItems(bookmarkItem, curObj["SLIP_ROTATE"], $.Actor);
+								this.data("bookmarkContext", bookmarkContext);
+							}
+						}
+						else {
+							$.Common.simpleToast(parent.localeMsg.FAILED_LOAD_DRAW_BOOKMARK_TOOL);
 						}
 					}
 				});
@@ -1076,6 +1084,8 @@ $.Actor = {
 		reloadBookmark:function(slipInfo) {
 			var elImg = $("#slip_masonry").find("[idx='"+slipInfo.SLIP_IRN+"']");
 			var bookmarkContext = elImg.data("bookmarkContext");
+
+			bookmarkContext.resizeStage(elImg.width(), elImg.height());
 			bookmarkContext.drawItems(slipInfo.BOOKMARKS, slipInfo.SLIP_ROTATE);
 		},
 		/**

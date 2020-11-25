@@ -94,10 +94,16 @@ var Bookmark = function() {
                 width: container.width(),
                 height: container.height(),
                 draggable: true,
-                name : "stage"
+                name : "stage",
+                parentObject : container.attr("parent"),
             });
 
             this.addScrollEvent();
+        },
+        resizeStage : function(w, h) {
+            module.stage.width(w);
+            module.stage.height(h);
+            module.stage.draw();
         },
         addScrollEvent : function(){
             var scaleBy = module.scaleBy;
@@ -256,7 +262,7 @@ var Bookmark = function() {
             module.items = bookmarkItem;
             module.setFontZoom();
 
-            $.each(this.items, function () {
+            $.each(this.items, function (i) {
                 module.draw(module.shapeLayer, this);
             });
             module.stage.add(module.shapeLayer);
@@ -303,6 +309,8 @@ var Bookmark = function() {
                 case module.SHAPE_TYPE.NOTEBOX :
                     var lineColor = Konva.Util.getRGB(shape.find("#line")[0].stroke());
                     var bgColor = Konva.Util.getRGB(shape.find("#background")[0].fill());
+                    var fontColor = Konva.Util.getRGB(shape.find("#text")[0].fill());
+
                     item['MARK_ALPHA'] = $.Common.getRawOpacity(shape.find("#background")[0].opacity());
                     item['MARK_BACKCOLOR'] = bgColor['r']+","+bgColor['g']+","+bgColor['b'];
                     item['MARK_BACKGROUND'] = "1";
@@ -315,7 +323,7 @@ var Bookmark = function() {
                     item['MARK_LINECOLOR'] = lineColor['r']+","+lineColor['g']+","+lineColor['b'];
                     item['MARK_LINEWIDTH'] = shape.find("#line")[0].strokeWidth();
                     item['MARK_STYLE'] = "";
-                    item['MARK_TEXTCOLOR'] = shape.find("#text")[0].fill();
+                    item['MARK_TEXTCOLOR'] = fontColor['r']+","+fontColor['g']+","+fontColor['b'];
                     item['MARK_TYPE'] = module.SHAPE_TYPE.NOTEBOX.KEY;
                     break;
                 case module.SHAPE_TYPE.RECTANGLE :
@@ -323,7 +331,7 @@ var Bookmark = function() {
                     var bgColor = Konva.Util.getRGB(shape.find("#background")[0].fill());
                     item['MARK_ALPHA'] = "0";
                     item['MARK_BACKCOLOR'] = bgColor['r']+","+bgColor['g']+","+bgColor['b'];
-                    item['MARK_BACKGROUND'] = "0";
+                    item['MARK_BACKGROUND'] = shape.find("#background")[0].opacity() === 0 ? "1" : "0";
                     item['MARK_BOLD'] = "0";
                     item['MARK_COMMENT'] = "";
                     item['MARK_FONTNAME'] = "";
@@ -341,7 +349,7 @@ var Bookmark = function() {
                     var bgColor = Konva.Util.getRGB(shape.find("#background")[0].fill());
                     item['MARK_ALPHA'] = "0";
                     item['MARK_BACKCOLOR'] = bgColor['r']+","+bgColor['g']+","+bgColor['b'];
-                    item['MARK_BACKGROUND'] = "0";
+                    item['MARK_BACKGROUND'] = shape.find("#background")[0].opacity() === 0 ? "1" : "0";
                     item['MARK_BOLD'] = "0";
                     item['MARK_COMMENT'] = "";
                     item['MARK_FONTNAME'] = "";
@@ -399,32 +407,49 @@ var Bookmark = function() {
             // item.RIGHT += offsetLeft;
             // item.BOTTOM += offsetTop;
 
-            item.LINE_WIDTH = parseInt(item.MARK_LINEWIDTH) * ratio;
-            if (item.LINE_WIDTH < 1) item.LINE_WIDTH = 1;
+            item.LINE_WIDTH = parseInt(item.MARK_LINEWIDTH)// * ratio;
+            if("actor" === module.stage.attrs.parentObject.toLowerCase()) {
+                item.LINE_WIDTH = item.LINE_WIDTH * ratio * 10;
+                if (item.LINE_WIDTH < 1) item.LINE_WIDTH = 1;
+            }
+            // if (item.LINE_WIDTH < 1) item.LINE_WIDTH = 1;
 
 
+            var shapeNode = null;
             switch (item.MARK_TYPE) {
                 case module.SHAPE_TYPE.NOTEBOX.KEY :
-                    module.drawNotebox(item, layer);
+                    shapeNode = module.drawNotebox(item, layer);
                     break;
                 case module.SHAPE_TYPE.RECTANGLE.KEY :
-                    module.drawRectangle(item, layer);
+                    shapeNode = module.drawRectangle(item, layer);
                     break;
                 case module.SHAPE_TYPE.ELLIPSE.KEY :
-                   module.drawEllipse(item, layer);
+                    shapeNode = module.drawEllipse(item, layer);
                     break;
                 case module.SHAPE_TYPE.LIGHTPEN.KEY :
-                    module.drawLightPen(item, layer);
+                    shapeNode = module.drawLightPen(item, layer);
                     break;
                 default:
                     return;
             }
+            return shapeNode;
         },
         refreshThumbBookmark : function () {
             if(null !== module.actorComponent) {
                 module.targetImageInfo.BOOKMARKS = module.items;
                 module.actorComponent.reloadBookmark(module.targetImageInfo);
             }
+        },
+        refreshShape : function(markIrn) {
+            var shape = module.stage.find("#"+markIrn)[0];
+            shape.destroy();
+            var shapeNode = module.draw(module.shapeLayer, module.getShapeInfo(markIrn));
+            // if(null !== shapeNode) {
+            //     shape.draggable(true);
+            module.stage.draw();
+
+            return shapeNode;
+            // }
         },
         drawRectangle : function (item, layer) {
 
@@ -435,8 +460,8 @@ var Bookmark = function() {
             }
 
             var rectangle = new Konva.Group({
-                x: item.LEFT + (item.LINE_WIDTH / 2) ,
-                y: item.TOP + (item.LINE_WIDTH / 2),
+                x: item.LEFT  ,
+                y: item.TOP ,
                 width: item.WIDTH,
                 height: item.HEIGHT,
                 rotation: module.degree,
@@ -464,6 +489,7 @@ var Bookmark = function() {
             }));
 
             layer.add(rectangle);
+            return rectangle;
         },
         drawEllipse : function (item, layer) {
             var opacity = 0;
@@ -473,8 +499,8 @@ var Bookmark = function() {
             }
 
             var ellipse = new Konva.Group({
-                x: item.LEFT + (item.LINE_WIDTH / 2) + (item.WIDTH / 2),
-                y: item.TOP + (item.LINE_WIDTH / 2) + (item.HEIGHT / 2),
+                x: item.LEFT ,
+                y: item.TOP ,
                 width: item.WIDTH,
                 height: item.HEIGHT,
                 rotation: module.degree,
@@ -500,13 +526,13 @@ var Bookmark = function() {
             }));
 
             layer.add(ellipse);
+            return ellipse;
         },
         drawLightPen : function (item, layer) {
 
-
-            layer.add(new Konva.Rect({
-                x: item.LEFT + (item.LINE_WIDTH / 2),
-                y: item.TOP + (item.LINE_WIDTH / 2),
+            var lightPen = new Konva.Rect({
+                x: item.LEFT ,
+                y: item.TOP ,
                 width: item.WIDTH,
                 height: item.HEIGHT,
                 fill: 'rgb(' + item.MARK_LINECOLOR + ')',
@@ -516,18 +542,22 @@ var Bookmark = function() {
                 // draggable: true,
                 id : item.MARK_IRN,
                 shapeType : module.SHAPE_TYPE.LIGHTPEN
-            }));
+            });
 
+            layer.add(lightPen);
+
+            return lightPen;
         },
 
         drawNotebox : function(item, layer) {
 
-            var fontSize = (parseInt(item.MARK_FONTSIZE) * this.fontZoom);
+            var fontSize = parseInt(item.MARK_FONTSIZE) * module.imageRatio * 10; //module.fontZoom;
+
             var fontName = item.MARK_FONTNAME;
 
             var notebox = new Konva.Group({
-                x: item.LEFT + (item.LINE_WIDTH / 2),
-                y: item.TOP + (item.LINE_WIDTH / 2),
+                x: item.LEFT,
+                y: item.TOP ,
                 width: item.WIDTH,
                 height: item.HEIGHT,
                 rotation: module.degree,
@@ -585,6 +615,12 @@ var Bookmark = function() {
 
 
             layer.add(notebox);
+            return notebox;
+        },
+        getShapeInfo:function(markIrn) {
+          return $.grep(module.items, function(item){
+              return item.MARK_IRN === markIrn;
+          })[0];
         },
     }
     return module;

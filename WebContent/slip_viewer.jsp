@@ -269,9 +269,9 @@
 <script src="<c:url value='js/zoom/jquery.panzoom.js' />"></script>
 <script src="<c:url value='js/zoom/rotate.js' />"></script>
 <script src="<c:url value='/js/jquery.nicescroll.min.js' />"></script>
-<script src="<c:url value='js/bookmark/bookmark.js' />"></script>
-<script src="<c:url value='js/bookmark/draw.js' />"></script>
-<script src="<c:url value='js/bookmark/konva.min.js' />"></script>
+<%--<script src="<c:url value='js/bookmark/bookmark.js' />"></script>--%>
+<%--<script src="<c:url value='js/bookmark/draw.js' />"></script>--%>
+<%--<script src="<c:url value='js/bookmark/konva.min.js' />"></script>--%>
 <%--<script src="<c:url value='js/colorpicker/spectrum.js' />"></script>--%>
 </body>
 </html>

@@ -18,7 +18,8 @@ var Draw = function() {
         // toolboxHeight: "260px",
         isToolboxVisible: false,
         // viewer : null,
-        localMsg : null,
+        isColorPickerDragging : false,
+        localeMsg : null,
         currentShape : null,
         shapeLayer : null,
         colorPicker : null,
@@ -38,14 +39,14 @@ var Draw = function() {
             background : 0 // 0 : Visible , 1 : Invisible
         },
         panelType: null,
-        init: function (bookmark, localMsg, colorPickerContainer) {
+        init: function (bookmark, localeMsg, colorPickerContainer) {
 
             module.drawingMode = module.STATUS.IDLE;
 
             this.toggleToolbox(false);
             this.Bookmark = bookmark;
             // this.viewer = viewer;
-            this.localMsg =  localMsg;
+            this.localeMsg =  localeMsg;
 
             this.addToolBtn();
             this.setStageEvents();
@@ -57,17 +58,6 @@ var Draw = function() {
         },
         initRightClickMenu : function () {
 
-
-            // var menu = $(document.createElement('div')).css({
-            //     display:"inline-table",
-            //     // left:left,
-            //     // top:top,
-            //     position:"fixed",
-            //     zIndex:9999,
-            //     width:"auto"
-            // });
-
-
             $(document).on('contextmenu', function(e) {
                 e.preventDefault();
 
@@ -78,7 +68,7 @@ var Draw = function() {
                 var padding = 10;
 
                 var menu = $("<div id='drawContextMenu' class='draw_contextmenu'>" +
-                    "<div class='menu_item' id='removeShape'>"+module.localMsg.REMOVE_SHAPE+"</div>" +
+                    "<div class='menu_item' id='removeShape'>"+module.localeMsg.REMOVE_SHAPE+"</div>" +
                     "</div>")
                     .appendTo("#originalImage");
 
@@ -107,12 +97,6 @@ var Draw = function() {
                 var estimatedHeight = e.offsetY + menuHeight;
                 var windowHeight 	= module.Bookmark.stage.height();
 
-                // var isBottomAlign = menu.attr("bottom_align");
-                // if("true" === isBottomAlign) {
-                //     top = e.offsetY + module.currentShape.height() - menuHeight;
-                // }
-                // else
-                // {
                 if(estimatedHeight  > windowHeight)
                 {
                     top = windowHeight - menuHeight;
@@ -120,30 +104,14 @@ var Draw = function() {
                 else {
                     top = e.offsetY + padding;
                 }
-                // }
-                //
-                // var isSpacingTop = menu.attr("spacing_top");
-                // if("true" === isSpacingTop) {
-                //     top =  top + (module.currentShape.height() / 4)
-                // }
+
                 menu.css({
                     top:top,
                 });
 
                 menu.fadeIn(300, function(){ $(this).show(); });
 
-                $(window).blur(function () {
-                    menu.remove();
-                });
-
-                $(window).on('resize', function () {
-                    menu.remove();
-                });
-                $(window).on('mousewheel', function(){
-                    menu.remove();
-                });
-
-                $(window).on('click', function(){
+                $(window).on('blur resize mousewheel click', function () {
                     menu.remove();
                 });
             });
@@ -174,98 +142,156 @@ var Draw = function() {
                         ["#c00", "#e69138", "#f1c232", "#6aa84f", "#45818e", "#3d85c6", "#674ea7", "#a64d79"],
                     ],
 
-                    move: function (color) {
-
-                        switch (module.drawingInfo.currentTab) {
-                            case module.TAB_OPTION.BACKGROUND :
-                                module.drawingInfo.bgColor = color.toHexString();
-                                break;
-                            case module.TAB_OPTION.FONT :
-                                module.drawingInfo.fontColor = color.toHexString();
-                                break;
-                            case module.TAB_OPTION.LINE :
-                                module.drawingInfo.lineColor = color.toHexString();
-                                break;
-                            default: break;
-                        }
-
-                        if (module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
-                            switch (module.currentShape.attrs.shapeType) {
-                                case module.Bookmark.SHAPE_TYPE.LIGHTPEN :
-                                    module.currentShape.fill(color.toHexString());
-                                    module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_LINECOLOR" , color);
-                                    break;
-                                case module.Bookmark.SHAPE_TYPE.NOTEBOX :
-                                    switch (module.drawingInfo.currentTab) {
-                                        case module.TAB_OPTION.BACKGROUND :
-                                            module.currentShape.find("#background").fill(color.toHexString());
-                                            module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_BACKCOLOR" , color);
-                                            break;
-                                        case module.TAB_OPTION.LINE :
-                                            module.currentShape.find("#line").stroke(color.toHexString());
-                                            module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_LINECOLOR" , color);
-                                            break;
-                                        case module.TAB_OPTION.FONT :
-                                            module.currentShape.find("#text").fill(color.toHexString());
-                                            module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_TEXTCOLOR" , color);
-                                            break;
-                                        default: break;
-                                    }
-                                case module.Bookmark.SHAPE_TYPE.RECTANGLE :
-                                    switch (module.drawingInfo.currentTab) {
-                                        case module.TAB_OPTION.BACKGROUND :
-                                            module.currentShape.find("#background").fill(color.toHexString());
-                                            module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_BACKCOLOR" , color);
-                                            break;
-                                        case module.TAB_OPTION.LINE :
-                                            module.currentShape.find("#line").stroke(color.toHexString());
-                                            module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_LINECOLOR" , color);
-                                            break;
-                                    }
-                                    break;
-                                case module.Bookmark.SHAPE_TYPE.ELLIPSE :
-                                    switch (module.drawingInfo.currentTab) {
-                                        case module.TAB_OPTION.BACKGROUND :
-                                            module.currentShape.find("#background").fill(color.toHexString());
-                                            module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_BACKCOLOR" , color);
-                                            break;
-                                        case module.TAB_OPTION.LINE :
-                                            module.currentShape.find("#line").stroke(color.toHexString());
-                                            module.Bookmark.items = module.updateShapeColor(module.Bookmark.items, "MARK_LINECOLOR" , color);
-                                            break;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            module.shapeLayer.draw();
-                            module.Bookmark.refreshThumbBookmark();
-
-                        }
+                    move : function(color) {
+                        module.updateShapeColor(color);
                     }
-                })
+                }).on("dragstart.spectrum", function(e, color) {
+                    module.isColorPickerDragging = true;
+                }).on("dragstop.spectrum", function(e, color) {
+                    module.isColorPickerDragging = false;
+                    module.updateShapeColor(color);
+                });
             })
             .fail(function(){
                 $.Common.simpleToast("Failed to load ColorPicker");
             });
         },
-        updateShapeColor: function(items, target, picker){
-            return $.map(items, function(item) {
-                if(item.MARK_IRN === module.currentShape.id()) {
-                    item[target] = parseInt(picker['_r'])+","+parseInt(picker['_g'])+","+parseInt(picker['_b']);
+        updateShapeColor : function(color) {
+            switch (module.drawingInfo.currentTab) {
+                case module.TAB_OPTION.BACKGROUND :
+                    module.drawingInfo.bgColor = color.toHexString();
+                    break;
+                case module.TAB_OPTION.FONT :
+                    module.drawingInfo.fontColor = color.toHexString();
+                    break;
+                case module.TAB_OPTION.LINE :
+                    module.drawingInfo.lineColor = color.toHexString();
+                    break;
+                default:
+                    break;
+            }
+
+            if (module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+
+                var field = null;
+                switch (module.currentShape.attrs.shapeType) {
+                    case module.Bookmark.SHAPE_TYPE.LIGHTPEN :
+                        field = "MARK_LINECOLOR";
+                        break;
+                    case module.Bookmark.SHAPE_TYPE.NOTEBOX :
+                        switch (module.drawingInfo.currentTab) {
+                            case module.TAB_OPTION.BACKGROUND :
+                                field = "MARK_BACKCOLOR";
+                                break;
+                            case module.TAB_OPTION.LINE :
+                                field = "MARK_LINECOLOR";
+                                break;
+                            case module.TAB_OPTION.FONT :
+                                field = "MARK_TEXTCOLOR";
+                                break;
+                            default:
+                                break;
+                        }
+                    case module.Bookmark.SHAPE_TYPE.RECTANGLE :
+                        switch (module.drawingInfo.currentTab) {
+                            case module.TAB_OPTION.BACKGROUND :
+                                field = "MARK_BACKCOLOR";
+                                break;
+                            case module.TAB_OPTION.LINE :
+                                field = "MARK_LINECOLOR";
+                                break;
+                        }
+                        break;
+                    case module.Bookmark.SHAPE_TYPE.ELLIPSE :
+                        switch (module.drawingInfo.currentTab) {
+                            case module.TAB_OPTION.BACKGROUND :
+                                field = "MARK_BACKCOLOR";
+                                break;
+                            case module.TAB_OPTION.LINE :
+                                field = "MARK_LINECOLOR";
+                                break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+                color = color.toRgb();
+                var colorVal = color.r + "," + color.g + "," + color.b;
+                if(!module.isColorPickerDragging) {
+
+                    var params = {
+                        "MARK_IRN" : targetShapeInfo['MARK_IRN'],
+                        "FIELD" : field,
+                        "VALUE" : colorVal,
+                    };
+
+                    $.Common.ShowProgress("#bookmarkProgress","","000000","0", 'rotation', 30);
+
+                    $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function(){
+                        //redraw when success
+                        var curTab = module.drawingInfo.currentTab;
+
+                        targetShapeInfo[field] = colorVal;
+
+                        module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                        module.refreshShape(targetShapeInfo['MARK_IRN']);
+
+                        $("#tabTitle").find("[tab-id="+curTab+"]").trigger("click");
+                        module.Bookmark.refreshThumbBookmark();
+
+                    }).fail(function(){
+                        $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                        var shape = module.Bookmark.stage.find("#"+targetShapeInfo['MARK_IRN'])[0];
+                        module.changeShapeColor(shape, targetShapeInfo[field], field);
+                    }).always(function(){
+                        $.Common.RemoveProgress("#bookmarkProgress");
+                        module.colorPicker.spectrum("set", "rgb("+targetShapeInfo[field]+")");
+                    });
+                }
+                else {
+                    module.changeShapeColor(module.currentShape, colorVal, field);
+                }
+            }
+        },
+        refreshShape : function(markIrn) {
+
+            var shape = module.Bookmark.refreshShape(markIrn);
+            module.addClickEvent(shape);
+            shape.fire("click");
+
+            return shape;
+        },
+        updateShapeInfo : function(bookmarkItems, targetObj) {
+            return $.map(bookmarkItems, function(item) {
+                if(item.MARK_IRN === targetObj['MARK_IRN']) {
+                    item = targetObj;
                 }
                 return item;
             });
         },
-        updateShapeValue: function(items, target, value) {
-            return $.map(items, function(item) {
-                if(item.MARK_IRN === module.currentShape.id()) {
-                    item[target] = value;
-                }
-                return item;
-            });
-        } ,
+        changeShapeColor : function(shapeNode, color, field) {
+            switch(field) {
+                case "MARK_LINECOLOR" :
+                    if(shapeNode.attrs.shapeType === module.Bookmark.SHAPE_TYPE.LIGHTPEN) {
+                        shapeNode.fill("rgb("+color+")");
+                    }
+                    else {
+                        shapeNode.find("#line").stroke("rgb("+color+")");
+                    }
+
+                    break;
+                case "MARK_BACKCOLOR" :
+                    shapeNode.find("#background").fill("rgb("+color+")");
+                    break;
+                case "MARK_TEXTCOLOR" :
+                    shapeNode.find("#text").fill("rgb("+color+")");
+                    break;
+            }
+
+            module.shapeLayer.draw();
+        },
         setStageEvents: function() {
             module.Bookmark.stage.on("click",function(e){
                 if("ORI_IMAGE" === e.target.id() || null === e.target.id() || "stage" === e.target.name()) {
@@ -283,15 +309,11 @@ var Draw = function() {
             })
         },
         addClickEvent : function(shape) {
-            // module.toggleToolbox(false);
-
             if(shape.attrs.shapeType === module.Bookmark.SHAPE_TYPE.NOTEBOX) {
-                module.addModifyTextEvent(shape.find("#text")[0]);
+                module.addModifyTextEvent(shape.find("#text")[0], shape.id());
             }
 
             shape.off('click').on('click', function(e) {
-                // e.cancelBubble = true;
-                // module.Bookmark.
                 module.deSelectAll();
                 module.removeStageDrawEvent();
                 module.drawingMode = module.STATUS.EDITING;
@@ -319,20 +341,39 @@ var Draw = function() {
             });
         },
         updateShapeMatrix:function(shape){
-            module.Bookmark.items = $.map(module.Bookmark.items, function (item) {
-                // var item = this;
-                if (item.MARK_IRN === module.currentShape.id()) {
-                    var oriImg =  module.Bookmark.stage.find("#ORI_IMAGE")[0];
-                    var left = (shape.x() - oriImg.x()) / module.Bookmark.imageRatio;
-                    var top = (shape.y() - oriImg.y()) / module.Bookmark.imageRatio;
-                    var right = (shape.width() + shape.x() - oriImg.x()) / module.Bookmark.imageRatio;
-                    var bottom = (shape.height() + shape.y() - oriImg.y()) / module.Bookmark.imageRatio;
-                    item.MARK_RECT = left + "," + top + "," + right + "," + bottom;
-                }
-                return item;
-            });
+            var markIrn = shape.id();
+            var targetShapeInfo = module.Bookmark.getShapeInfo(markIrn);
+            var strokeWidth = 0;//shape.find("#line")[0].strokeWidth();
 
-            module.Bookmark.refreshThumbBookmark();
+            var oriImg =  module.Bookmark.stage.find("#ORI_IMAGE")[0];
+            var left = (shape.x() - oriImg.x() - (strokeWidth / 2)) / module.Bookmark.imageRatio;
+            var top = (shape.y() - oriImg.y() - (strokeWidth / 2)) / module.Bookmark.imageRatio;
+            var right = (shape.width() + shape.x() - (strokeWidth / 2) - oriImg.x()) / module.Bookmark.imageRatio;
+            var bottom = (shape.height() + shape.y() - (strokeWidth / 2) - oriImg.y()) / module.Bookmark.imageRatio;
+
+            var markRect = parseInt(left) + "," + parseInt(top) + "," + parseInt(right) + "," + parseInt(bottom);
+
+
+            var params = {
+                "MARK_IRN" : markIrn,
+                "FIELD" : "MARK_RECT",
+                "VALUE" : markRect//targetShapeInfo.MARK_RECT,
+            };
+            //
+            $.Common.ShowProgress("#bookmarkProgress","","000000","0", 'rotation', 30);
+            //
+            $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function() {
+                targetShapeInfo['MARK_RECT'] = markRect;
+                module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                module.Bookmark.refreshThumbBookmark();
+            })
+            .fail(function(){
+                $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                module.refreshShape(markIrn);
+            })
+            .always(function(){
+                $.Common.HideProgress("#bookmarkProgress");
+            });
         },
         setCurrentProps: function() {
             var shape = module.currentShape;
@@ -346,38 +387,15 @@ var Draw = function() {
             module.shapeLayer.draw();
             module.hideToolbox();
             module.currentShape = null;
-            // module.deSelectAll();
+            module.drawingInfo.currentTab = null;
         },
 
-        // disablePanzoom : function() {
         drawShape : function(type) {
-
-            // module.mode = module.STATUS.DRAWING;
             module.deSelectAll();
 
-
-
-            // this.disablePanzoom();
             module.drawingMode = module.STATUS.IDLE;
-            // switch (type) {
-            //     case module.Bookmark.SHAPE_TYPE.LIGHTPEN :
-            //         module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-            //         break;
-            //     case module.Bookmark.SHAPE_TYPE.NOTEBOX :
-            //         module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-            //         break;
-            //     case module.Bookmark.SHAPE_TYPE.RECTANGLE :
-            //         module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-            //         break;
-            //     case module.Bookmark.SHAPE_TYPE.ELL :
-            //         module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-            //         break;
-            //     default: return;
-            // }
-
             module.showPanel(type);
             module.addStageDrawEvent(type);
-
         },
         addStageDrawEvent : function(type) {
 
@@ -414,14 +432,14 @@ var Draw = function() {
                             height: 0,
                             rotation: module.degree,
                             // draggable: true,
-                            opacity : 0.7,
+                            // opacity : 0.7,
                             id : $.Common.getIRN(),
                             shapeType : module.Bookmark.SHAPE_TYPE.RECTANGLE,
                         });
 
                         var bg = new Konva.Rect({
                             fill: module.drawingInfo.bgColor != null ? module.drawingInfo.bgColor : type.DEFAULT_VALUES.BACKGROUND.COLOR,
-                            // opacity : $.Common.getFloatOpacity(module.drawingInfo.opacity),
+                            opacity : module.drawingInfo.background === "1" ? 0 : type.DEFAULT_VALUES.BACKGROUND.OPACITY,
                             width: newShape.width(),
                             height: newShape.height(),
                             id:"background",
@@ -433,6 +451,7 @@ var Draw = function() {
                             strokeWidth: module.drawingInfo.lineWidth != null ? module.drawingInfo.lineWidth : type.DEFAULT_VALUES.LINE.WIDTH,
                             width: newShape.width(),
                             height: newShape.height(),
+                            opacity : 1,
                             id:"line",
                         });
                         newShape.add(line);
@@ -446,7 +465,7 @@ var Draw = function() {
                             height: 0,
                             rotation: module.degree,
                             // draggable: true,
-                            opacity : 0.7,
+                            // opacity : 0.7,
                             id : $.Common.getIRN(),
                             shapeType : module.Bookmark.SHAPE_TYPE.ELLIPSE,
                         });
@@ -454,6 +473,7 @@ var Draw = function() {
                         var bg = new Konva.Ellipse({
                             fill: module.drawingInfo.bgColor != null ? module.drawingInfo.bgColor : type.DEFAULT_VALUES.BACKGROUND.COLOR,
                             // opacity : $.Common.getFloatOpacity(module.drawingInfo.opacity),
+                            opacity : module.drawingInfo.background === "1" ? 0 : type.DEFAULT_VALUES.BACKGROUND.OPACITY,
                             width: newShape.width(),
                             height: newShape.height(),
                             id:"background",
@@ -465,6 +485,7 @@ var Draw = function() {
                             strokeWidth: module.drawingInfo.lineWidth != null ? module.drawingInfo.lineWidth : type.DEFAULT_VALUES.LINE.WIDTH,
                             width: newShape.width(),
                             height: newShape.height(),
+                            opacity : 1,
                             id:"line",
                         });
                         newShape.add(line);
@@ -515,6 +536,7 @@ var Draw = function() {
                             strokeWidth: module.LINE_WIDTH,
                             width: newShape.width(),
                             height: newShape.height(),
+                            opacity : 1,
                             id:"line",
                         });
                         newShape.add(line);
@@ -586,20 +608,21 @@ var Draw = function() {
                     // module.drawingMode = module.STATUS.IDLE;
 
                     if(module.currentShape.width() < module.minimumSize || module.currentShape.height() < module.minimumSize) {
-                        $.Common.simpleToast(module.localMsg.ERR_TOO_SMALL);
+                        $.Common.simpleToast(module.localeMsg.ERR_TOO_SMALL);
                         module.currentShape.destroy();
                         module.Bookmark.stage.draw();
                         return;
                     }
                     else {
                         var item = module.Bookmark.addShape(module.currentShape);
-                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.ADD_BOOKMARK, item)).then(function(res) {
-                            $.Common.ShowProgress("#bookmarkProgress","","000000","0", 'rotation', 30);
+                        $.Common.ShowProgress("#bookmarkProgress","","000000","0", 'rotation', 30);
+                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.ADD_BOOKMARK, item)).then(function() {
 
                             var shape = module.getCurrentShape(item['MARK_IRN']);
                             shape.listening(true);
-                            module.shapeLayer.draw()
+                            // module.shapeLayer.draw()
                             module.addClickEvent(shape);
+                            module.Bookmark.stage.draw();
 
                             module.Bookmark.refreshThumbBookmark();
                         })
@@ -615,9 +638,8 @@ var Draw = function() {
                             $.Common.RemoveProgress("#bookmarkProgress");
                         });
                     }
-
-
                 }
+                module.deSelectAll();
             })
         },
 
@@ -631,6 +653,621 @@ var Draw = function() {
             module.Bookmark && module.Bookmark.stage.off('mousedown.drawShape');
             module.Bookmark && module.Bookmark.stage.off('mousemove.drawShape');
             module.Bookmark && module.Bookmark.stage.off('mouseup.drawShape');
+        },
+        showLightpenPanel : function() {
+
+            this.showToolbox(302);
+
+            var curShape = module.currentShape;
+            var type = module.drawingInfo.shapeType;
+
+            //set panel values
+            var sliderVal = type.DEFAULT_VALUES.BACKGROUND.HEIGHT;
+            var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
+
+            //set panel title
+            $("#drawPanel #panelTitle").html(module.localeMsg.TITLE_LIGHTPEN_SETTING);
+
+            if(null !== curShape) {
+                sliderVal = Math.floor(curShape.height());
+                colorPickerVal = curShape.fill();
+            }
+
+            //set colorPicker options
+            module.colorPicker.spectrum("set", colorPickerVal);
+
+            module.drawingInfo.height = sliderVal;
+            module.drawingInfo.bgColor = colorPickerVal;
+
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_BG,"tabTitle", module.TAB_OPTION.BACKGROUND).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = null;
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color = curShape.fill();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.bgColor) ? type.DEFAULT_VALUES.BACKGROUND.COLOR : module.drawingInfo.bgColor;
+                }
+                module.colorPicker.spectrum("set", color);
+            }).trigger("click");
+
+            //add slider
+            var id = "heightRange";
+            module.addRangeSlider(id,
+                module.localeMsg.PEN_HEIGHT,
+                sliderVal,
+                1,
+                99,
+                "options",
+                function(data){
+                    var curVal = data.from;
+                    module.drawingInfo.height = curVal;
+                    //  module.currentShape.setHeight(data.from);
+                    $("#"+id+"_val").html(curVal);
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        module.currentShape.setHeight(curVal);
+                        module.shapeLayer.draw();
+                    }
+                },
+                function(data) {
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        var curVal = data.from;
+                        var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+
+                        var params = {
+                            "MARK_IRN": targetShapeInfo['MARK_IRN'],
+                            "FIELD": "MARK_LINEWIDTH",
+                            "VALUE": curVal,
+                        };
+
+                        $.Common.ShowProgress("#bookmarkProgress", "", "000000", "0", 'rotation', 30);
+
+                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function () {
+                            targetShapeInfo['MARK_LINEWIDTH'] = curVal;
+                            module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+
+                            var shape = module.Bookmark.stage.find("#"+targetShapeInfo['MARK_IRN'])[0];
+                            module.updateShapeMatrix(shape);
+
+                            module.Bookmark.refreshThumbBookmark();
+                        })
+                        .fail(function () {
+                            $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                            module.currentShape.setHeight(sliderVal);
+                            module.shapeLayer.draw();
+                            $("#" + id).data("ionRangeSlider").update({
+                                from: parseInt(sliderVal)
+                            })
+                            $("#" + id + "_val").html(sliderVal);
+                        })
+                        .always(function () {
+                            $.Common.HideProgress("#bookmarkProgress");
+                        });
+                    }
+                })
+        },
+        showRectanglePanel: function(){
+            this.showToolbox(302);
+
+            var curShape = module.currentShape;
+            var type = module.drawingInfo.shapeType;
+
+            //set panel values
+            var lineWidth = type.DEFAULT_VALUES.LINE.WIDTH;
+            var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
+
+            //set panel title
+            $("#drawPanel #panelTitle").html(module.localeMsg.TITLE_RECTANGLE_SETTING);
+
+            if(null !== curShape) {
+                lineWidth = Math.floor(curShape.find("#line")[0].strokeWidth());
+                colorPickerVal = curShape.find("#background")[0].fill();
+            }
+
+            //set colorPicker options
+            module.colorPicker.spectrum("set", colorPickerVal);
+
+            module.drawingInfo.lineWidth = lineWidth;
+            module.drawingInfo.bgColor = colorPickerVal;
+
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_BG,"tabTitle", module.TAB_OPTION.BACKGROUND).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = type.DEFAULT_VALUES.BACKGROUND.COLOR;
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color = curShape.find("#background")[0].fill();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.bgColor) ? type.DEFAULT_VALUES.BACKGROUND.COLOR : module.drawingInfo.bgColor;
+                }
+
+                module.colorPicker.spectrum("set", color);
+
+            }).trigger("click");
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_LINE,"tabTitle", module.TAB_OPTION.LINE).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.LINE;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = type.DEFAULT_VALUES.LINE.COLOR;
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color = curShape.find("#line")[0].stroke();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.lineColor) ? type.DEFAULT_VALUES.LINE.COLOR : module.drawingInfo.lineColor;
+                }
+                module.colorPicker.spectrum("set", color);
+            });
+            // var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+            //add tab
+            var chk = module.addCheckBox(module.localeMsg.NO_BACKGROUND,"tabTitle").off("change").on("change", function(){
+
+                var chkStat = this.checked;
+                var origOpacity = null;
+                var newOpecity = null;
+                if(this.checked) {
+                    module.drawingInfo.background = "1";
+                    origOpacity = type.DEFAULT_VALUES.BACKGROUND.OPACITY;
+                    newOpecity = 0;
+                }
+                else {
+                    module.drawingInfo.background = "0";
+                    origOpacity = 0;
+                    newOpecity = type.DEFAULT_VALUES.BACKGROUND.OPACITY;
+                }
+
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+
+                    var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+
+                    module.currentShape.find("#background")[0].opacity(newOpecity);
+                    module.shapeLayer.draw();
+
+                    var params = {
+                        "MARK_IRN": targetShapeInfo['MARK_IRN'],
+                        "FIELD": "MARK_BACKGROUND",
+                        "VALUE": module.drawingInfo.background,
+                    };
+
+                    $.Common.ShowProgress("#bookmarkProgress", "", "000000", "0", 'rotation', 30);
+
+                    $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function () {
+                        targetShapeInfo['MARK_BACKGROUND'] = module.drawingInfo.background;
+                        module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                        module.Bookmark.refreshThumbBookmark();
+                    })
+                        .fail(function () {
+                            $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                            chk.prop('checked', !chkStat);
+                            module.currentShape.find("#background")[0].opacity(origOpacity);
+                            module.shapeLayer.draw();
+                        })
+                        .always(function () {
+                            $.Common.HideProgress("#bookmarkProgress");
+                        });
+                }
+
+            });
+
+            if(module.currentShape !== null && 0 === module.currentShape.find("#background")[0].opacity()) {
+                chk.prop('checked', true);
+            }
+
+            //add slider
+            var id = "lineRange";
+            module.addRangeSlider(id,
+                module.localeMsg.LINE_WIDTH,
+                lineWidth,
+                1,
+                99,
+                "options",
+                function(data){
+                    var curVal = data.from;
+                    module.drawingInfo.lineWidth = curVal;
+                    //  module.currentShape.setHeight(data.from);
+                    $("#"+id+"_val").html(curVal);
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        module.currentShape.find("#line")[0].strokeWidth(curVal);
+                        module.shapeLayer.draw();
+                    }
+                },
+                function(data) {
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+                        var params = {
+                            "MARK_IRN": targetShapeInfo['MARK_IRN'],
+                            "FIELD": "MARK_LINEWIDTH",
+                            "VALUE": data.from,
+                        };
+
+                        $.Common.ShowProgress("#bookmarkProgress", "", "000000", "0", 'rotation', 30);
+
+                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function () {
+                            targetShapeInfo['MARK_LINEWIDTH'] = data.from;
+                            module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                            module.Bookmark.refreshThumbBookmark();
+                        })
+                            .fail(function () {
+                                $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                                module.currentShape.find("#line")[0].strokeWidth(lineWidth);
+                                module.shapeLayer.draw();
+                                $("#" + id).data("ionRangeSlider").update({
+                                    from: parseInt(lineWidth)
+                                })
+                                $("#" + id + "_val").html(lineWidth);
+                            })
+                            .always(function () {
+                                $.Common.HideProgress("#bookmarkProgress");
+                            });
+                    }
+                })
+        },
+        showEllipsePanel: function(){
+            this.showToolbox(302);
+
+            var curShape = module.currentShape;
+            var type = module.drawingInfo.shapeType;
+
+            //set panel values
+            var lineWidth = type.DEFAULT_VALUES.LINE.WIDTH;
+            var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
+
+            //set panel title
+            $("#drawPanel #panelTitle").html(module.localeMsg.TITLE_ELLIPSE_SETTING);
+
+            if(null !== curShape) {
+                lineWidth = Math.floor(curShape.find("#line")[0].strokeWidth());
+                colorPickerVal = curShape.find("#background")[0].fill();
+            }
+
+            //set colorPicker options
+            module.colorPicker.spectrum("set", colorPickerVal);
+            module.drawingInfo.lineWidth = lineWidth;
+            module.drawingInfo.bgColor = colorPickerVal;
+
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_BG,"tabTitle", module.TAB_OPTION.BACKGROUND).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = type.DEFAULT_VALUES.BACKGROUND.COLOR;
+
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color = curShape.find("#background")[0].fill();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.bgColor) ? type.DEFAULT_VALUES.BACKGROUND.COLOR : module.drawingInfo.bgColor;
+                }
+
+                module.colorPicker.spectrum("set", color);
+
+            }).trigger("click");
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_LINE,"tabTitle", module.TAB_OPTION.LINE).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.LINE;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = type.DEFAULT_VALUES.LINE.COLOR;
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color = curShape.find("#line")[0].stroke();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.lineColor) ? type.DEFAULT_VALUES.LINE.COLOR : module.drawingInfo.lineColor;
+                }
+
+                module.colorPicker.spectrum("set", color);
+            });
+            // var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+            //add tab
+            var chk = module.addCheckBox(module.localeMsg.NO_BACKGROUND,"tabTitle").off("change").on("change", function(){
+
+                var chkStat = this.checked;
+                var origOpacity = null;
+                var newOpecity = null;
+                if(this.checked) {
+                    module.drawingInfo.background = "1";
+                    origOpacity = type.DEFAULT_VALUES.BACKGROUND.OPACITY;
+                    newOpecity = 0;
+                }
+                else {
+                    module.drawingInfo.background = "0";
+                    origOpacity = 0;
+                    newOpecity = type.DEFAULT_VALUES.BACKGROUND.OPACITY;
+                }
+
+
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+
+                    var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+
+                    module.currentShape.find("#background")[0].opacity(newOpecity);
+                    module.shapeLayer.draw();
+
+                    var params = {
+                        "MARK_IRN": targetShapeInfo['MARK_IRN'],
+                        "FIELD": "MARK_BACKGROUND",
+                        "VALUE": module.drawingInfo.background,
+                    };
+
+                    $.Common.ShowProgress("#bookmarkProgress", "", "000000", "0", 'rotation', 30);
+
+                    $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function () {
+                        targetShapeInfo['MARK_BACKGROUND'] = module.drawingInfo.background;
+                        module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                        module.Bookmark.refreshThumbBookmark();
+                    })
+                    .fail(function () {
+                        $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                        chk.prop('checked', !chkStat);
+                        module.currentShape.find("#background")[0].opacity(origOpacity);
+                        module.shapeLayer.draw();
+                    })
+                    .always(function () {
+                        $.Common.HideProgress("#bookmarkProgress");
+                    });
+                }
+
+            });
+
+            if(module.currentShape !== null && 0 === module.currentShape.find("#background")[0].opacity()) {
+                chk.prop('checked', true);
+            }
+
+            //add slider
+            var id = "lineRange";
+            module.addRangeSlider(id,
+                module.localeMsg.LINE_WIDTH,
+                lineWidth,
+                1,
+                99,
+                "options",
+                function(data){
+                    var curVal = data.from;
+                    module.drawingInfo.lineWidth = curVal;
+                    //  module.currentShape.setHeight(data.from);
+                    $("#"+id+"_val").html(curVal);
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        module.currentShape.find("#line")[0].strokeWidth(curVal);
+                        module.shapeLayer.draw();
+                    }
+                },
+                function(data) {
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+                        var params = {
+                            "MARK_IRN": targetShapeInfo['MARK_IRN'],
+                            "FIELD": "MARK_LINEWIDTH",
+                            "VALUE": data.from,
+                        };
+
+                        $.Common.ShowProgress("#bookmarkProgress", "", "000000", "0", 'rotation', 30);
+
+                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function () {
+                            targetShapeInfo['MARK_LINEWIDTH'] = data.from;
+                            module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                            module.Bookmark.refreshThumbBookmark();
+                        })
+                        .fail(function () {
+                            $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                            module.currentShape.find("#line")[0].strokeWidth(lineWidth);
+                            module.shapeLayer.draw();
+                            $("#" + id).data("ionRangeSlider").update({
+                                from: parseInt(lineWidth)
+                            })
+                            $("#" + id + "_val").html(lineWidth);
+                        })
+                        .always(function () {
+                            $.Common.HideProgress("#bookmarkProgress");
+                        });
+                    }
+                })
+
+        },
+        showNoteboxPanel : function(){
+            this.showToolbox(338);
+
+            var curShape = module.currentShape;
+            var type = module.drawingInfo.shapeType;
+            var opacityVal = type.DEFAULT_VALUES.BACKGROUND.OPACITY;
+            var fontSizeVal = type.DEFAULT_VALUES.FONT.SIZE;
+            var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
+
+            //set panel title
+            $("#drawPanel #panelTitle").html(module.localeMsg.TITLE_ELLIPSE_SETTING);
+
+            if(null !== curShape) {
+                colorPickerVal = curShape.find("#background")[0].fill();
+                opacityVal = $.Common.getRawOpacity(curShape.find("#background")[0].opacity());
+                fontSizeVal = parseInt(curShape.find("#text")[0].fontSize());
+            }
+
+            //set colorPicker options
+            module.colorPicker.spectrum("set", colorPickerVal);
+
+            module.drawingInfo.opacity = opacityVal;
+            module.drawingInfo.fontSize = fontSizeVal;
+            module.drawingInfo.bgColor = colorPickerVal;
+
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_BG,"tabTitle", module.TAB_OPTION.BACKGROUND).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = type.DEFAULT_VALUES.BACKGROUND.COLOR;
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color = curShape.find("#background")[0].fill();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.bgColor) ? type.DEFAULT_VALUES.BACKGROUND.COLOR : module.drawingInfo.bgColor;
+                }
+
+                module.colorPicker.spectrum("set", color);
+            }).trigger("click");
+
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_FONT,"tabTitle", module.TAB_OPTION.FONT).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.FONT;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = type.DEFAULT_VALUES.FONT.COLOR;
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color =  curShape.find("#text")[0].fill();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.fontColor) ? type.DEFAULT_VALUES.FONT.COLOR : module.drawingInfo.fontColor;
+                }
+
+                module.colorPicker.spectrum("set", color);
+            });
+
+            //add tab
+            module.addTabElement(module.localeMsg.TAB_LINE,"tabTitle", module.TAB_OPTION.LINE).off("on").on("click", function(){
+                module.drawingInfo.currentTab = module.TAB_OPTION.LINE;
+                $(".tab_title_container").children().removeClass('focus');
+                $(this).addClass("focus");
+
+                var color = type.DEFAULT_VALUES.LINE.COLOR;
+                if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                    color = curShape.find("#line")[0].stroke();
+                }
+                else {
+                    color = $.Common.isBlank(module.drawingInfo.lineColor) ? type.DEFAULT_VALUES.LINE.COLOR : module.drawingInfo.lineColor;
+                }
+
+                module.colorPicker.spectrum("set", color);
+            });
+
+            //add slider
+            // var alphaId = "alphaRange";
+            // module.addRangeSlider(alphaId,
+            //     module.localeMsg.OPACITY,
+            //     opacityVal,
+            //     1,
+            //     255,
+            //     "options").off('change').on('change', function(){
+            //     var curVal = $(this).data("from");
+            //     module.drawingInfo.opacity = curVal;
+            //     //  module.currentShape.setHeight(data.from);
+            //     $("#"+alphaId+"_val").html(curVal);
+            //     if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+            //         // switch (type) {
+            //         //     case module.Bookmark.SHAPE_TYPE.LIGHTPEN :
+            //         module.currentShape.find("#background").opacity($.Common.getFloatOpacity(curVal));
+            //
+            //         module.shapeLayer.draw();
+            //         module.updateShapeValue(module.Bookmark.items, 'MARK_ALPHA', curVal);
+            //         module.Bookmark.refreshThumbBookmark();
+            //     }
+            // });
+
+            //add slider
+            var alphaId = "alphaRange";
+            module.addRangeSlider(alphaId,
+                module.localeMsg.LINE_WIDTH,
+                opacityVal,
+                1,
+                255,
+                "options",
+                function(data){
+                    var curVal = data.from;
+                    module.drawingInfo.opacity = curVal;
+                    //  module.currentShape.setHeight(data.from);
+                    $("#"+alphaId+"_val").html(curVal);
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        module.currentShape.find("#background").opacity($.Common.getFloatOpacity(curVal));
+                        module.shapeLayer.draw();
+                    }
+                },
+                function(data) {
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+                        var params = {
+                            "MARK_IRN": targetShapeInfo['MARK_IRN'],
+                            "FIELD": "MARK_ALPHA",
+                            "VALUE": data.from,
+                        };
+
+                        $.Common.ShowProgress("#bookmarkProgress", "", "000000", "0", 'rotation', 30);
+
+                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function () {
+                            targetShapeInfo['MARK_ALPHA'] = data.from;
+                            module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                            module.Bookmark.refreshThumbBookmark();
+                        })
+                        .fail(function () {
+                            $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                            module.currentShape.find("#background").opacity($.Common.getFloatOpacity(opacityVal));
+                            module.shapeLayer.draw();
+                            $("#" + alphaId).data("ionRangeSlider").update({
+                                from: parseInt(opacityVal)
+                            })
+                            $("#" + alphaId + "_val").html(opacityVal);
+                        })
+                        .always(function () {
+                            $.Common.HideProgress("#bookmarkProgress");
+                        });
+                    }
+                })
+
+            var fontId = "fontRange";
+            module.addRangeSlider(fontId,
+                module.localeMsg.FONT_SIZE,
+                fontSizeVal,
+                1,
+                100,
+                "options",
+                function(data){
+                    var curVal = data.from;
+                    module.drawingInfo.fontSize = curVal;
+                    //  module.currentShape.setHeight(data.from);
+                    $("#"+fontId+"_val").html(curVal);
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        module.currentShape.find("#text").fontSize(curVal);
+                        module.shapeLayer.draw();
+                    }
+                },
+                function(data) {
+                    if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
+                        var targetShapeInfo = module.Bookmark.getShapeInfo(module.currentShape.id());
+                        var params = {
+                            "MARK_IRN": targetShapeInfo['MARK_IRN'],
+                            "FIELD": "MARK_FONTSIZE",
+                            "VALUE": data.from,
+                        };
+
+                        $.Common.ShowProgress("#bookmarkProgress", "", "000000", "0", 'rotation', 30);
+
+                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function () {
+                            targetShapeInfo['MARK_FONTSIZE'] = data.from;
+                            module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                            module.Bookmark.refreshThumbBookmark();
+                        })
+                            .fail(function () {
+                                $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                                module.currentShape.find("#text").fontSize(fontSizeVal);
+                                module.shapeLayer.draw();
+                                $("#" + fontId).data("ionRangeSlider").update({
+                                    from: parseInt(fontSizeVal)
+                                })
+                                $("#" + fontId + "_val").html(fontSizeVal);
+                            })
+                            .always(function () {
+                                $.Common.HideProgress("#bookmarkProgress");
+                            });
+                    }
+                })
         },
         showPanel : function(type) {
 
@@ -648,301 +1285,26 @@ var Draw = function() {
             var curShape = module.currentShape;
 
             var title = "";
+            if(null === module.drawingInfo.currentTab || undefined === module.drawingInfo.currentTab){
+                module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
+            }
+
             switch (type) {
                 case module.Bookmark.SHAPE_TYPE.LIGHTPEN :
-                    this.showToolbox(302);
-
-                    title = module.localMsg.TITLE_LIGHTPEN_SETTING;
-
-                    //set panel values
-                    var sliderVal = type.DEFAULT_VALUES.BACKGROUND.HEIGHT;
-                    var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
-
-
-                    if(null !== curShape) {
-                        sliderVal = Math.floor(curShape.height());
-                        colorPickerVal = curShape.fill();
-                    }
-
-                    //set colorPicker options
-                    module.colorPicker.spectrum("set", colorPickerVal);
-
-                    module.drawingInfo.height = sliderVal;
-                    module.drawingInfo.bgColor = colorPickerVal;
-
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_BG,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    }).trigger("click");
-
-                    //add slider
-                    var id = "heightRange";
-                    module.addRangeSlider(id,
-                        module.localMsg.PEN_HEIGHT,
-                        sliderVal,
-                        1,
-                        100,
-                        "options").off('change').on('change', function(){
-                            var curVal = $(this).data("from");
-                            module.drawingInfo.height = curVal;
-                            //  module.currentShape.setHeight(data.from);
-                            $("#"+id+"_val").html(curVal);
-                            if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
-                                // switch (type) {
-                                //     case module.Bookmark.SHAPE_TYPE.LIGHTPEN :
-                                        module.currentShape.height(curVal);
-                                        module.updateShapeMatrix(module.currentShape);
-                                        // break;
-                                    // default:
-                                    //     break;
-                                // }
-                                module.shapeLayer.draw();
-                            }
-                        });
+                    module.showLightpenPanel();
                     break;
                 case module.Bookmark.SHAPE_TYPE.RECTANGLE :
-                    this.showToolbox(302);
-
-                    title = module.localMsg.TITLE_RECTANGLE_SETTING;
-
-                    //set panel values
-                    var lineWidth = type.DEFAULT_VALUES.LINE.WIDTH;
-                    var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
-
-
-                    if(null !== curShape) {
-                        lineWidth = Math.floor(curShape.find("#line")[0].strokeWidth());
-                        colorPickerVal = curShape.find("#background")[0].fill();
-                    }
-
-                    //set colorPicker options
-                    module.colorPicker.spectrum("set", colorPickerVal);
-
-                    module.drawingInfo.lineWidth = lineWidth;
-                    module.drawingInfo.bgColor = colorPickerVal;
-
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_BG,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    }).trigger("click");
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_LINE,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.LINE;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    });
-                    //add tab
-                    var chk = module.addCheckBox(module.localMsg.NO_BACKGROUND,"tabTitle").off("change").on("change", function(){
-                        if(this.checked) {
-                            module.drawingInfo.background = 1;
-                            module.currentShape.find("#background")[0].opacity(0);
-                        }
-                        else {
-                            module.drawingInfo.background = 0;
-                            module.currentShape.find("#background")[0].opacity(type.DEFAULT_VALUES.BACKGROUND.OPACITY);
-                        }
-                        module.shapeLayer.draw();
-                        module.updateShapeValue(module.Bookmark.items, 'MARK_BACKGROUND', module.drawingInfo.background+"");
-                        module.Bookmark.refreshThumbBookmark();
-                    });
-
-
-                    if(module.currentShape !== null && 0 === module.currentShape.find("#background")[0].opacity()) {
-                        chk.prop('checked', true);
-                    }
-
-                    //add slider
-                    var id = "lineRange";
-                    module.addRangeSlider(id,
-                        module.localMsg.LINE_WIDTH,
-                        lineWidth,
-                        1,
-                        100,
-                        "options").off('change').on('change', function(){
-                        var curVal = $(this).data("from");
-                        module.drawingInfo.lineWidth = curVal;
-                        //  module.currentShape.setHeight(data.from);
-                        $("#"+id+"_val").html(curVal);
-                        if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
-                            module.currentShape.find("#line")[0].strokeWidth(curVal);
-                            module.shapeLayer.draw();
-                            module.updateShapeValue(module.Bookmark.items, 'MARK_LINEWIDTH', curVal);
-                            module.Bookmark.refreshThumbBookmark();
-                        }
-                    });
+                    module.showRectanglePanel();
                     break;
                 case module.Bookmark.SHAPE_TYPE.ELLIPSE :
-                    this.showToolbox(302);
-
-                    title = module.localMsg.TITLE_ELLIPSE_SETTING;
-
-                    //set panel values
-                    var lineWidth = type.DEFAULT_VALUES.LINE.WIDTH;
-                    var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
-
-
-                    if(null !== curShape) {
-                        lineWidth = Math.floor(curShape.find("#line")[0].strokeWidth());
-                        colorPickerVal = curShape.find("#background")[0].fill();
-                    }
-
-                    //set colorPicker options
-                    module.colorPicker.spectrum("set", colorPickerVal);
-
-                    module.drawingInfo.lineWidth = lineWidth;
-                    module.drawingInfo.bgColor = colorPickerVal;
-
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_BG,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    }).trigger("click");
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_LINE,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.LINE;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    });
-                    //add tab
-                    var chk = module.addCheckBox(module.localMsg.NO_BACKGROUND,"tabTitle").off("change").on("change", function(){
-                        if(this.checked) {
-                            module.drawingInfo.background = 1;
-                            module.currentShape.find("#background")[0].opacity(0);
-                        }
-                        else {
-                            module.drawingInfo.background = 0;
-                            module.currentShape.find("#background")[0].opacity(type.DEFAULT_VALUES.BACKGROUND.OPACITY);
-                        }
-                        module.shapeLayer.draw();
-                        module.updateShapeValue(module.Bookmark.items, 'MARK_BACKGROUND', module.drawingInfo.background+"");
-                        module.Bookmark.refreshThumbBookmark();
-                    });
-
-
-                    if(module.currentShape !== null && 0 === module.currentShape.find("#background")[0].opacity()) {
-                        chk.prop('checked', true);
-                    }
-
-                    //add slider
-                    var id = "lineRange";
-                    module.addRangeSlider(id,
-                        module.localMsg.LINE_WIDTH,
-                        lineWidth,
-                        1,
-                        100,
-                        "options").off('change').on('change', function(){
-                        var curVal = $(this).data("from");
-                        module.drawingInfo.lineWidth = curVal;
-                        //  module.currentShape.setHeight(data.from);
-                        $("#"+id+"_val").html(curVal);
-                        if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
-                            module.currentShape.find("#line")[0].strokeWidth(curVal);
-                            module.shapeLayer.draw();
-                            module.updateShapeValue(module.Bookmark.items, 'MARK_LINEWIDTH', curVal);
-                            module.Bookmark.refreshThumbBookmark();
-                        }
-                    });
+                    module.showEllipsePanel();
                     break;
                 case module.Bookmark.SHAPE_TYPE.NOTEBOX :
-                    this.showToolbox(338);
-
-                    title = module.localMsg.TITLE_NOTEBOX_SETTING;
-                    module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-
-                    var opacityVal = type.DEFAULT_VALUES.BACKGROUND.OPACITY;
-                    var fontSizeVal = type.DEFAULT_VALUES.FONT.SIZE;
-                    var colorPickerVal = type.DEFAULT_VALUES.BACKGROUND.COLOR;
-
-                    if(null !== curShape) {
-                        colorPickerVal = curShape.find("#background")[0].fill();
-                        opacityVal = $.Common.getRawOpacity(curShape.find("#background")[0].opacity());
-                        fontSizeVal = curShape.find("#text")[0].fontSize();
-                    }
-
-                    //set colorPicker options
-                    module.colorPicker.spectrum("set", colorPickerVal);
-
-                    module.drawingInfo.opacity = opacityVal;
-                    module.drawingInfo.fontSize = fontSizeVal;
-                    module.drawingInfo.bgColor = colorPickerVal;
-
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_BG,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    }).trigger("click");
-
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_FONT,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.FONT;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    });
-
-                    //add tab
-                    module.addTabElement(module.localMsg.TAB_LINE,"tabTitle").off("on").on("click", function(){
-                        module.drawingInfo.currentTab = module.TAB_OPTION.LINE;
-                        $(".tab_title_container").children().removeClass('focus');
-                        $(this).addClass("focus");
-                    });
-
-                    //add slider
-                    var alphaId = "alphaRange";
-                    module.addRangeSlider(alphaId,
-                        module.localMsg.OPACITY,
-                        opacityVal,
-                        1,
-                        255,
-                        "options").off('change').on('change', function(){
-                        var curVal = $(this).data("from");
-                        module.drawingInfo.opacity = curVal;
-                        //  module.currentShape.setHeight(data.from);
-                        $("#"+alphaId+"_val").html(curVal);
-                        if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
-                            // switch (type) {
-                            //     case module.Bookmark.SHAPE_TYPE.LIGHTPEN :
-                            module.currentShape.find("#background").opacity($.Common.getFloatOpacity(curVal));
-
-                            module.shapeLayer.draw();
-                            module.updateShapeValue(module.Bookmark.items, 'MARK_ALPHA', curVal);
-                            module.Bookmark.refreshThumbBookmark();
-                        }
-                    });
-
-                    //add slider
-                    var fontId = "fontRange";
-                    module.addRangeSlider(fontId,
-                        module.localMsg.FONT_SIZE,
-                        fontSizeVal,
-                        1,
-                        100,
-                        "options").off('change').on('change', function(){
-                        var curVal = $(this).data("from");
-                        module.drawingInfo.fontSize = curVal;
-                        //  module.currentShape.setHeight(data.from);
-                        $("#"+fontId+"_val").html(curVal);
-                        if(module.drawingMode === module.STATUS.EDITING && null !== module.currentShape) {
-                            module.currentShape.find("#text").fontSize(curVal);
-                            // module.shapeLayer.draw();
-                            module.shapeLayer.draw();
-                            module.updateShapeValue(module.Bookmark.items, 'MARK_FONTSIZE', curVal);
-                            module.Bookmark.refreshThumbBookmark();
-                        }
-                    });
-
-
+                    module.showNoteboxPanel();
                     break;
                 default : return;
             }
 
-            //set panel title
-            $("#drawPanel #panelTitle").html(title);
         },
         addCheckBox : function(title, targetId){
             var container = $("<div class='area_chk'></div>");
@@ -958,7 +1320,7 @@ var Draw = function() {
                 .appendTo(container);
             return chkbox.find("#chk");
         },
-        addRangeSlider : function(id, title, val, min, max, targetId) {
+        addRangeSlider : function(id, title, val, min, max, targetId, onChange, onFinish) {
             $("<div class='container_option'>" +
                 "<div class='option_title'>"+title+"</div>" +
                 "<div class='container_contents'>" +
@@ -974,10 +1336,14 @@ var Draw = function() {
                     hide_min_max: true,
                     hide_from_to:true,
                     force_edges:true,
-                    from:val});
+                    from:val,
+                    onChange : onChange,
+                    onFinish : onFinish
+            });
         },
-        addTabElement:function(title, targetId) {
-            return $('<div class="tab_title">'+title+'</div>')
+        addTabElement:function(title, targetId, tabId) {
+            if($.Common.isBlank(tabId)) { tabId = ""; }
+            return $('<div class="tab_title" tab-id="'+tabId+'">'+title+'</div>')
                 // .on("click", function(){
                 //     module.drawingInfo.currentTab = module.TAB_OPTION.BACKGROUND;
                 // })
@@ -1086,25 +1452,32 @@ var Draw = function() {
           var shape = module.currentShape;
           if(shape === null) return;
 
-          if(true/*remove bookmark query*/) {
-              // shape.destroy();
+          var param = module.Bookmark.getShapeInfo(shape.id());
+          if(null === param || undefined === param) {
+              $.Common.simpleToast(module.localeMsg.FAILED_REMOVE_BOOKMARK);
+              return;
+          }
+            $.Common.ShowProgress("#bookmarkProgress","","000000","0", 'rotation', 30);
+            $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.REMOVE_BOOKMARK, param))
+              .then(function(){
+                    shape.destroy();
+                    module.shapeLayer.draw();
+                    // module.Bookmark.removeShape(shape);
+                    module.Bookmark.items = $(module.Bookmark.items).filter(function() {
+                        return this.MARK_IRN !== shape.id();
+                    });
+                    // module.Bookmark.items = $.Common.removeKey(module.Bookmark.items, shape.id());
+                    // module.shapeLayer.draw();
+                    module.deSelectAll();
 
-
-              shape.destroy();
-              module.shapeLayer.draw();
-              // module.Bookmark.removeShape(shape);
-              module.Bookmark.items = $(module.Bookmark.items).filter(function() {
-                  return this.MARK_IRN !== shape.id();
+                    module.Bookmark.refreshThumbBookmark();
+              })
+              .fail(function(err){
+                  $.Common.simpleToast(module.localeMsg.FAILED_REMOVE_BOOKMARK);
+              })
+              .always(function(){
+                  $.Common.RemoveProgress("#bookmarkProgress");
               });
-              // module.Bookmark.items = $.Common.removeKey(module.Bookmark.items, shape.id());
-              // module.shapeLayer.draw();
-              module.deSelectAll();
-
-              module.Bookmark.refreshThumbBookmark();
-          }
-          else {
-              $.Common.simpleToast(this.localMsg.FAILED_REMOVE_BOOKMARK);
-          }
         },
         reset : function (bookmark) {
             module.drawingMode = module.STATUS.IDLE;
@@ -1113,8 +1486,8 @@ var Draw = function() {
             this.setStageEvents();
             this.setShapeEvents();
         },
-        addModifyTextEvent:function(textNode) {
-            textNode.on('dblclick', () => {
+        addModifyTextEvent:function(textNode, shapeId) {
+            textNode.on('dblclick', function() {
                 // hide text node and transformer:
                 textNode.hide();
                 // tr.hide();
@@ -1225,10 +1598,34 @@ var Draw = function() {
                     // hide on enter
                     // but don't hide on shift + enter
                     if (e.keyCode === 13 && !e.shiftKey) {
+                        var originalValue = textNode.text();
                         textNode.text(textarea.value);
-                        module.updateShapeValue(module.Bookmark.items, 'MARK_COMMENT', textarea.value);
-                        module.Bookmark.refreshThumbBookmark();
-                        removeTextarea();
+                        var targetShapeInfo = module.Bookmark.getShapeInfo(shapeId);
+
+                        var params = {
+                            "MARK_IRN" : targetShapeInfo['MARK_IRN'],
+                            "FIELD" : "MARK_COMMENT",
+                            "VALUE" : textarea.value,
+                        };
+
+                        $.Common.ShowProgress("#bookmarkProgress","","000000","0", 'rotation', 30);
+
+                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.MODIFY_BOOKMARK, params)).then(function() {
+
+                            targetShapeInfo['MARK_COMMENT'] = textarea.value;
+                            module.Bookmark.items = module.updateShapeInfo(module.Bookmark.items, targetShapeInfo);
+                            module.Bookmark.refreshThumbBookmark();
+
+                            removeTextarea();
+                        })
+                        .fail(function(){
+                            $.Common.simpleToast(module.localeMsg.FAILED_MODIFY_BOOKMARK);
+                            textNode.text(originalValue);
+                            removeTextarea();
+                        })
+                        .always(function(){
+                            $.Common.HideProgress("#bookmarkProgress");
+                        });
                     }
                     // on esc do not set value back to node
                     if (e.keyCode === 27) {
@@ -1250,18 +1647,21 @@ var Draw = function() {
                         removeTextarea();
                     }
                 }
-                setTimeout(() => {
+                setTimeout(function() {
                     window.addEventListener('click', handleOutsideClick);
                 });
             });
         },
     }
+
     return module;
 }
 
 $.BookmarkOperation = {
     COMMAND : {
         ADD_BOOKMARK : 1,
+        REMOVE_BOOKMARK : 2,
+        MODIFY_BOOKMARK : 3,
     },
     execute : function(cmd, params){
         var deferred = $.Deferred();
@@ -1271,6 +1671,14 @@ $.BookmarkOperation = {
                 deferred = $.BookmarkOperation.addBookmark(params);
             }
             break;
+            case this.COMMAND.REMOVE_BOOKMARK : {
+                deferred = $.BookmarkOperation.removeBookmark(params);
+            }
+            break;
+            case this.COMMAND.MODIFY_BOOKMARK : {
+                deferred = $.BookmarkOperation.modifyBookmark(params);
+            }
+                break;
             default: break;
         }
 
@@ -1282,10 +1690,50 @@ $.BookmarkOperation = {
         params["MARK_COMMENT"] = encodeURIComponent(encodeURIComponent(params["MARK_COMMENT"]));
         $.when($.Common.RunCommand(g_BookmarkCommand, "ADD_BOOKMARK", params)).then(function(objRes) {
 
-            deferred.resolve(objRes);
+            if("T"===objRes.RESULT) {
+                deferred.resolve(objRes);
+            }
+            else {
+                deferred.reject(objRes.MSG);
+            }
 
         }, function (reason) {
             deferred.reject(reason)
+        });
+
+        return deferred.promise();
+    },
+    removeBookmark : function(params) {
+        var deferred = $.Deferred();
+        $.when($.Common.RunCommand(g_BookmarkCommand, "REMOVE_BOOKMARK", params)).then(function(objRes) {
+
+            if("T"===objRes.RESULT) {
+                deferred.resolve(objRes);
+            }
+            else {
+                deferred.reject(objRes.MSG);
+            }
+
+        }, function (reason) {
+            deferred.reject(reason);
+        });
+
+        return deferred.promise();
+    },
+    modifyBookmark : function(params) {
+        var deferred = $.Deferred();
+        //Encoding
+        $.when($.Common.RunCommand(g_BookmarkCommand, "MODIFY_BOOKMARK", params)).then(function(objRes) {
+
+            if("T"===objRes.RESULT) {
+                deferred.resolve(objRes);
+            }
+            else {
+                deferred.reject(objRes.MSG);
+            }
+
+        }, function (reason) {
+            deferred.reject(reason);
         });
 
         return deferred.promise();
