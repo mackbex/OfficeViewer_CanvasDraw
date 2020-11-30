@@ -417,12 +417,27 @@ public class ActorController extends HttpServlet{
 					String useBookMark = profile.getString("WAS_INFO", "USE_BOOKMARK", "F");
 
 					if("T".equalsIgnoreCase(useBookMark)) {
+
+						String[] arKey				= m_C.getParamValue(mapParams, "KEY");
+						JsonArray bookmarkList 		= m_GM.GetBookmarkList(arKey);
+
 						Iterator<String> keys = objRes.keySet().iterator();
 						while(keys.hasNext()) {
 							JsonObject item = objRes.get(keys.next()).getAsJsonObject();
 							String sdocNo 	= item.get("SDOC_NO").getAsString();
-							String slipIrn 	= item.get("SLIP_IRN").getAsString();
-							item.add("BOOKMARKS",m_GM.Get_BookmarkList(sdocNo, slipIrn));
+//							String slipIrn 	= item.get("SLIP_IRN").getAsString();
+
+							JsonArray list = new JsonArray();
+							for(int i = 0; i < bookmarkList.size(); i++) {
+								JsonObject bookmarkObj = bookmarkList.get(i).getAsJsonObject();
+								String bookmarkSdocNo = bookmarkObj.get("SDOC_NO").getAsString();
+								if(sdocNo.equalsIgnoreCase(bookmarkSdocNo)) {
+									list.add(bookmarkObj);
+								}
+							}
+							item.add("BOOKMARKS", list);
+
+//							item.add("BOOKMARKS",m_GM.GetBookmarkList(sdocNo, slipIrn));
 						}
 					}
 					out.print(objRes.toString());

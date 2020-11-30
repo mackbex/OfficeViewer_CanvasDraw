@@ -763,7 +763,7 @@ $.Viewer = {
 			// if($.Viewer.isBookmarkLoaded) {
 			var bookmarkContext = Bookmark();
 			var bookmarkItem = objData["BOOKMARKS"];
-			if(bookmarkItem != null && bookmarkItem.length > 0) {
+			// if(bookmarkItem != null && bookmarkItem.length > 0) {
 
 				//var zoomRatio = $.Viewer.viewer.panzoom('getScale',$.Viewer.viewer.panzoom('getMatrix'));
 
@@ -817,7 +817,7 @@ $.Viewer = {
 
 
 				// $.Bookmark.Draw_BookmarkItem(bookmark[0], bookmarkItem, objData["SLIP_ROTATE"]);
-			}
+			// }
 
 
 

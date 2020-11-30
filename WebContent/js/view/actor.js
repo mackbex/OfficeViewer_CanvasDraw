@@ -1048,7 +1048,7 @@ $.Actor = {
 							var curObj = parent.objSlipItem[idx];
 							var bookmarkItem = curObj["BOOKMARKS"];
 
-							if (bookmarkItem != null && bookmarkItem.length > 0) {
+							// if (bookmarkItem != null && bookmarkItem.length > 0) {
 
 								var imgContainer = $(this).find(".area_thumb");
 
@@ -1072,7 +1072,7 @@ $.Actor = {
 								bookmarkContext.init(bookmarkContainer, img, curObj, parent.params);
 								bookmarkContext.drawItems(bookmarkItem, curObj["SLIP_ROTATE"], $.Actor);
 								this.data("bookmarkContext", bookmarkContext);
-							}
+							// }
 						}
 						else {
 							$.Common.simpleToast(parent.localeMsg.FAILED_LOAD_DRAW_BOOKMARK_TOOL);

@@ -259,12 +259,13 @@ var Bookmark = function() {
             }
             module.shapeLayer = new Konva.Layer();
             module.shapeLayer.id(module.stage.container().id);
-            module.items = bookmarkItem;
+            module.items = bookmarkItem !== undefined ? bookmarkItem : [];
             module.setFontZoom();
 
             $.each(this.items, function (i) {
                 module.draw(module.shapeLayer, this);
             });
+
             module.stage.add(module.shapeLayer);
 
             // var shape = this.stage.find('#202010277C8C8095504697')[0];

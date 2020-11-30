@@ -1181,7 +1181,7 @@ public class GetModel {
 		return objRes;
 	}
 
-	public JsonArray Get_BookmarkList(String sdocNo, String slipIrn) {
+	public JsonArray GetBookmarkList(String[] jdocNo) {
 		String strFuncName 	= new Object(){}.getClass().getEnclosingMethod().getName();
 		JsonArray arObjRes = new JsonArray();
 
@@ -1193,8 +1193,7 @@ public class GetModel {
 		{
 			PreparedStatement pStmt = new PreparedStatement(m_Profile);
 			pStmt.setQuery(Queries.GET_BOOKMARK_LIST);
-			pStmt.setString(0, sdocNo);
-			pStmt.setString(1, slipIrn);
+			pStmt.setProcArray(0, new ArrayList<Object>(Arrays.asList(jdocNo)));
 
 			m_AC.GetProcedure(pStmt.getQuery(), strFuncName);
 

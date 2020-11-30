@@ -124,5 +124,5 @@ public class Queries {
      public final static String HISTORY_ADD = " EXEC ProcImg_History_Add ?, ?, ?, ?, ?, ?";
      public final static String COPY_REPLACE = " EXEC ProcImg_COPY_REPLACE ?, ?, ?, ? ";
      public final static String GET_RECYCLE_LIST = " Select * From IMG_PTISVR_RESULT_T Where PTI_TYPE='04' And PTI_STATUS = '00'  ";
-     public final static String GET_BOOKMARK_LIST = " EXEC ProcImg_BookMark ?, ? ";
+     public final static String GET_BOOKMARK_LIST = " EXEC ProcImg_BookMark_JDocNo ? ";
 }
