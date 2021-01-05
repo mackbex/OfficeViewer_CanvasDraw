@@ -99,6 +99,8 @@ var Bookmark = function() {
             });
 
             this.addScrollEvent();
+
+            this.imageRatio = module.getImageRatio(imgInfo);
         },
         resizeStage : function(w, h) {
             module.stage.width(w);
@@ -128,7 +130,7 @@ var Bookmark = function() {
                 };
 
                 var newScale =
-                    e.evt.deltaY > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+                    e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
 
                 if(newScale < module.minZoom) {
                     newScale = module.minZoom;
@@ -274,10 +276,10 @@ var Bookmark = function() {
         addShape : function (shape) {
 
             var oriImg =  this.stage.find("#ORI_IMAGE")[0];
-            var left = (shape.x() - oriImg.x()) / this.imageRatio;
-            var top = (shape.y() - oriImg.y()) / this.imageRatio;
-            var right = (shape.width() + shape.x() - oriImg.x()) / this.imageRatio;
-            var bottom = (shape.height() + shape.y() - oriImg.y()) / this.imageRatio;
+            var left = (shape.x() - oriImg.x()) / module.imageRatio;
+            var top = (shape.y() - oriImg.y()) / module.imageRatio;
+            var right = (shape.width() + shape.x() - oriImg.x()) / module.imageRatio;
+            var bottom = (shape.height() + shape.y() - oriImg.y()) / module.imageRatio;
 
             var item = {};
             item['CORP_NO'] = this.slipdocInfo.CORP_NO;
@@ -368,7 +370,7 @@ var Bookmark = function() {
             this.items.push(item);
             return item;
         },
-        draw : function (layer, item) {
+        getImageRatio :function(item){
             var rect = item.SLIP_RECT.split(",");
 
             var imageWidth = parseInt(rect[2]);
@@ -378,8 +380,12 @@ var Bookmark = function() {
             var hRatio = module.stage.height() / imageHeight;
 
             var ratio = wRatio > hRatio ? hRatio : wRatio;
+            return ratio;
+        },
+        draw : function (layer, item) {
+            var ratio = module.getImageRatio(item);
 
-            this.imageRatio = ratio;
+            // module.imageRatio = ratio;
 
             var shape = item.MARK_RECT.split(",");
 

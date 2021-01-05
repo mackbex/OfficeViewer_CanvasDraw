@@ -616,7 +616,7 @@ var Draw = function() {
                     else {
                         var item = module.Bookmark.addShape(module.currentShape);
                         $.Common.ShowProgress("#bookmarkProgress","","000000","0", 'rotation', 30);
-                        $.when($.BookmarkOperation.execute($.BookmarkOperation.COMMAND.ADD_BOOKMARK, item)).then(function() {
+                        $.when($.BookmarkOperatiozoomInn.execute($.BookmarkOperation.COMMAND.ADD_BOOKMARK, item)).then(function() {
 
                             var shape = module.getCurrentShape(item['MARK_IRN']);
                             shape.listening(true);
@@ -627,6 +627,7 @@ var Draw = function() {
                             module.Bookmark.refreshThumbBookmark();
                         })
                         .fail(function (err){
+                            $.Common.simpleToast(module.localeMsg.FAILED_ADD_BOOKMARK);
                             var shape = module.getCurrentShape(item['MARK_IRN']);
                             module.Bookmark.items = $(module.Bookmark.items).filter(function() {
                                 return this.MARK_IRN !== item['MARK_IRN'];

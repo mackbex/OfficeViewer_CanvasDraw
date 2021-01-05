@@ -206,6 +206,7 @@ $.Lang = {
 				"FONT_SIZE" : "글씨 크기",
 				"REMOVE_SHAPE" : "삭제",
 				"NO_BACKGROUND" : "배경 없음",
+				"FAILED_ADD_BOOKMARK" : "등록에 실패했습니다.",
 				"FAILED_REMOVE_BOOKMARK" : "삭제에 실패했습니다.",
 				"FAILED_MODIFY_BOOKMARK" : "수정에 실패했습니다.",
 				"ERR_TOO_SMALL" : "크기가 너무 작습니다.",
